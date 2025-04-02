@@ -1,19 +1,18 @@
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
 #include <semaphore.h>
 #include <string.h>
 
-// Structure to hold data about intersections
-
+// Structure to hold data about trains
 typedef struct {
     char name[50];  // Train name (e.g., Train1)
     char **route;   // Array of intersection names the train passes through
     int routeCount; // Number of intersections the train visits
 } Train;
 
+//Structure that holds data about intersections
 typedef struct {
     char name[50];  // Intersection name
 	char type[50]; // Type of Intersection
@@ -30,7 +29,7 @@ typedef struct {
 
 Intersection *intersections;
 
-//makes the resource allocation table
+//Function that makes the resource allocation table
 void initR_Table(Intersection **intersections, int intersectionCount){
 	
 	for(int i = 0; i < intersectionCount; i++){
@@ -56,7 +55,7 @@ void initR_Table(Intersection **intersections, int intersectionCount){
 	
 }
 
-//prints resource allocation table
+//Function that prints resource allocation table
 void printR_Table(Intersection **intersections, int intersectionCount) {
     printf("Resource Allocation Table:\n");
     printf("---------------------------------------------------------------\n");

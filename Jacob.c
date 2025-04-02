@@ -142,7 +142,7 @@ void GetIntersectionResources(Intersection *intersections, int intersectionCount
         printf("Invalid intersection number.\n");
     }
 }
-
+/*
 int main() {
     Intersection *intersections;
     Train *trains;
@@ -224,4 +224,4 @@ int main() {
     FreeMemory(intersections, intersectionCount, trains, trainCount);
 
     return 0;
-}
+}*/

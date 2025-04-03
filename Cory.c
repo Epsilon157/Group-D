@@ -9,6 +9,7 @@
 #include <sys/msg.h>
 #include <unistd.h>
 #include <string.h>
+#include <sys/wait.h>
 
 #define MAX_TEXT 512
 #define NUM_CHILDREN 3

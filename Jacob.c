@@ -1,8 +1,3 @@
-/* Add text options when ran so anyone can find how to pull the data out.
- As we get more code for the data to be used in I will adjust parsing so it returns the 
- info needed*/
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,7 +5,7 @@
 // Structure to hold data about intersections
 typedef struct {
     char name[50];  // Intersection name
-    int capacity;  // Resources available at this intersection
+    int capacity;   // Capacity available at this intersection
 } Intersection;
 
 // Structure to hold data about trains
@@ -44,10 +39,10 @@ int IntersectionParsing(const char *filename, Intersection **intersections) {
     int i = 0;
     while (fgets(line, sizeof(line), file)) {
         char name[50];
-        int resources;
-        sscanf(line, "%[^:]:%d", name, &resources);
+        int capacity;  // Changed from 'resources' to 'capacity'
+        sscanf(line, "%[^:]:%d", name, &capacity);  // Changed from 'resources' to 'capacity'
         strcpy((*intersections)[i].name, name);
-        (*intersections)[i].resources = resources;
+        (*intersections)[i].capacity = capacity;  // Changed from 'resources' to 'capacity'
         i++;
     }
 
@@ -134,15 +129,15 @@ void DisplayTrainPath(Train *trains, int trainCount, const char *trainName) {
     }
 }
 
-// Function to get the resource amount for a specific intersection
-void GetIntersectionResources(Intersection *intersections, int intersectionCount, int intersectionIndex) {
+// Function to get the capacity amount for a specific intersection
+void GetIntersectionCapacity(Intersection *intersections, int intersectionCount, int intersectionIndex) {
     if (intersectionIndex >= 1 && intersectionIndex <= intersectionCount) {
-        printf("Resources at intersection %s: %d\n", intersections[intersectionIndex - 1].name, intersections[intersectionIndex - 1].resources);
+        printf("Capacity at intersection %s: %d\n", intersections[intersectionIndex - 1].name, intersections[intersectionIndex - 1].capacity);  // Changed 'resources' to 'capacity'
     } else {
         printf("Invalid intersection number.\n");
     }
 }
-/*
+
 int main() {
     Intersection *intersections;
     Train *trains;
@@ -150,7 +145,7 @@ int main() {
     int intersectionCount = IntersectionParsing(intersectionFilePath, &intersections);
     printf("Parsed %d intersections:\n", intersectionCount);
     for (int i = 0; i < intersectionCount; i++) {
-        printf("%s has %d resources\n", intersections[i].name, intersections[i].resources);
+        printf("%s has %d capacity\n", intersections[i].name, intersections[i].capacity);  // Changed 'resources' to 'capacity'
     }
 
     int trainCount = TrainParsing(trainFilePath, &trains);
@@ -172,7 +167,7 @@ int main() {
     printf("1. Select an intersection and find all trains passing through it\n");
     printf("2. Select a stop number (1-%d) and find all trains with that stop\n", trainCount);
     printf("3. Get the path of a specific train\n");
-    printf("4. Select an intersection and get the resource amount\n");
+    printf("4. Select an intersection and get the capacity amount\n");
     printf("Enter your choice (1, 2, 3, or 4): ");
     scanf("%d", &choice);
 
@@ -216,7 +211,7 @@ int main() {
         printf("Enter the intersection number (1-%d): ", intersectionCount);
         scanf("%d", &intersectionNumber);
 
-        GetIntersectionResources(intersections, intersectionCount, intersectionNumber);
+        GetIntersectionCapacity(intersections, intersectionCount, intersectionNumber);  // Changed 'resources' to 'capacity'
     } else {
         printf("Invalid choice.\n");
     }
@@ -224,4 +219,4 @@ int main() {
     FreeMemory(intersections, intersectionCount, trains, trainCount);
 
     return 0;
-}*/
+}

@@ -10,7 +10,7 @@
 // Structure to hold data about intersections
 typedef struct {
     char name[50];  // Intersection name
-    int resources;  // Resources available at this intersection
+    int capacity;  // Resources available at this intersection
 } Intersection;
 
 // Structure to hold data about trains

@@ -7,9 +7,9 @@
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
+#include <sys/wait.h>
 #include <unistd.h>
 #include <string.h>
-#include <sys/wait.h>
 
 #define MAX_TEXT 512
 #define NUM_CHILDREN 3
@@ -49,7 +49,7 @@ int main() {
     int msgid;
 
     // Create a unique key for the message queue
-    key = ftok("progfile", 65);
+    key = ftok("/tmp", 65);
     if (key == -1) {
         perror("ftok failed");
         exit(1);

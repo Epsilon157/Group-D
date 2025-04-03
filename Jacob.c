@@ -139,7 +139,7 @@ void GetIntersectionCapacity(Intersection *intersections, int intersectionCount,
         printf("Invalid intersection number.\n");
     }
 }
-
+/*
 int main() {
     Intersection *intersections;
     Train *trains;
@@ -222,3 +222,4 @@ int main() {
 
     return 0;
 }
+*/

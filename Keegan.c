@@ -3,6 +3,11 @@
 #include  <stdio.h>
 #include <pthread.h>
 
+typedef struct {
+    char name[50];  // Intersection name
+    int resources;  // Resources available at this intersection
+    pthread_mutex_t mutex;
+} Intersection;
 
 // method for initializing mutex
 void initializeMutex(Intersection *intersections, int intersectionCount){

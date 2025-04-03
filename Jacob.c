@@ -51,6 +51,7 @@ int IntersectionParsing(const char *filename, Intersection **intersections) {
 }
 
 // Function to parse the train data
+// Function to parse the train data
 int TrainParsing(const char *filename, Train **trains) {
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
@@ -58,14 +59,14 @@ int TrainParsing(const char *filename, Train **trains) {
         return 0;
     }
 
-    int count = 0;
+    int numberOfTrains = 0;  // Changed the variable name to 'numberOfTrains'
     char line[200];
     while (fgets(line, sizeof(line), file)) {
-        count++;
+        numberOfTrains++;  // Increment count for each train
     }
     rewind(file);
 
-    *trains = malloc(count * sizeof(Train));
+    *trains = malloc(numberOfTrains * sizeof(Train));
 
     int i = 0;
     while (fgets(line, sizeof(line), file)) {
@@ -90,8 +91,9 @@ int TrainParsing(const char *filename, Train **trains) {
     }
 
     fclose(file);
-    return count;
+    return numberOfTrains;  // Return the number of trains
 }
+
 
 // Function to free the memory allocated for intersections and trains
 void FreeMemory(Intersection *intersections, int intersectionCount, Train *trains, int trainCount) {
@@ -138,13 +140,13 @@ void GetIntersectionCapacity(Intersection *intersections, int intersectionCount,
     }
 }
 
-int /*main() {
+int main() {
     Intersection *intersections;
     Train *trains;
 
     int intersectionCount = IntersectionParsing(intersectionFilePath, &intersections);
     printf("Parsed %d intersections:\n", intersectionCount);
-    for (int i = 04; i < intersectionCount; i++) {
+    for (int i = 0; i < intersectionCount; i++) {
         printf("%s has %d capacity\n", intersections[i].name, intersections[i].capacity);  // Changed 'resources' to 'capacity'
     }
 
@@ -219,4 +221,4 @@ int /*main() {
     FreeMemory(intersections, intersectionCount, trains, trainCount);
 
     return 0;
-}*/
+}

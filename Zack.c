@@ -1,4 +1,5 @@
 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
@@ -37,6 +38,11 @@ void initR_Table(Intersection **intersections, int intersectionCount){
 		//initializes lock_state to 0
 		(*intersections)[i].lock_state = 0;
 		
+		//Test case
+		strcpy((*intersections)[0].trains[0].name, "Train 1");
+		strcpy((*intersections)[1].trains[0].name, "Train 2");
+		strcpy((*intersections)[1].trains[1].name, "Train 3");
+		
 		//initializes semaphore is resource > 1 and mutex if else
 		if((*intersections)[i].resources > 1){
 			strcpy((*intersections)[i].lock_type, "Semaphore");
@@ -66,8 +72,15 @@ void printR_Table(Intersection **intersections, int intersectionCount) {
         printf("%-15s | %-9s | %-8d | %-10s |", (*intersections)[i].name,
                strcmp((*intersections)[i].lock_type, "Semaphore") ? "Mutex" : "Semaphore",
                (*intersections)[i].resources, ((*intersections)[i].lock_state == 0) ? "Free" : "Locked");
-
-        printf(" None");
+		int j = 0;
+		if(strcmp((*intersections)[i].trains[0].name, "") == 0){
+			printf(" None");
+		}else {
+        while(!(strcmp((*intersections)[i].trains[j].name, "") == 0)){
+			printf("%-1s ", (*intersections)[i].trains[j].name);
+			j++;
+			}
+		}
 
         printf("\n");
     }
@@ -79,3 +92,4 @@ int main(void){
 return 0;
 
 }
+

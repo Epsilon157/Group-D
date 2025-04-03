@@ -138,13 +138,13 @@ void GetIntersectionCapacity(Intersection *intersections, int intersectionCount,
     }
 }
 
-int main() {
+int /*main() {
     Intersection *intersections;
     Train *trains;
 
     int intersectionCount = IntersectionParsing(intersectionFilePath, &intersections);
     printf("Parsed %d intersections:\n", intersectionCount);
-    for (int i = 0; i < intersectionCount; i++) {
+    for (int i = 04; i < intersectionCount; i++) {
         printf("%s has %d capacity\n", intersections[i].name, intersections[i].capacity);  // Changed 'resources' to 'capacity'
     }
 
@@ -219,4 +219,4 @@ int main() {
     FreeMemory(intersections, intersectionCount, trains, trainCount);
 
     return 0;
-}
+}*/

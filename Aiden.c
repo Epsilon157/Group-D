@@ -1,4 +1,7 @@
-
+//Group D
+//Aiden Maner
+//aiden.maner@okstate.edu
+//4/3/2025
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,7 +9,7 @@
 #include <semaphore.h>
 #include <unistd.h>
 //#include "Jacob.c"
-#include "main.c"
+//#include "main.c"
 
 //Function to initialize the semaphores for every intersection with more than 1 resource
 void initializeSemaphores(Intersection **intersections, int intersectionCount){

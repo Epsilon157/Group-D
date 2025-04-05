@@ -10,6 +10,8 @@
 #include <semaphore.h>
 #include <string.h>
 
+// include other files here
+#include "Cory.c"
 
 // Structure to hold data about trains
 typedef struct {
@@ -215,6 +217,10 @@ void GetIntersectionResources(Intersection *intersections, int intersectionCount
 int main() {
     Intersection *intersections;
     Train *trains;
+    // create key and message queue ID needed for the
+    // message queue to work
+    key_t key;
+    int msgid;
 
     int intersectionCount = IntersectionParsing(intersectionFilePath, &intersections);
     printf("Parsed %d intersections:\n", intersectionCount);
@@ -235,9 +241,9 @@ int main() {
         printf("\n");
     }
 
-  initR_Table(&intersections, intersectionCount);
+    initR_Table(&intersections, intersectionCount);
 	printR_Table(&intersections, intersectionCount);
-	
+
 	/*  // Main menu for user to choose
     int choice;
     printf("\nSelect an option:\n");
@@ -293,6 +299,25 @@ int main() {
         printf("Invalid choice.\n");
     }
 	*/
+
+    // Create message queue for message passing between parent
+    // and child processes. This function MUST return msgid so 
+    // that the created message queue ID can be used in the 
+    // rest of the main function.
+    msgid = createMessageQueue(key, msgid);
+
+    // Fork multiple child processes
+    // this is purely for testing
+    fork_trains(msgid, trainCount);
+
+    // By this point, all child processes have exited,
+    // so only the parent will execute the code below
+
+    // execute responsibilities of server
+    server_process(msgid, trainCount);
+
+    // clear up memory from message queue since, it is no longer needed
+    destroyMessageQueue(msgid);
 
     FreeMemory(intersections, intersectionCount, trains, trainCount);
 

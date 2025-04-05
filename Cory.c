@@ -9,6 +9,8 @@
 // Testing: ensure that IPC successfully allows for message 
 // passing between trains
 
+// testing if git is working
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>

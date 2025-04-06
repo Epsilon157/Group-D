@@ -1,6 +1,7 @@
 // Group D
 // Cory Thrutchley
 // cory.thrutchley@okstate.edu
+// 4/5/2025
 
 // Cory's Week 2 role: Basic IPC Workflow
 // Crease a message queue system where different train processes 
@@ -19,7 +20,6 @@
 #include <string.h>
 
 #define MAX_TEXT 512
-#define NUM_CHILDREN 3
 
 // Structure for message queue
 struct message {
@@ -56,11 +56,11 @@ void destroyMessageQueue(int msgid) {
 }
 
 // Function for parent process acting as server
-void parent_process(int msgid) {
+void server_process(int msgid, int trainCount) {
     struct message msg;
     // CHANGE: will need to loop the server as long as
     // there are still trains that need to pass through
-    for (int i = 0; i < NUM_CHILDREN; i++) {
+    for (int i = 0; i < trainCount; i++) {
         // Receive request from any child
         if (msgrcv(msgid, &msg, sizeof(msg) - sizeof(long), 1, 0) == -1) {
             perror("Parent process msgrcv failed");
@@ -83,7 +83,7 @@ void parent_process(int msgid) {
     }
 
     // Wait for all children to terminate
-    for (int i = 0; i < NUM_CHILDREN; i++) {
+    for (int i = 0; i < trainCount; i++) {
         wait(NULL);
     }
 }
@@ -91,7 +91,7 @@ void parent_process(int msgid) {
 // Function for child process behavior
 // This is temporary for testing message queue system, a function 
 // specific to train requirements should replace this
-void child_process(int msgid) {
+void train_process(int msgid) {
     struct message msg;
     msg.msg_type = 1; // Type 1 means request to the server
     msg.pid = getpid();
@@ -117,11 +117,11 @@ void child_process(int msgid) {
 // this is not official since this is what Fawaz
 // will implement in Fawaz.c, except to match
 // the required structure of trains
-void fork_child_processes(int msgid) {
-    for (int i = 0; i < NUM_CHILDREN; i++) {
+void fork_trains(int msgid, int trainCount) {
+    for (int i = 0; i < trainCount; i++) {
         pid_t pid = fork();
         if (pid == 0) { // child processes run this
-            child_process(msgid);
+            train_process(msgid);
         } else if (pid < 0) { // only runs if a fork fails
             perror("fork failed");
             exit(1);
@@ -129,32 +129,35 @@ void fork_child_processes(int msgid) {
     }
 }
 
-// This main function will need to be removed, this is only for
-// forking and IPC testing purposes
-int main() {
-    // create key and message queue ID needed for the
-    // message queue to work
-    key_t key;
-    int msgid;
+// // This main function will need to be removed, this is only for
+// // forking and IPC testing purposes
+// int main() {
+//     // create key and message queue ID needed for the
+//     // message queue to work
+//     key_t key;
+//     int msgid;
 
-    // Create message queue for message passing between parent
-    // and child processes. This function MUST return msgid so 
-    // that the created message queue ID can be used in the 
-    // rest of the main function.
-    msgid = createMessageQueue(key, msgid);
+//     // testing 
+//     int trainCount = 3;
 
-    // Fork multiple child processes
-    // this is purely for testing
-    fork_child_processes(msgid);
+//     // Create message queue for message passing between parent
+//     // and child processes. This function MUST return msgid so 
+//     // that the created message queue ID can be used in the 
+//     // rest of the main function.
+//     msgid = createMessageQueue(key, msgid);
 
-    // By this point, all child processes have exited,
-    // so only the parent will execute the code below
+//     // Fork multiple child processes
+//     // this is purely for testing
+//     fork_trains(msgid, trainCount);
 
-    // execute responsibilities of server
-    parent_process(msgid);
+//     // By this point, all child processes have exited,
+//     // so only the parent will execute the code below
 
-    // clear up memory from message queue since, it is no longer needed
-    destroyMessageQueue(msgid);
+//     // execute responsibilities of server
+//     server_process(msgid, trainCount);
 
-    return 0;
-}
+//     // clear up memory from message queue since, it is no longer needed
+//     destroyMessageQueue(msgid);
+
+//     return 0;
+// }

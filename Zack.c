@@ -42,14 +42,15 @@ void initR_Table(Intersection **intersections, int intersectionCount){
 		strcpy((*intersections)[0].trains[0].name, "Train 1");
 		strcpy((*intersections)[1].trains[0].name, "Train 2");
 		strcpy((*intersections)[1].trains[1].name, "Train 3");
-		
-		//initializes semaphore is resource > 1 and mutex if else
+
+		//initializes lock type to semaphore if its resource > 1 and mutex if else
 		if((*intersections)[i].resources > 1){
 			strcpy((*intersections)[i].lock_type, "Semaphore");
 		} else{
 			strcpy((*intersections)[i].lock_type, "Mutex");
 		}
-		
+
+		//will implement aiden and keegan code to initialize 
 		if(strcmp((*intersections)[i].lock_type, "Semaphore")){
 			sem_init(&(*intersections)[i].Semaphore, 0, (*intersections)[i].resources);
 		} else{

@@ -10,7 +10,7 @@
 #include <unistd.h>
 
 //Function to initialize the semaphores for every intersection with more than 1 resource
-void initializeSemaphores(Intersection **intersections, int intersectionCount){
+void initializeSemaphores(Intersection *intersections, int intersectionCount){
     for(int i = 0; i < intersectionCount; i++){
         if((*intersections)[i].resources > 1){
             (*intersections)[i].Semaphore = malloc(sizeof(sem_t));
@@ -18,6 +18,7 @@ void initializeSemaphores(Intersection **intersections, int intersectionCount){
         }
         else if((*intersections)[i].resources < 0){
             printf("Error: Intersection %c has an invalid resource value: %i (must be greater than 0)", (*intersections)[i].name, (*intersections)[i].resources);
+            Exit(0);
         }
     }
 }
@@ -39,7 +40,7 @@ void releaseTrain(Intersection *intersection, const char *trainName){
     }
 }
 //Function to destroy the semaphores and free them from memory
-void clearSemaphores(Intersection **intersections, int intersectionCount){
+void clearSemaphores(Intersection *intersections, int intersectionCount){
     for(int i = 0; i < intersectionCount; i++){
         if((*intersections)[i].resources > 1){
             sem_destroy(&((*intersections)[i].Semaphore));

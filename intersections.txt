@@ -1,13 +1,5 @@
-<<<<<<< HEAD
 IntersectionA:1 
 IntersectionB:2 
 IntersectionC:1 
 IntersectionD:3 
 IntersectionE:1 
-=======
-IntersectionA:1
-IntersectionB:2
-IntersectionC:1
-IntersectionD:3
-IntersectionE:1
->>>>>>> 11e5124b28ba9ca0e598780a5faf7782a8af680e

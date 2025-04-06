@@ -1,11 +1,4 @@
-<<<<<<< HEAD
 Train1:IntersectionA,IntersectionB,IntersectionC   
 Train2:IntersectionB,IntersectionD,IntersectionE   
 Train3:IntersectionC,IntersectionD,IntersectionA   
 Train4:IntersectionE,IntersectionB,IntersectionD 
-=======
-Train1:IntersectionA,IntersectionB,IntersectionC
-Train2:IntersectionB,IntersectionD,IntersectionE
-Train3:IntersectionC,IntersectionD,IntersectionA
-Train4:IntersectionE,IntersectionB,IntersectionD
->>>>>>> 11e5124b28ba9ca0e598780a5faf7782a8af680e

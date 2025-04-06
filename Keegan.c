@@ -5,7 +5,7 @@
 
 #include <stdio.h>
 #include <pthread.h>
-#include "main.c"
+//#include "main.c"
 
 /*
 typedef struct {
@@ -25,6 +25,10 @@ void initializeMutex(Intersection *intersections, int intersectionCount){
     if(intersections[i].resources == 1){
         pthread_mutex_init(&intersections[i].Mutex, &at);
         printf("Intersection %s initialized \n", intersections[i].name);
+    }//added error handling
+    else if(intersections[i].resources < 0){
+        printf("Error: Intersection %c has an invalid resource value: %i (must be greater than 0)", (*intersections)[i].name, (*intersections)[i].resources);
+        Exit(0);
     }
    }
     

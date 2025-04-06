@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+/*
 // Structure to hold data about intersections
 typedef struct {
     char name[50];  // Intersection name
@@ -14,7 +15,7 @@ typedef struct {
     char **route;   // Array of intersection names the train passes through
     int routeCount; // Number of intersections the train visits
 } Train;
-
+*/
 // File paths for intersections and trains
 const char *intersectionFilePath = "intersections.txt";
 const char *trainFilePath = "trains.txt";

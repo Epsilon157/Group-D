@@ -13,8 +13,12 @@
 // include other files here
 #include "Cory.c"
 #include "Keegan.c" 
+#include "Aiden.c"
+#include "Jacob.c"
+#include "Fawaz.c"
+#include "Zack.c"
 
-// Structure to hold data about trains
+/*// Structure to hold data about trains
 typedef struct {
     char name[50];  // Train name (e.g., Train1)
     char **route;   // Array of intersection names the train passes through
@@ -23,22 +27,24 @@ typedef struct {
 
 // Structure to hold data about intersections
 typedef struct {
-  char name[50];  // Intersection name
+    char name[50];  // Intersection name
 	char type[50]; // Type of Intersection
 	char lock_type[50]; //Type of lock
-  int resources;  // Resources available at this intersection
+    int resources;  // Resources available at this intersection
 	int lock_state; //0 is for free, 1 is for locked
 	Train trains[50];
 	
 	pthread_mutex_t Mutex;
 	sem_t Semaphore;
 	
-} Intersection;
+} Intersection;*
 
 // File paths for intersections and trains
 const char *intersectionFilePath = "intersections.txt";
 const char *trainFilePath = "trains.txt";
+*/
 
+/*
 //Function that makes the resource allocation table
 void initR_Table(Intersection **intersections, int intersectionCount){
 	
@@ -97,7 +103,10 @@ void printR_Table(Intersection **intersections, int intersectionCount) {
     }
     printf("---------------------------------------------------------------\n");
 }
+*/
 
+
+/*
 // Function to parse the intersection data
 int IntersectionParsing(const char *filename, Intersection **intersections) {
     FILE *file = fopen(filename, "r");
@@ -215,22 +224,23 @@ void GetIntersectionResources(Intersection *intersections, int intersectionCount
     } else {
         printf("Invalid intersection number.\n");
     }
-}
+}*/
 
 int main() {
-    Intersection *intersections;
+    Intersection **intersections; //From * to **
     Train *trains;
     // create key and message queue ID needed for the
     // message queue to work
     key_t key;
     int msgid;
-
+    //below, should it be & or * or **?
     int intersectionCount = IntersectionParsing(intersectionFilePath, &intersections);
     printf("Parsed %d intersections:\n", intersectionCount);
     for (int i = 0; i < intersectionCount; i++) {
         printf("%s has %d resources\n", intersections[i].name, intersections[i].resources);
     }
-
+    initializeSemaphores(&intersections, intersectionCount);//added
+    initializeMutex(&intersections, intersectionCount);//added
     int trainCount = TrainParsing(trainFilePath, &trains);
     printf("\nParsed %d trains:\n", trainCount);
     for (int i = 0; i < trainCount; i++) {

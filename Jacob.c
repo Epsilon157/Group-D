@@ -107,7 +107,7 @@ void FreeMemory(Intersection *intersections, int intersectionCount, Train *train
     }
     free(trains);
 }
-
+/*
 // Function to display the path of a specific train
 void DisplayTrainPath(Train *trains, int trainCount, const char *trainName) {
     int found = 0;
@@ -139,7 +139,7 @@ void GetIntersectionCapacity(Intersection *intersections, int intersectionCount,
         printf("Invalid intersection number.\n");
     }
 }
-/*
+
 int main() {
     Intersection *intersections;
     Train *trains;

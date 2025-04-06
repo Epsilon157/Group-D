@@ -12,6 +12,7 @@
 
 // include other files here
 #include "Cory.c"
+#include "Keegan.c" 
 
 // Structure to hold data about trains
 typedef struct {
@@ -66,6 +67,8 @@ void initR_Table(Intersection **intersections, int intersectionCount){
 		
 		
 	} 
+
+    //initializeMutex(*intersections, intersectionCount);
 	
 }
 

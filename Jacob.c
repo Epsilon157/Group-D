@@ -109,6 +109,17 @@ void FreeMemory(Intersection *intersections, int intersectionCount, Train *train
     free(trains);
 }
 
+
+void GetIntersectionCapacity(Intersection *intersections, int intersectionCount, int intersectionIndex) {
+    if (intersectionIndex >= 1 && intersectionIndex <= intersectionCount) {
+        printf("Capacity at intersection %s: %d\n", intersections[intersectionIndex - 1].name, intersections[intersectionIndex - 1].capacity);  // Changed 'resources' to 'capacity'
+    } else {
+        printf("Invalid intersection number.\n");
+    }
+}
+
+
+/*
 // Function to display the path of a specific train
 void DisplayTrainPath(Train *trains, int trainCount, const char *trainName) {
     int found = 0;
@@ -133,14 +144,8 @@ void DisplayTrainPath(Train *trains, int trainCount, const char *trainName) {
 }
 
 // Function to get the capacity amount for a specific intersection
-void GetIntersectionCapacity(Intersection *intersections, int intersectionCount, int intersectionIndex) {
-    if (intersectionIndex >= 1 && intersectionIndex <= intersectionCount) {
-        printf("Capacity at intersection %s: %d\n", intersections[intersectionIndex - 1].name, intersections[intersectionIndex - 1].capacity);  // Changed 'resources' to 'capacity'
-    } else {
-        printf("Invalid intersection number.\n");
-    }
-}
-/*
+
+
 int main() {
     Intersection *intersections;
     Train *trains;

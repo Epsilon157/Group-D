@@ -98,7 +98,7 @@ int TrainParsing(const char *filename, Train **trains) {
 
 
 // Function to free the memory allocated for intersections and trains
-void FreeMemory(Intersection **intersections, int intersectionCount, Train *trains, int trainCount) {
+void FreeMemory(Intersection *intersections, int intersectionCount, Train *trains, int trainCount) {
     free(intersections);
 
     for (int i = 0; i < trainCount; i++) {

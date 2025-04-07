@@ -1,0 +1,25 @@
+// shared_structs.h
+#ifndef SHARED_STRUCTS_H
+#define SHARED_STRUCTS_H
+
+#include <pthread.h>
+#include <semaphore.h>
+
+typedef struct {
+    char name[50];  // Train name (e.g., Train1)
+    char **route;   // Array of intersection names the train passes through
+    int routeCount;
+} Train;
+
+typedef struct {
+    char name[50];         // Intersection name
+    char type[50];         // Type of intersection
+    char lock_type[50];    // "Mutex" or "Semaphore"
+    int capacity;         // Capacity
+    int lock_state;        // 0 = free, 1 = locked
+    Train trains[50];      // Trains currently in intersection
+    pthread_mutex_t Mutex;
+    sem_t Semaphore;
+} Intersection;
+
+#endif

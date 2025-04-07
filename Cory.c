@@ -18,6 +18,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <string.h>
+#include "shared_header.h"
 
 #define MAX_TEXT 512
 

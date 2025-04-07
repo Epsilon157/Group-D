@@ -8,18 +8,19 @@
 #include <pthread.h>
 #include <semaphore.h>
 #include <unistd.h>
+#include "shared_header.h"
 
 //Function to initialize the semaphores for every intersection with more than 1 resource
 void initializeSemaphores(Intersection *intersections, int intersectionCount){
     for(int i = 0; i < intersectionCount; i++){
-        if((*intersections)[i].resources > 1){
-            (*intersections)[i].Semaphore = malloc(sizeof(sem_t));
-            sem_init(&(*intersections)[i].Semaphore, 0, (*intersections)[i].resources);
+        if(intersections[i].capacity > 1){
+           // (*intersections)[i].Semaphore = malloc(sizeof(sem_t));
+            sem_init(&intersections[i].Semaphore, 0, intersections[i].capacity);
         }
-        else if((*intersections)[i].resources < 0){
-            printf("Error: Intersection %c has an invalid resource value: %i (must be greater than 0)", (*intersections)[i].name, (*intersections)[i].resources);
-            Exit(0);
-        }
+        //else if((*intersections)[i].resources < 0){
+          //  printf("Error: Intersection %c has an invalid resource value: %i (must be greater than 0)", (*intersections)[i].name, (*intersections)[i].resources);
+            //exit(0);
+       // }
     }
 }
 //Function for a train to try and go through an intersection
@@ -42,9 +43,9 @@ void releaseTrain(Intersection *intersection, const char *trainName){
 //Function to destroy the semaphores and free them from memory
 void clearSemaphores(Intersection *intersections, int intersectionCount){
     for(int i = 0; i < intersectionCount; i++){
-        if((*intersections)[i].resources > 1){
-            sem_destroy(&((*intersections)[i].Semaphore));
-            free((*intersections)[i].Semaphore);
+        if(intersections[i].capacity > 1){
+            sem_destroy(&(intersections[i].Semaphore));
+          //  free((*intersections)[i].Semaphore);
         }
     }
 }

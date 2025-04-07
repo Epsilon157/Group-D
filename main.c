@@ -9,8 +9,10 @@
 #include <pthread.h>
 #include <semaphore.h>
 #include <string.h>
+#include "shared_header.h"
 
 // include other files here
+
 #include "Cory.c"
 #include "Keegan.c" 
 #include "Aiden.c"
@@ -227,7 +229,7 @@ void GetIntersectionResources(Intersection *intersections, int intersectionCount
 }*/
 
 int main() {
-    Intersection **intersections; //From * to **
+    Intersection *intersections; //From * to **
     Train *trains;
     // create key and message queue ID needed for the
     // message queue to work
@@ -237,10 +239,14 @@ int main() {
     int intersectionCount = IntersectionParsing(intersectionFilePath, &intersections);
     printf("Parsed %d intersections:\n", intersectionCount);
     for (int i = 0; i < intersectionCount; i++) {
-        printf("%s has %d resources\n", intersections[i].name, intersections[i].resources);
+        printf("%s has %d resources\n", intersections[i].name, intersections[i].capacity);
     }
-    initializeSemaphores(&intersections, intersectionCount);//added
-    initializeMutex(&intersections, intersectionCount);//added
+
+//removed &
+    initializeSemaphores(intersections, intersectionCount);//added
+    initializeMutex(intersections, intersectionCount);//added
+
+
     int trainCount = TrainParsing(trainFilePath, &trains);
     printf("\nParsed %d trains:\n", trainCount);
     for (int i = 0; i < trainCount; i++) {

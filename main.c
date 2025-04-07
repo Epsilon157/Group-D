@@ -340,5 +340,29 @@ int main() {
 
     FreeMemory(intersections, intersectionCount, trains, trainCount);
 
+
+    int num_intersections = IntersectionParsing("intersections.txt", &intersections);
+    if (num_intersections > 0) {
+        // Print the initialized intersections
+        print_initialized_intersections(intersections, num_intersections);
+    } else {
+        printf("No intersections to display.\n");
+    }
+
+    // Clean up the dynamically allocated memory
+    free(intersections);
+
+
+
+
+    char* T = "Train1";
+    char* I = "IntersectionA";
+    int granted = 1;
+    printMessages(T, I, granted);
+    T = "Train2";
+    I = "IntersectionA";
+    granted = 0;
+    printMessages(T, I, granted);
+
     return 0;
 }

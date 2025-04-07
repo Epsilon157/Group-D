@@ -120,113 +120,68 @@ void GetIntersectionCapacity(Intersection *intersections, int intersectionCount,
 }
 
 
-/*
-// Function to display the path of a specific train
-void DisplayTrainPath(Train *trains, int trainCount, const char *trainName) {
-    int found = 0;
-    for (int i = 0; i < trainCount; i++) {
-        if (strcmp(trains[i].name, trainName) == 0) {
-            found = 1;
-            printf("Train %s's path: ", trains[i].name);
-            for (int j = 0; j < trains[i].routeCount; j++) {
-                printf("%s", trains[i].route[j]);
-                if (j < trains[i].routeCount - 1) {
-                    printf(", ");
-                }
-            }
-            printf("\n");
-            break;
-        }
+
+//Week 3 code
+
+
+char* updateAndFormatTime(char* buffer) {
+    // Initialize variables
+    static int var1 = 0, var2 = 0, var3 = 0;
+
+    // Increment var1
+    var1++;
+
+    // If var1 reaches 60, reset it to 0 and increment var2
+    if (var1 >= 60) {
+        var1 = 0;
+        var2++;
     }
 
-    if (!found) {
-        printf("Train %s not found.\n", trainName);
+    // If var2 reaches 60, reset it to 0 and increment var3
+    if (var2 >= 60) {
+        var2 = 0;
+        var3++;
     }
+
+    // Format the time string as [hh:mm:ss]
+    sprintf(buffer, "[%02d:%02d:%02d]", var3, var2, var1);
+
+    return buffer;
 }
 
-// Function to get the capacity amount for a specific intersection
 
 
-int main() {
-    Intersection *intersections;
-    Train *trains;
+void printMessages(char* train, char* intersection, int granted) {
+    char timeBuffer[10]; // Buffer to hold the time string
+    updateAndFormatTime(timeBuffer);  // Update and get the formatted time
 
-    int intersectionCount = IntersectionParsing(intersectionFilePath, &intersections);
-    printf("Parsed %d intersections:\n", intersectionCount);
-    for (int i = 0; i < intersectionCount; i++) {
-        printf("%s has %d capacity\n", intersections[i].name, intersections[i].capacity);  // Changed 'resources' to 'capacity'
-    }
-
-    int trainCount = TrainParsing(trainFilePath, &trains);
-    printf("\nParsed %d trains:\n", trainCount);
-    for (int i = 0; i < trainCount; i++) {
-        printf("%s passes through:", trains[i].name);
-        for (int j = 0; j < trains[i].routeCount; j++) {
-            printf(" %s", trains[i].route[j]);
-            if (j < trains[i].routeCount - 1) {
-                printf(",");
-            }
-        }
-        printf("\n");
-    }
-
-    // Main menu for user to choose
-    int choice;
-    printf("\nSelect an option:\n");
-    printf("1. Select an intersection and find all trains passing through it\n");
-    printf("2. Select a stop number (1-%d) and find all trains with that stop\n", trainCount);
-    printf("3. Get the path of a specific train\n");
-    printf("4. Select an intersection and get the capacity amount\n");
-    printf("Enter your choice (1, 2, 3, or 4): ");
-    scanf("%d", &choice);
-
-    if (choice == 1) {
-        int stopNumber;
-        printf("Enter the intersection number (1-%d): ", intersectionCount);
-        scanf("%d", &stopNumber);
-
-        if (stopNumber >= 1 && stopNumber <= intersectionCount) {
-            const char *intersectionName = intersections[stopNumber - 1].name;
-            printf("Trains passing through %s:\n", intersectionName);
-            for (int i = 0; i < trainCount; i++) {
-                for (int j = 0; j < trains[i].routeCount; j++) {
-                    if (strcmp(trains[i].route[j], intersectionName) == 0) {
-                        printf("%s\n", trains[i].name);
-                        break;
-                    }
-                }
-            }
-        } else {
-            printf("Invalid intersection number.\n");
-        }
-    } else if (choice == 2) {
-        int stopNumber;
-        printf("Enter the stop number (1-%d): ", trainCount);
-        scanf("%d", &stopNumber);
-
-        printf("Trains at stop %d:\n", stopNumber);
-        for (int i = 0; i < trainCount; i++) {
-            if (stopNumber <= trains[i].routeCount) {
-                printf("%s: %s (Stop %d)\n", trains[i].name, trains[i].route[stopNumber - 1], stopNumber);
-            }
-        }
-    } else if (choice == 3) {
-        char trainName[50];
-        printf("Enter the train name: ");
-        scanf("%s", trainName);
-        DisplayTrainPath(trains, trainCount, trainName);
-    } else if (choice == 4) {
-        int intersectionNumber;
-        printf("Enter the intersection number (1-%d): ", intersectionCount);
-        scanf("%d", &intersectionNumber);
-
-        GetIntersectionCapacity(intersections, intersectionCount, intersectionNumber);  // Changed 'resources' to 'capacity'
+    if (granted == 1) {
+        // If granted is 1, print the granted message
+        printf("%s %s: Sent ACQUIRE request for %s.\n", timeBuffer, train, intersection);
+        printf("%s SERVER: GRANTED %s to %s.\n", timeBuffer, intersection, train);
     } else {
-        printf("Invalid choice.\n");
+        // If granted is 0, print the denied message
+        printf("%s %s: Sent ACQUIRE request for %s.\n", timeBuffer, train, intersection);
+        printf("%s SERVER: %s is locked. %s added to wait queue.\n", timeBuffer, intersection, train);
     }
-
-    FreeMemory(intersections, intersectionCount, trains, trainCount);
-
-    return 0;
 }
-*/
+
+
+
+
+void print_initialized_intersections(Intersection *intersections, int num_intersections) {
+    printf("00:00:00] SERVER: Initialized intersections:\n");
+
+    for (int i = 0; i < num_intersections; i++) {
+        // Check if the intersection's capacity is 1 (Mutex) or greater than 1 (Semaphore)
+        if (intersections[i].capacity == 1) {
+            printf("- %s (Mutex, Capacity=%d)\n", 
+                   intersections[i].name, 
+                   intersections[i].capacity);
+        } else {
+            printf("- %s (Semaphore, Capacity=%d)\n", 
+                   intersections[i].name, 
+                   intersections[i].capacity);
+        }
+    }
+}

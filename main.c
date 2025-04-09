@@ -355,14 +355,7 @@ int main() {
 
 
 
-    char* T = "Train1";
-    char* I = "IntersectionA";
-    int granted = 1;
-    printMessages(T, I, granted);
-    T = "Train2";
-    I = "IntersectionA";
-    granted = 0;
-    printMessages(T, I, granted);
+
 
     return 0;
 }

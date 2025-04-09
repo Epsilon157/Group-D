@@ -158,10 +158,12 @@ void printMessages(char* train, char* intersection, int granted) {
     if (granted == 1) {
         // If granted is 1, print the granted message
         printf("%s %s: Sent ACQUIRE request for %s.\n", timeBuffer, train, intersection);
+        updateAndFormatTime(timeBuffer);
         printf("%s SERVER: GRANTED %s to %s.\n", timeBuffer, intersection, train);
     } else {
         // If granted is 0, print the denied message
         printf("%s %s: Sent ACQUIRE request for %s.\n", timeBuffer, train, intersection);
+        updateAndFormatTime(timeBuffer);
         printf("%s SERVER: %s is locked. %s added to wait queue.\n", timeBuffer, intersection, train);
     }
 }
@@ -170,7 +172,7 @@ void printMessages(char* train, char* intersection, int granted) {
 
 
 void print_initialized_intersections(Intersection *intersections, int num_intersections) {
-    printf("00:00:00] SERVER: Initialized intersections:\n");
+    printf("[00:00:00] SERVER: Initialized intersections:\n");
 
     for (int i = 0; i < num_intersections; i++) {
         // Check if the intersection's capacity is 1 (Mutex) or greater than 1 (Semaphore)
@@ -185,3 +187,43 @@ void print_initialized_intersections(Intersection *intersections, int num_inters
         }
     }
 }
+
+
+void printDeadlockAndPreemption(char* train1, char* train2, char* intersection) {
+    char timeBuffer[10];
+    updateAndFormatTime(timeBuffer);  // Update and get the formatted time
+
+    // Print the deadlock detection message
+    printf("%s SERVER: Deadlock detected! Cycle: %s ↔ %s.\n", timeBuffer, train1, train2);
+    updateAndFormatTime(timeBuffer);
+    
+    // Print the preemption action
+    printf("%s SERVER: Preempting %s from %s.\n", timeBuffer, intersection, train1);
+    updateAndFormatTime(timeBuffer);
+
+    // Print the forced release message
+    printf("%s SERVER: %s released %s forcibly.\n", timeBuffer, train1, intersection);
+}
+
+
+
+
+    /*
+    char* T = "Train1";
+    char* I = "IntersectionA";
+    int granted = 1;
+    printMessages(T, I, granted);
+
+
+    T = "Train2";
+    I = "IntersectionA";
+    granted = 0;
+    printMessages(T, I, granted);
+
+
+    char* DeadlockTrain1 = "Train1";
+    char* DeadlockTrain2 = "Train2";
+    char* DeadlockIntersection = "IntersectionA";
+    printDeadlockAndPreemption(DeadlockTrain1, DeadlockTrain2, DeadlockIntersection);
+
+    */

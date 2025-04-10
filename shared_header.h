@@ -8,6 +8,9 @@
 typedef struct {
     char name[50];  // Train name (e.g., Train1)
     char **route;   // Array of intersection names the train passes through
+    char *heldIntersections[10]; // intersections trains hold
+    char *waitingIntersection; // intersection train is waiting for 
+    int heldIntersectionCount;  // how many intersecions the train holds
     int routeCount;
 } Train;
 

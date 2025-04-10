@@ -263,6 +263,12 @@ int main() {
     initR_Table(&intersections, intersectionCount);
 	printR_Table(&intersections, intersectionCount);
 
+
+    // This is just testing mutexes are properly working
+    printf("\n TEST FOR MUTEX \n") ;
+    test_initializeMutex();
+    printf("\n END OF TEST FOR MUTEX \n") ;
+
 	/*  // Main menu for user to choose
     int choice;
     printf("\nSelect an option:\n");
@@ -368,7 +374,7 @@ int main() {
     // Clean up the dynamically allocated memory
     free(intersections);
 
-
+    
 
 
 

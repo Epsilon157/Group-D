@@ -10,11 +10,9 @@
 //#include "main.c"
 
 /*
-typedef struct {
-    char name[50];  // Intersection name
-    int capacity;  // Resources available at this intersection
-    pthread_mutex_t Mutex;
-} Intersection;
+    This code includes making sure mutexes were configured correctly, also ensuring that mutexes could work in shared space with all of the trains(processes) 
+    allowing to be shared throughout all of the processes safely.I also made sure there was a capacity check for allowing trains (processes) was set to only 1 to ensure 
+    it would be compatible with mutexes and also only allowing one train can enter at a time in an intersection.
 */
 // method for initializing mutex
 void initializeMutex(Intersection *intersections, int intersectionCount){
@@ -28,10 +26,10 @@ void initializeMutex(Intersection *intersections, int intersectionCount){
         pthread_mutex_init(&intersections[i].Mutex, &at);
         printf("Intersection %s initialized \n", intersections[i].name);
     }//added error handling
-   // else if(intersections[i].resources < 0){
-     //   printf("Error: Intersection %c has an invalid resource value: %i (must be greater than 0)", intersections[i].name, (*intersections)[i].resources);
-       // exit(0);
-    //}
+    else if(intersections[i].capacity < 0){
+        printf("Error: Intersection %s has an invalid resource value: %i (must be greater than 0)", intersections[i].name, intersections[i].capacity);
+        exit(0);
+    }
    }
     
 }
@@ -55,4 +53,22 @@ void releaseTrainMutex(Intersection *intersection, const char *trainName){
 
     }
 
+}
+//writing a test to ensure the code mutexes are called correctly
+
+void test_initializeMutex() {
+    Intersection intersections[1];
+    strcpy(intersections[0].name, "TestIntersection");
+    intersections[0].capacity = 2;  // This should SKIP mutex initialization
+
+    initializeMutex(intersections, 1);
+
+    int lockResult = pthread_mutex_lock(&intersections[0].Mutex);
+
+    if (lockResult == 0) {
+        printf("ERROR: Mutex was lockable for %s, but it should NOT have been initialized!\n", intersections[0].name);
+        pthread_mutex_unlock(&intersections[0].Mutex);
+    } else {
+        printf("Correct behavior: Mutex not initialized for %s (capacity > 1)\n", intersections[0].name);
+    }
 }

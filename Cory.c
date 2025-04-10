@@ -92,7 +92,10 @@ void server_process(int msgid, int trainCount) {
 // Function for child process behavior
 // This is temporary for testing message queue system, a function 
 // specific to train requirements should replace this
-void train_process(int msgid) {
+
+// , Train *trains, Intersection *intersections
+
+void train_process(int msgid, int trainIndex) {
     struct message msg;
     msg.msg_type = 1; // Type 1 means request to the server
     msg.pid = getpid();
@@ -110,6 +113,9 @@ void train_process(int msgid) {
         exit(1);
     }
 
+    // need a while loop to send requests for intersections
+    // until all intersections in route are visited
+
     printf("Child %d received response: %s\n", getpid(), msg.text);
     exit(0);
 }
@@ -122,7 +128,7 @@ void fork_trains(int msgid, int trainCount) {
     for (int i = 0; i < trainCount; i++) {
         pid_t pid = fork();
         if (pid == 0) { // child processes run this
-            train_process(msgid);
+            train_process(msgid, i);
         } else if (pid < 0) { // only runs if a fork fails
             perror("fork failed");
             exit(1);
@@ -139,11 +145,11 @@ void createRAG(Train *trains, int trainCount) {
 
     fprintf(fp, "digraph RAG {\n");
     fprintf(fp, "  rankdir=LR;\n");
-    fprintf(fp, "  node [shape=circle, style=filled, fillcolor=lightblue];\n");
+    fprintf(fp, "  node [shape=rectangle, style=filled, fillcolor=lightblue];\n");
 
     for (int i = 0; i < trainCount; i++) {
         Train *t = &trains[i];
-        fprintf(fp, "  \"%s\" [shape=ellipse, fillcolor=lightgreen];\n", t->name);
+        fprintf(fp, "  \"%s\" [shape=circle, fillcolor=lightgreen];\n", t->name);
 
         // Add edges from held intersections to train (resource to process)
         for (int j = 0; j < t->heldIntersectionCount; j++) {
@@ -162,6 +168,10 @@ void createRAG(Train *trains, int trainCount) {
     fclose(fp);
 
     printf("Resource Allocation Graph created: rag.dot\n");
+}
+
+void detectCycle() {
+
 }
 
 // // This main function will need to be removed, this is only for

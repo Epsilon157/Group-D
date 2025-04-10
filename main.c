@@ -342,6 +342,13 @@ int main() {
     // for this to work properly, trains.heldIntersections and
     // trains.instersectionCount need to be updated based on
     // parsed info from text files
+    trains[0].heldIntersectionCount = 2;
+    trains[0].heldIntersections[0] = "IntersectionA";
+    trains[0].heldIntersections[1] = "IntersectionB";
+    trains[0].waitingIntersection = "IntersectionC";
+    trains[3].waitingIntersection = "IntersectionA";
+    trains[3].heldIntersectionCount = 1;
+    trains[3].heldIntersections[0] = "IntersectionC";
     createRAG(trains, trainCount);
 
     // clear up memory from message queue since, it is no longer needed

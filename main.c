@@ -335,6 +335,15 @@ int main() {
     // execute responsibilities of server
     server_process(msgid, trainCount);
 
+    // running createRAG in server for now for testing, it should
+    // eventually be executed after any train request is made
+    // in the train_process function
+
+    // for this to work properly, trains.heldIntersections and
+    // trains.instersectionCount need to be updated based on
+    // parsed info from text files
+    createRAG(trains, trainCount);
+
     // clear up memory from message queue since, it is no longer needed
     destroyMessageQueue(msgid);
 

@@ -130,6 +130,40 @@ void fork_trains(int msgid, int trainCount) {
     }
 }
 
+void createRAG(Train *trains, int trainCount) {
+    FILE *fp = fopen("rag.dot", "w");
+    if (!fp) {
+        perror("Failed to open rag.dot");
+        return;
+    }
+
+    fprintf(fp, "digraph RAG {\n");
+    fprintf(fp, "  rankdir=LR;\n");
+    fprintf(fp, "  node [shape=circle, style=filled, fillcolor=lightblue];\n");
+
+    for (int i = 0; i < trainCount; i++) {
+        Train *t = &trains[i];
+        fprintf(fp, "  \"%s\" [shape=ellipse, fillcolor=lightgreen];\n", t->name);
+
+        // Add edges from held intersections to train (resource to process)
+        for (int j = 0; j < t->heldIntersectionCount; j++) {
+            if (t->heldIntersections[j] && strlen(t->heldIntersections[j]) > 0) {
+                fprintf(fp, "  \"%s\" -> \"%s\";\n", t->heldIntersections[j], t->name);
+            }
+        }
+
+        // Add edge from train to waiting intersection (process to resource)
+        if (t->waitingIntersection && strlen(t->waitingIntersection) > 0) {
+            fprintf(fp, "  \"%s\" -> \"%s\";\n", t->name, t->waitingIntersection);
+        }
+    }
+
+    fprintf(fp, "}\n");
+    fclose(fp);
+
+    printf("Resource Allocation Graph created: rag.dot\n");
+}
+
 // // This main function will need to be removed, this is only for
 // // forking and IPC testing purposes
 // int main() {

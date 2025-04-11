@@ -1,6 +1,6 @@
-[00:00:01] Logging system initialized.
-[00:00:02] TRAINTrainTest: Sent ACQUIRE request for IntersectionIntersectionA.
-[00:00:03] SERVER: GRANTED IntersectionIntersectionA to TrainTrainTest
-[00:00:01] Logging system initialized.
-[00:00:02] TRAINTrainTest: Sent ACQUIRE request for IntersectionIntersectionA.
-[00:00:03] SERVER: GRANTED IntersectionIntersectionA to TrainTrainTest
+[00:00:06] SERVER: Initialized intersections:
+[00:00:07] - IntersectionA (Mutex, Capacity=1)
+[00:00:08] - IntersectionB (Semaphore, Capacity=2)
+[00:00:09] - IntersectionC (Mutex, Capacity=1)
+[00:00:10] - IntersectionD (Semaphore, Capacity=3)
+[00:00:11] - IntersectionE (Mutex, Capacity=1)

@@ -17,7 +17,11 @@
 #include "Keegan.c" 
 #include "Aiden.c"
 #include "Jacob.c"
+<<<<<<< HEAD
 // #include "Fawaz.c"
+=======
+//#include "Fawaz.c"
+>>>>>>> 9bb5a5f6b904db1014b2e89932589986bfc99fca
 #include "Zack.c"
 
 /*// Structure to hold data about trains
@@ -201,17 +205,34 @@ int main() {
     int msgid;
     //below, should it be & or * or **?
     int intersectionCount = IntersectionParsing(intersectionFilePath, &intersections);
+    //adding error handling for file parsing
+    if(intersectionCount <= 0){
+        fprintf(stderr," ERROR: No intersections were parsed and file could not be read. Exiting \n");
+        exit(EXIT_FAILURE);
+    }
     printf("Parsed %d intersections:\n", intersectionCount);
     for (int i = 0; i < intersectionCount; i++) {
         printf("%s has %d resources\n", intersections[i].name, intersections[i].capacity);
     }
 
+<<<<<<< HEAD
     // removed &
     initializeSemaphores(intersections, intersectionCount);//added
     initializeMutex(intersections, intersectionCount);//added
+=======
+//removed &
+    initializeSemaphores(intersections, intersectionCount);
+    initializeMutex(intersections, intersectionCount);
+>>>>>>> 9bb5a5f6b904db1014b2e89932589986bfc99fca
 
 
     int trainCount = TrainParsing(trainFilePath, &trains);
+// added error handling for train parsing
+    if(trainCount <=0){
+        fprintf(stderr,"ERROR: No trains were parsed. Exiting\n");
+        free(intersections);
+        exit(EXIT_FAILURE);
+    }
     printf("\nParsed %d trains:\n", trainCount);
     for (int i = 0; i < trainCount; i++) {
         printf("%s passes through:", trains[i].name);
@@ -233,61 +254,7 @@ int main() {
     test_initializeMutex();
     printf("\n END OF TEST FOR MUTEX \n") ;
 
-	/*  // Main menu for user to choose
-    int choice;
-    printf("\nSelect an option:\n");
-    printf("1. Select an intersection and find all trains passing through it\n");
-    printf("2. Select a stop number (1-%d) and find all trains with that stop\n", trainCount);
-    printf("3. Get the path of a specific train\n");
-    printf("4. Select an intersection and get the resource amount\n");
-    printf("Enter your choice (1, 2, 3, or 4): ");
-    scanf("%d", &choice);
-
-    if (choice == 1) {
-        int stopNumber;
-        printf("Enter the intersection number (1-%d): ", intersectionCount);
-        scanf("%d", &stopNumber);
-
-        if (stopNumber >= 1 && stopNumber <= intersectionCount) {
-            const char *intersectionName = intersections[stopNumber - 1].name;
-            printf("Trains passing through %s:\n", intersectionName);
-            for (int i = 0; i < trainCount; i++) {
-                for (int j = 0; j < trains[i].routeCount; j++) {
-                    if (strcmp(trains[i].route[j], intersectionName) == 0) {
-                        printf("%s\n", trains[i].name);
-                        break;
-                    }
-                }
-            }
-        } else {
-            printf("Invalid intersection number.\n");
-        }
-    } else if (choice == 2) {
-        int stopNumber;
-        printf("Enter the stop number (1-%d): ", trainCount);
-        scanf("%d", &stopNumber);
-
-        printf("Trains at stop %d:\n", stopNumber);
-        for (int i = 0; i < trainCount; i++) {
-            if (stopNumber <= trains[i].routeCount) {
-                printf("%s: %s (Stop %d)\n", trains[i].name, trains[i].route[stopNumber - 1], stopNumber);
-            }
-        }
-    } else if (choice == 3) {
-        char trainName[50];
-        printf("Enter the train name: ");
-        scanf("%s", trainName);
-        DisplayTrainPath(trains, trainCount, trainName);
-    } else if (choice == 4) {
-        int intersectionNumber;
-        printf("Enter the intersection number (1-%d): ", intersectionCount);
-        scanf("%d", &intersectionNumber);
-
-        GetIntersectionResources(intersections, intersectionCount, intersectionNumber);
-    } else {
-        printf("Invalid choice.\n");
-    }
-	*/
+	
 
     // Create message queue for message passing between parent
     // and child processes. This function MUST return msgid so 
@@ -355,14 +322,31 @@ int main() {
     // Clean up the dynamically allocated memory
     free(intersections);
 
+<<<<<<< HEAD
     log_file = fopen("simulation.log", "w");
+=======
+
+
+	
+     log_file = fopen("simulation.log", "w");
+>>>>>>> 9bb5a5f6b904db1014b2e89932589986bfc99fca
     if (log_file == NULL) {
         perror("Failed to open simulation.log");
         exit(EXIT_FAILURE);
     }
 
      
+<<<<<<< HEAD
     print_initialized_intersections(intersections, 5);
+=======
+     print_initialized_intersections(intersections, num_intersections);
+
+	    int grantTest = 1;
+  
+    
+
+    printMessages(trains[0].name, intersections[0].name, grantTest, intersections[0].capacity);
+>>>>>>> 9bb5a5f6b904db1014b2e89932589986bfc99fca
 
     if (log_file) {
         fclose(log_file);

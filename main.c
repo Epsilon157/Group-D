@@ -341,7 +341,13 @@ int main() {
     }
 
      
-     print_initialized_intersections(intersections, 5);
+     print_initialized_intersections(intersections, num_intersections);
+
+	    int grantTest = 1;
+  
+    
+
+    printMessages(trains[0].name, intersections[0].name, grantTest, intersections[0].capacity);
 
      if (log_file) {
         fclose(log_file);

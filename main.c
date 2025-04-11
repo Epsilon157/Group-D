@@ -17,7 +17,7 @@
 #include "Keegan.c" 
 #include "Aiden.c"
 #include "Jacob.c"
-#include "Fawaz.c"
+// #include "Fawaz.c"
 #include "Zack.c"
 
 /*// Structure to hold data about trains
@@ -183,42 +183,6 @@ int TrainParsing(const char *filename, Train **trains) {
     return count;
 }
 
-// Function to free the memory allocated for intersections and trains
-void FreeMemory(Intersection *intersections, int intersectionCount, Train *trains, int trainCount) {
-    free(intersections);
-
-    for (int i = 0; i < trainCount; i++) {
-        for (int j = 0; j < trains[i].routeCount; j++) {
-            free(trains[i].route[j]);
-        }
-        free(trains[i].route);
-    }
-    free(trains);
-}
-
-// Function to display the path of a specific train
-void DisplayTrainPath(Train *trains, int trainCount, const char *trainName) {
-    int found = 0;
-    for (int i = 0; i < trainCount; i++) {
-        if (strcmp(trains[i].name, trainName) == 0) {
-            found = 1;
-            printf("Train %s's path: ", trains[i].name);
-            for (int j = 0; j < trains[i].routeCount; j++) {
-                printf("%s", trains[i].route[j]);
-                if (j < trains[i].routeCount - 1) {
-                    printf(", ");
-                }
-            }
-            printf("\n");
-            break;
-        }
-    }
-
-    if (!found) {
-        printf("Train %s not found.\n", trainName);
-    }
-}
-
 // Function to get the resource amount for a specific intersection
 void GetIntersectionResources(Intersection *intersections, int intersectionCount, int intersectionIndex) {
     if (intersectionIndex >= 1 && intersectionIndex <= intersectionCount) {
@@ -242,7 +206,7 @@ int main() {
         printf("%s has %d resources\n", intersections[i].name, intersections[i].capacity);
     }
 
-//removed &
+    // removed &
     initializeSemaphores(intersections, intersectionCount);//added
     initializeMutex(intersections, intersectionCount);//added
 
@@ -348,20 +312,37 @@ int main() {
     // for this to work properly, trains.heldIntersections and
     // trains.instersectionCount need to be updated based on
     // parsed info from text files
+    
+    // hard coded tests for RAG
     trains[0].heldIntersectionCount = 2;
     trains[0].heldIntersections[0] = "IntersectionA";
     trains[0].heldIntersections[1] = "IntersectionB";
     trains[0].waitingIntersection = "IntersectionC";
-    trains[3].waitingIntersection = "IntersectionA";
+
+    trains[1].heldIntersectionCount = 1;
+    trains[1].heldIntersections[0] = "IntersectionD";
+
+    trains[2].heldIntersectionCount = 0;
+    trains[2].waitingIntersection = "IntersectionD";
+    
     trains[3].heldIntersectionCount = 1;
     trains[3].heldIntersections[0] = "IntersectionC";
-    createRAG(trains, trainCount);
+    trains[3].waitingIntersection = "IntersectionA";
+
+    createRAG_dot(trains, trainCount);
+    Node *RAG = createRAG_list(trains, trainCount);
+    printRAG_list(RAG);
+
+    if (detectCycleInRAG(RAG)) {
+        printf("\nCycle in RAG detected (deadlock can occur)\n");
+    } else {
+        printf("\nNo cycle in RAG detected\n");
+    }
 
     // clear up memory from message queue since, it is no longer needed
     destroyMessageQueue(msgid);
 
     FreeMemory(intersections, intersectionCount, trains, trainCount);
-
 
     int num_intersections = IntersectionParsing("intersections.txt", &intersections);
     if (num_intersections > 0) {
@@ -374,24 +355,22 @@ int main() {
     // Clean up the dynamically allocated memory
     free(intersections);
 
-
-
-	
-     log_file = fopen("simulation.log", "w");
-if (log_file == NULL) {
-    perror("Failed to open simulation.log");
-    exit(EXIT_FAILURE);
-}
+    log_file = fopen("simulation.log", "w");
+    if (log_file == NULL) {
+        perror("Failed to open simulation.log");
+        exit(EXIT_FAILURE);
+    }
 
      
-     print_initialized_intersections(intersections, 5);
+    print_initialized_intersections(intersections, 5);
 
-     if (log_file) {
+    if (log_file) {
         fclose(log_file);
     }
+
+
+
+
     
-
-
-
     return 0;
 }

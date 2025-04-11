@@ -6,7 +6,9 @@ digraph RAG {
   "IntersectionB" -> "Train1";
   "Train1" -> "IntersectionC";
   "Train2" [shape=circle, fillcolor=lightgreen];
+  "IntersectionD" -> "Train2";
   "Train3" [shape=circle, fillcolor=lightgreen];
+  "Train3" -> "IntersectionD";
   "Train4" [shape=circle, fillcolor=lightgreen];
   "IntersectionC" -> "Train4";
   "Train4" -> "IntersectionA";

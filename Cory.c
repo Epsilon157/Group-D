@@ -18,6 +18,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdbool.h>
 #include "shared_header.h"
 
 #define MAX_TEXT 512
@@ -28,6 +29,87 @@ struct message {
     pid_t pid;          // Process ID of the sender
     char text[MAX_TEXT];// Request message
 };
+
+// Graph data structure elements needed for resource
+// allocation graph generation (digraph)
+typedef struct Edge {
+    char target[50];
+    struct Edge *next;
+} Edge;
+
+typedef struct Node {
+    char name[50];
+    int isTrain;         // 1 = Train, 0 = Intersection
+    Edge *edges;         // Outgoing edges
+    struct Node *next;   // Next node in graph
+} Node;
+
+// Digraph helper function to find/create nodes
+Node *findOrCreateNode(Node **head, const char *name, int isTrain) {
+    Node *curr = *head;
+    while (curr) {
+        if (strcmp(curr->name, name) == 0)
+            return curr;
+        curr = curr->next;
+    }
+
+    // Not found — create and prepend
+    Node *newNode = malloc(sizeof(Node));
+    strcpy(newNode->name, name);
+    newNode->isTrain = isTrain;
+    newNode->edges = NULL;
+    newNode->next = *head;
+    *head = newNode;
+    return newNode;
+}
+
+// Digraph helper function to add edges between 
+// trains and instersections
+void addEdge(Node *from, const char *toName) {
+    Edge *newEdge = malloc(sizeof(Edge));
+    strcpy(newEdge->target, toName);
+    newEdge->next = from->edges;
+    from->edges = newEdge;
+}
+
+// Digraph helper function to get a node by name 
+// (used in graphDFS)
+Node* getNodeByName(Node *graph, const char *name) {
+    while (graph) {
+        if (strcmp(graph->name, name) == 0)
+            return graph;
+        graph = graph->next;
+    }
+    return NULL;
+}
+
+// Digraph helper function used in depth-first
+// search cycle detection algorithm
+bool graphDFS(Node *node, Node *graph, bool *visited, bool *path, int index, char nodeNames[][50], int nodeCount) {
+    visited[index] = true;
+    path[index] = true;
+
+    Edge *edge = node->edges;
+
+    while (edge) {
+        // Find the target node in the graph
+        for (int i = 0; i < nodeCount; i++) {
+            if (strcmp(edge->target, nodeNames[i]) == 0) {
+                if (!visited[i]) {
+                    if (graphDFS(getNodeByName(graph, nodeNames[i]), graph, visited, path, i, nodeNames, nodeCount))
+                        return true;
+                } else if (path[i]) {
+                    // Back edge found: cycle detected
+                    return true;
+                }
+            }
+        }
+        edge = edge->next;
+    }
+
+    path[index] = false;
+    return false;
+}
 
 // Function for setting up the message queue
 int createMessageQueue(int key, int msgid) {
@@ -53,14 +135,16 @@ int createMessageQueue(int key, int msgid) {
 void destroyMessageQueue(int msgid) {
     // Cleanup: Remove message queue
     msgctl(msgid, IPC_RMID, NULL);
-    printf("Message queue removed, exiting.\n");
+    printf("Message queue removed\n");
 }
 
 // Function for parent process acting as server
 void server_process(int msgid, int trainCount) {
     struct message msg;
-    // CHANGE: will need to loop the server as long as
+
+    // to do: will need to loop the server as long as
     // there are still trains that need to pass through
+
     for (int i = 0; i < trainCount; i++) {
         // Receive request from any child
         if (msgrcv(msgid, &msg, sizeof(msg) - sizeof(long), 1, 0) == -1) {
@@ -101,6 +185,9 @@ void train_process(int msgid, int trainIndex) {
     msg.pid = getpid();
     snprintf(msg.text, MAX_TEXT, "Request from child PID %d", msg.pid);
 
+    // to do: loop through each intersection in its route
+    // requesting to go through them (one at a time?)
+
     // Send request to parent
     if (msgsnd(msgid, &msg, sizeof(msg) - sizeof(long), 0) == -1) {
         perror("Child process msgsnd failed");
@@ -136,7 +223,9 @@ void fork_trains(int msgid, int trainCount) {
     }
 }
 
-void createRAG(Train *trains, int trainCount) {
+// Creates a resource allocation graph in the form of
+// a .dot file for visualization
+void createRAG_dot(Train *trains, int trainCount) {
     FILE *fp = fopen("rag.dot", "w");
     if (!fp) {
         perror("Failed to open rag.dot");
@@ -151,14 +240,14 @@ void createRAG(Train *trains, int trainCount) {
         Train *t = &trains[i];
         fprintf(fp, "  \"%s\" [shape=circle, fillcolor=lightgreen];\n", t->name);
 
-        // Add edges from held intersections to train (resource to process)
+        // Add edges from intersections to train (held)
         for (int j = 0; j < t->heldIntersectionCount; j++) {
             if (t->heldIntersections[j] && strlen(t->heldIntersections[j]) > 0) {
                 fprintf(fp, "  \"%s\" -> \"%s\";\n", t->heldIntersections[j], t->name);
             }
         }
 
-        // Add edge from train to waiting intersection (process to resource)
+        // Add edge from train to intersection (waiting)
         if (t->waitingIntersection && strlen(t->waitingIntersection) > 0) {
             fprintf(fp, "  \"%s\" -> \"%s\";\n", t->name, t->waitingIntersection);
         }
@@ -170,8 +259,79 @@ void createRAG(Train *trains, int trainCount) {
     printf("Resource Allocation Graph created: rag.dot\n");
 }
 
-void detectCycle() {
+// Creates a resource allocation graph in the form of
+// a digraph to run the cycle detection function on
+Node* createRAG_list(Train *trains, int trainCount) {
+    Node *graph = NULL;
 
+    for (int i = 0; i < trainCount; i++) {
+        Train *t = &trains[i];
+        Node *tNode = findOrCreateNode(&graph, t->name, 1);
+
+        // Add edges from intersections to train (held)
+        for (int j = 0; j < t->heldIntersectionCount; j++) {
+            if (t->heldIntersections[j] && strlen(t->heldIntersections[j]) > 0) {
+                Node *interNode = findOrCreateNode(&graph, t->heldIntersections[j], 0);
+                addEdge(interNode, t->name);
+            }
+        }
+
+        // Add edge from train to intersection (waiting)
+        if (t->waitingIntersection && strlen(t->waitingIntersection) > 0) {
+            Node *interNode = findOrCreateNode(&graph, t->waitingIntersection, 0);
+            addEdge(tNode, t->waitingIntersection);
+        }
+    }
+
+    return graph;
+}
+
+// Debugging function to print the RAG digraph to ensure
+// RAG's are generated correctly
+void printRAG_list(Node *graph) {
+    Node *curr = graph;
+    while (curr) {
+        printf("%s -> ", curr->name);
+
+        // different version of print statement to explicityly
+        // state if the node is a train or intersection, not
+        // necessary but helpful for debugging
+        // printf("%s (%s) -> ", curr->name, curr->isTrain ? "Train" : "Intersection");
+
+        Edge *e = curr->edges;
+        while (e) {
+            printf("%s ", e->target);
+            e = e->next;
+        }
+        printf("\n");
+        curr = curr->next;
+    }
+}
+
+// Function to detect cycle in RAG
+bool detectCycleInRAG(Node *graph) {
+    // First, collect all node names
+    int nodeCount = 0;
+    Node *curr = graph;
+    char nodeNames[100][50];  // Max 100 nodes
+    while (curr && nodeCount < 100) {
+        strcpy(nodeNames[nodeCount++], curr->name);
+        curr = curr->next;
+    }
+
+    bool visited[100] = {false};
+    bool path[100] = {false};
+
+    for (int i = 0; i < nodeCount; i++) {
+        if (!visited[i]) {
+            Node *startNode = getNodeByName(graph, nodeNames[i]);
+            if (graphDFS(startNode, graph, visited, path, i, nodeNames, nodeCount)) {
+                return true; // Cycle detected
+            }
+        }
+    }
+
+    return false; // No cycles detected
 }
 
 // // This main function will need to be removed, this is only for

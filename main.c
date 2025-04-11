@@ -17,11 +17,7 @@
 #include "Keegan.c" 
 #include "Aiden.c"
 #include "Jacob.c"
-<<<<<<< HEAD
 // #include "Fawaz.c"
-=======
-//#include "Fawaz.c"
->>>>>>> 9bb5a5f6b904db1014b2e89932589986bfc99fca
 #include "Zack.c"
 
 /*// Structure to hold data about trains
@@ -215,15 +211,9 @@ int main() {
         printf("%s has %d resources\n", intersections[i].name, intersections[i].capacity);
     }
 
-<<<<<<< HEAD
     // removed &
     initializeSemaphores(intersections, intersectionCount);//added
     initializeMutex(intersections, intersectionCount);//added
-=======
-//removed &
-    initializeSemaphores(intersections, intersectionCount);
-    initializeMutex(intersections, intersectionCount);
->>>>>>> 9bb5a5f6b904db1014b2e89932589986bfc99fca
 
 
     int trainCount = TrainParsing(trainFilePath, &trains);
@@ -322,23 +312,13 @@ int main() {
     // Clean up the dynamically allocated memory
     free(intersections);
 
-<<<<<<< HEAD
     log_file = fopen("simulation.log", "w");
-=======
-
-
-	
-     log_file = fopen("simulation.log", "w");
->>>>>>> 9bb5a5f6b904db1014b2e89932589986bfc99fca
     if (log_file == NULL) {
         perror("Failed to open simulation.log");
         exit(EXIT_FAILURE);
     }
 
      
-<<<<<<< HEAD
-    print_initialized_intersections(intersections, 5);
-=======
      print_initialized_intersections(intersections, num_intersections);
 
 	    int grantTest = 1;
@@ -346,7 +326,6 @@ int main() {
     
 
     printMessages(trains[0].name, intersections[0].name, grantTest, intersections[0].capacity);
->>>>>>> 9bb5a5f6b904db1014b2e89932589986bfc99fca
 
     if (log_file) {
         fclose(log_file);

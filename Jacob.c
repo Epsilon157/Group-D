@@ -1,25 +1,89 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>  // For va_list, va_start, va_end
 #include "shared_header.h"
 
-/*
-// Structure to hold data about intersections
-typedef struct {
-    char name[50];  // Intersection name
-    int capacity;   // Capacity available at this intersection
-} Intersection;
+// Global variables for simulation time and log file
+int sim_time = 0;
+FILE *log_file = NULL;
 
-// Structure to hold data about trains
-typedef struct {
-    char name[50];  // Train name (e.g., Train1)
-    char **route;   // Array of intersection names the train passes through
-    int routeCount; // Number of intersections the train visits
-} Train;
-*/
+// ----------- Utility Functions -----------
+
+// Function to format the current simulation time
+void formatTime(char *buffer) {
+    int hours = sim_time / 3600;
+    int minutes = (sim_time % 3600) / 60;
+    int seconds = sim_time % 60;
+    sprintf(buffer, "[%02d:%02d:%02d]", hours, minutes, seconds);
+}
+
+// Function to log events in the simulation
+void logEvent(const char *format, ...) {
+    char timeBuffer[10];
+    formatTime(timeBuffer);  // Format current time
+    sim_time++;  // Increment simulation time for each event
+
+    va_list args;
+    va_start(args, format);
+
+    if (log_file) {  // Ensure the log file is open
+        fprintf(log_file, "%s ", timeBuffer);
+        vfprintf(log_file, format, args);
+        fprintf(log_file, "\n");
+    }
+
+    va_end(args);
+}
+
+// ----------- Simulation Logging -----------
+
+// Function to print initialized intersections to the log file
+void print_initialized_intersections(Intersection *intersections, int count) {
+    logEvent("SERVER: Initialized intersections:");
+    for (int i = 0; i < count; i++) {
+        if (intersections[i].capacity == 1)
+            logEvent("- %s (Mutex, Capacity=%d)", intersections[i].name, intersections[i].capacity);
+        else
+            logEvent("- %s (Semaphore, Capacity=%d)", intersections[i].name, intersections[i].capacity);
+    }
+}
+
+// Function to print train messages regarding intersection requests and grants
+void printMessages(const char *train, const char *intersection, int granted, int remaining) {
+    logEvent("%s: Sent ACQUIRE request for %s.", train, intersection);
+    if (granted) {
+        if (remaining >= 0)
+            logEvent("SERVER: GRANTED %s to %s. Semaphore count: %d.", intersection, train, remaining);
+        else
+            logEvent("SERVER: GRANTED %s to %s.", intersection, train);
+    } else {
+        logEvent("SERVER: %s is locked. %s added to wait queue.", intersection, train);
+    }
+}
+
+// Function to log a deadlock and preemption event
+void printDeadlockAndPreemption(const char *train1, const char *train2, const char *intersection) {
+    logEvent("SERVER: Deadlock detected! Cycle: %s ? %s.", train1, train2);
+    logEvent("SERVER: Preempting %s from %s.", intersection, train1);
+    logEvent("SERVER: %s released %s forcibly.", train1, intersection);
+}
+
+// Function to log the completion of the simulation
+void printSimulationComplete() {
+    logEvent("SIMULATION COMPLETE. All trains reached destinations.");
+}
+
+// ----------- Structure Definitions -----------
+
+// Structure to hold data about intersections
+
+
 // File paths for intersections and trains
 const char *intersectionFilePath = "intersections.txt";
 const char *trainFilePath = "trains.txt";
+
+// ----------- Parsing Functions -----------
 
 // Function to parse the intersection data
 int IntersectionParsing(const char *filename, Intersection **intersections) {
@@ -41,10 +105,10 @@ int IntersectionParsing(const char *filename, Intersection **intersections) {
     int i = 0;
     while (fgets(line, sizeof(line), file)) {
         char name[50];
-        int capacity;  // Changed from 'resources' to 'capacity'
-        sscanf(line, "%[^:]:%d", name, &capacity);  // Changed from 'resources' to 'capacity'
+        int capacity;
+        sscanf(line, "%[^:]:%d", name, &capacity);
         strcpy((*intersections)[i].name, name);
-        (*intersections)[i].capacity = capacity;  // Changed from 'resources' to 'capacity'
+        (*intersections)[i].capacity = capacity;
         i++;
     }
 
@@ -53,7 +117,6 @@ int IntersectionParsing(const char *filename, Intersection **intersections) {
 }
 
 // Function to parse the train data
-// Function to parse the train data
 int TrainParsing(const char *filename, Train **trains) {
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
@@ -61,10 +124,10 @@ int TrainParsing(const char *filename, Train **trains) {
         return 0;
     }
 
-    int numberOfTrains = 0;  // Changed the variable name to 'numberOfTrains'
+    int numberOfTrains = 0;
     char line[200];
     while (fgets(line, sizeof(line), file)) {
-        numberOfTrains++;  // Increment count for each train
+        numberOfTrains++;
     }
     rewind(file);
 
@@ -77,7 +140,6 @@ int TrainParsing(const char *filename, Train **trains) {
         sscanf(line, "%[^:]:%s", name, route);
 
         strcpy((*trains)[i].name, name);
-
         (*trains)[i].route = NULL;
         (*trains)[i].routeCount = 0;
 
@@ -93,9 +155,8 @@ int TrainParsing(const char *filename, Train **trains) {
     }
 
     fclose(file);
-    return numberOfTrains;  // Return the number of trains
+    return numberOfTrains;
 }
-
 
 // Function to free the memory allocated for intersections and trains
 void FreeMemory(Intersection *intersections, int intersectionCount, Train *trains, int trainCount) {
@@ -110,120 +171,13 @@ void FreeMemory(Intersection *intersections, int intersectionCount, Train *train
     free(trains);
 }
 
-
+// Function to get the capacity of a specific intersection
 void GetIntersectionCapacity(Intersection *intersections, int intersectionCount, int intersectionIndex) {
     if (intersectionIndex >= 1 && intersectionIndex <= intersectionCount) {
-        printf("Capacity at intersection %s: %d\n", intersections[intersectionIndex - 1].name, intersections[intersectionIndex - 1].capacity);  // Changed 'resources' to 'capacity'
+        printf("Capacity at intersection %s: %d\n", intersections[intersectionIndex - 1].name, intersections[intersectionIndex - 1].capacity);
     } else {
         printf("Invalid intersection number.\n");
     }
 }
 
-
-
-//Week 3 code
-
-
-char* updateAndFormatTime(char* buffer) {
-    // Initialize variables
-    static int var1 = 0, var2 = 0, var3 = 0;
-
-    // Increment var1
-    var1++;
-
-    // If var1 reaches 60, reset it to 0 and increment var2
-    if (var1 >= 60) {
-        var1 = 0;
-        var2++;
-    }
-
-    // If var2 reaches 60, reset it to 0 and increment var3
-    if (var2 >= 60) {
-        var2 = 0;
-        var3++;
-    }
-
-    // Format the time string as [hh:mm:ss]
-    sprintf(buffer, "[%02d:%02d:%02d]", var3, var2, var1);
-
-    return buffer;
-}
-
-
-
-void printMessages(char* train, char* intersection, int granted) {
-    char timeBuffer[10]; // Buffer to hold the time string
-    updateAndFormatTime(timeBuffer);  // Update and get the formatted time
-
-    if (granted == 1) {
-        // If granted is 1, print the granted message
-        printf("%s %s: Sent ACQUIRE request for %s.\n", timeBuffer, train, intersection);
-        updateAndFormatTime(timeBuffer);
-        printf("%s SERVER: GRANTED %s to %s.\n", timeBuffer, intersection, train);
-    } else {
-        // If granted is 0, print the denied message
-        printf("%s %s: Sent ACQUIRE request for %s.\n", timeBuffer, train, intersection);
-        updateAndFormatTime(timeBuffer);
-        printf("%s SERVER: %s is locked. %s added to wait queue.\n", timeBuffer, intersection, train);
-    }
-}
-
-
-
-
-void print_initialized_intersections(Intersection *intersections, int num_intersections) {
-    printf("[00:00:00] SERVER: Initialized intersections:\n");
-
-    for (int i = 0; i < num_intersections; i++) {
-        // Check if the intersection's capacity is 1 (Mutex) or greater than 1 (Semaphore)
-        if (intersections[i].capacity == 1) {
-            printf("- %s (Mutex, Capacity=%d)\n", 
-                   intersections[i].name, 
-                   intersections[i].capacity);
-        } else {
-            printf("- %s (Semaphore, Capacity=%d)\n", 
-                   intersections[i].name, 
-                   intersections[i].capacity);
-        }
-    }
-}
-
-
-void printDeadlockAndPreemption(char* train1, char* train2, char* intersection) {
-    char timeBuffer[10];
-    updateAndFormatTime(timeBuffer);  // Update and get the formatted time
-
-    // Print the deadlock detection message
-    printf("%s SERVER: Deadlock detected! Cycle: %s ↔ %s.\n", timeBuffer, train1, train2);
-    updateAndFormatTime(timeBuffer);
-    
-    // Print the preemption action
-    printf("%s SERVER: Preempting %s from %s.\n", timeBuffer, intersection, train1);
-    updateAndFormatTime(timeBuffer);
-
-    // Print the forced release message
-    printf("%s SERVER: %s released %s forcibly.\n", timeBuffer, train1, intersection);
-}
-
-
-
-
-    /*
-    char* T = "Train1";
-    char* I = "IntersectionA";
-    int granted = 1;
-    printMessages(T, I, granted);
-
-
-    T = "Train2";
-    I = "IntersectionA";
-    granted = 0;
-    printMessages(T, I, granted);
-
-
-    char* DeadlockTrain1 = "Train1";
-    char* DeadlockTrain2 = "Train2";
-    char* DeadlockIntersection = "IntersectionA";
-    printDeadlockAndPreemption(DeadlockTrain1, DeadlockTrain2, DeadlockIntersection);
-
-    */
+// Main function or simulation driver will go here...

@@ -12,6 +12,7 @@ FILE *log_file = NULL;
 
 // Function to format the current simulation time
 void formatTime(char *buffer) {
+    
     int hours = sim_time / 3600;
     int minutes = (sim_time % 3600) / 60;
     int seconds = sim_time % 60;
@@ -22,7 +23,6 @@ void formatTime(char *buffer) {
 void logEvent(const char *format, ...) {
     char timeBuffer[10];
     formatTime(timeBuffer);  // Format current time
-    sim_time++;  // Increment simulation time for each event
 
     va_list args;
     va_start(args, format);
@@ -35,6 +35,7 @@ void logEvent(const char *format, ...) {
 
     va_end(args);
 }
+
 
 // ----------- Simulation Logging -----------
 
@@ -51,6 +52,7 @@ void print_initialized_intersections(Intersection *intersections, int count) {
 
 // Function to print train messages regarding intersection requests and grants
 void printMessages(const char *train, const char *intersection, int granted, int remaining) {
+    sim_time++;
     logEvent("%s: Sent ACQUIRE request for %s.", train, intersection);
     if (granted) {
         if (remaining >= 0)
@@ -62,8 +64,11 @@ void printMessages(const char *train, const char *intersection, int granted, int
     }
 }
 
+
+
 // Function to log a deadlock and preemption event
 void printDeadlockAndPreemption(const char *train1, const char *train2, const char *intersection) {
+    sim_time++;
     logEvent("SERVER: Deadlock detected! Cycle: %s ? %s.", train1, train2);
     logEvent("SERVER: Preempting %s from %s.", intersection, train1);
     logEvent("SERVER: %s released %s forcibly.", train1, intersection);
@@ -71,6 +76,7 @@ void printDeadlockAndPreemption(const char *train1, const char *train2, const ch
 
 // Function to log the completion of the simulation
 void printSimulationComplete() {
+    sim_time++;
     logEvent("SIMULATION COMPLETE. All trains reached destinations.");
 }
 
@@ -139,10 +145,14 @@ int TrainParsing(const char *filename, Train **trains) {
         char route[200];
         sscanf(line, "%[^:]:%s", name, route);
 
-        strcpy((*trains)[i].name, name);
+        // Ensure the name is properly null-terminated and fits in the buffer
+        strncpy((*trains)[i].name, name, sizeof((*trains)[i].name) - 1);
+        (*trains)[i].name[sizeof((*trains)[i].name) - 1] = '\0';  // Ensure null termination
+
         (*trains)[i].route = NULL;
         (*trains)[i].routeCount = 0;
 
+        // Parse the route string and allocate memory for each intersection
         char *token = strtok(route, ",");
         while (token != NULL) {
             (*trains)[i].route = realloc((*trains)[i].route, ((*trains)[i].routeCount + 1) * sizeof(char *));
@@ -157,6 +167,8 @@ int TrainParsing(const char *filename, Train **trains) {
     fclose(file);
     return numberOfTrains;
 }
+
+
 
 // Function to free the memory allocated for intersections and trains
 void FreeMemory(Intersection *intersections, int intersectionCount, Train *trains, int trainCount) {

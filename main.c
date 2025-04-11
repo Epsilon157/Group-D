@@ -374,8 +374,22 @@ int main() {
     // Clean up the dynamically allocated memory
     free(intersections);
 
-    
 
+
+	
+     log_file = fopen("simulation.log", "w");
+if (log_file == NULL) {
+    perror("Failed to open simulation.log");
+    exit(EXIT_FAILURE);
+}
+
+     
+     print_initialized_intersections(intersections, 5);
+
+     if (log_file) {
+        fclose(log_file);
+    }
+    
 
 
 

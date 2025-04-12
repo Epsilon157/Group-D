@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <sys/mman.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>  // For va_list, va_start, va_end
@@ -8,13 +9,24 @@
 
 
 // ----------- Utility Functions -----------
+int *sim_time = NULL;
 
+void initialize_sim_time() {
+    sim_time = mmap(NULL, sizeof(int), PROT_READ | PROT_WRITE,
+                    MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+    if (sim_time == MAP_FAILED) {
+        perror("mmap failed for sim_time");
+        exit(1);
+    }
+    *sim_time = 0; // Initialize to 0
+}
 // Function to format the current simulation time
 void formatTime(char *buffer) {
     
-    int hours = sim_time / 3600;
-    int minutes = (sim_time % 3600) / 60;
-    int seconds = sim_time % 60;
+    int hours = (*sim_time) / 3600;
+    int minutes = ((*sim_time) % 3600) / 60;
+    int seconds = (*sim_time) % 60;
+    
     sprintf(buffer, "[%02d:%02d:%02d]", hours, minutes, seconds);
 }
 
@@ -47,11 +59,12 @@ void print_initialized_intersections(Intersection *intersections, int count) {
         else
             logEvent("- %s (Semaphore, Capacity=%d)", intersections[i].name, intersections[i].capacity);
     }
+    
 }
 
 // Function to print train messages regarding intersection requests and grants
 void printMessages(const char *train, const char *intersection, int granted, int remaining) {
-    sim_time++;
+    (*sim_time)++;
     logEvent("%s: Sent ACQUIRE request for %s.", train, intersection);
     if (granted) {
         if (remaining >= 0)
@@ -64,15 +77,19 @@ void printMessages(const char *train, const char *intersection, int granted, int
 }
 
 void printRequestSent(const char *train, const char *intersection){
-    sim_time++;
+    (*sim_time)++;
     logEvent("%s: Sent ACQUIRE request for %s.", train, intersection);
+    fprintf(log_file, "\n");
 }
 
+void printRequestGranted(const char *train, const char *intersection){
+    
+}
 
 
 // Function to log a deadlock and preemption event
 void printDeadlockAndPreemption(const char *train1, const char *train2, const char *intersection) {
-    sim_time++;
+    (*sim_time)++;
     logEvent("SERVER: Deadlock detected! Cycle: %s ? %s.", train1, train2);
     logEvent("SERVER: Preempting %s from %s.", intersection, train1);
     logEvent("SERVER: %s released %s forcibly.", train1, intersection);
@@ -80,7 +97,7 @@ void printDeadlockAndPreemption(const char *train1, const char *train2, const ch
 
 // Function to log the completion of the simulation
 void printSimulationComplete() {
-    sim_time++;
+    (*sim_time)++;
     logEvent("SIMULATION COMPLETE. All trains reached destinations.");
 }
 

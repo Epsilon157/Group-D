@@ -172,7 +172,7 @@ void serverResponseGrant(int msgid, int trainIndex, const char *intersectionName
     }
 
     printRequestSent(trains[trainIndex].name, intersectionName);
-
+    printIntersctionGranted(trains[trainIndex].name, intersectionName);
     if (log_file) {
         fclose(log_file);
     }

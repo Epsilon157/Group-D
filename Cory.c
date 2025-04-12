@@ -193,21 +193,21 @@ void server_process(int msgid, int trainCount) {
     for (int i = 0; i < trainCount; i++) {
         // Receive request from any child
         if (msgrcv(msgid, &msg, sizeof(msg) - sizeof(long), 1, 0) == -1) {
-            perror("Server msgrcv failed");
+            perror("Parent process msgrcv failed");
             exit(1);
         }
 
-        printf("Server received: %s\n", msg.text);
+        printf("Parent received: %s\n", msg.text);
 
         // Respond to the child
         msg.msg_type = msg.pid;  // Reply directly to the requesting child
 
         // ADD: will need to add checks to make sure there is room to 
         // allow the child processes to run (deadlock detection)
-        snprintf(msg.text, MAX_TEXT, "Approved request");
+        snprintf(msg.text, MAX_TEXT, "Approved request for PID %d", msg.pid);
 
         if (msgsnd(msgid, &msg, sizeof(msg) - sizeof(long), 0) == -1) {
-            perror("Server msgsnd failed");
+            perror("Parent process msgsnd failed");
             exit(1);
         }
     }

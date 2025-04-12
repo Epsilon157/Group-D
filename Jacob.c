@@ -79,13 +79,14 @@ void printMessages(const char *train, const char *intersection, int granted, int
 void printRequestSent(const char *train, const char *intersection){
     (*sim_time)++;
     logEvent("%s: Sent ACQUIRE request for %s.", train, intersection);
-    fprintf(log_file, "\n");
+    
 }
 
 void printRequestGranted(const char *train, const char *intersection){
         (*sim_time)++;
     logEvent("%s: Sent ACQUIRE request for %s.", train, intersection);
-    fprintf(log_file, "\n");
+    
+    
 }
 
 void printIntersctionGranted(const char *train, const char *intersection){
@@ -101,8 +102,10 @@ void printIntersctionGranted(const char *train, const char *intersection){
     }
     if(intersections[matchIndex].capacity>1){
         logEvent("SERVER: GRANTED %s to %s. Semaphore count: %d.", intersection, train, intersections[matchIndex].capacity);
+        fprintf(log_file, "\n");
     }else{
         logEvent("SERVER: %s is locked. %s added to wait queue.", intersection, train);
+        fprintf(log_file, "\n");
     }
 
 

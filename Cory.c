@@ -138,6 +138,31 @@ void destroyMessageQueue(int msgid) {
     printf("Message queue removed\n");
 }
 
+// Function for a train to request to acquire an intersection
+void trainRequestAcquire(int msgid) {
+
+}
+
+// Function for a train to request to release an intersection
+void trainRequestRelease(int msgid) {
+
+}
+
+// Function for server to grant a train's request
+void serverResponseGrant(int msgid) {
+
+}
+
+// Function for server to tell train to wait for an intersection
+void serverResponseWait(int msgid) {
+
+}
+
+// Function for server to deny a train's request
+void serverResponseDeny(int msgid) {
+
+}
+
 // Function for parent process acting as server
 void server_process(int msgid, int trainCount) {
     struct message msg;
@@ -148,21 +173,21 @@ void server_process(int msgid, int trainCount) {
     for (int i = 0; i < trainCount; i++) {
         // Receive request from any child
         if (msgrcv(msgid, &msg, sizeof(msg) - sizeof(long), 1, 0) == -1) {
-            perror("Parent process msgrcv failed");
+            perror("Server msgrcv failed");
             exit(1);
         }
 
-        printf("Parent received: %s\n", msg.text);
+        printf("Server received: %s\n", msg.text);
 
         // Respond to the child
         msg.msg_type = msg.pid;  // Reply directly to the requesting child
 
         // ADD: will need to add checks to make sure there is room to 
         // allow the child processes to run (deadlock detection)
-        snprintf(msg.text, MAX_TEXT, "Approved request for PID %d", msg.pid);
+        snprintf(msg.text, MAX_TEXT, "Approved request");
 
         if (msgsnd(msgid, &msg, sizeof(msg) - sizeof(long), 0) == -1) {
-            perror("Parent process msgsnd failed");
+            perror("Server msgsnd failed");
             exit(1);
         }
     }
@@ -183,7 +208,7 @@ void train_process(int msgid, int trainIndex) {
     struct message msg;
     msg.msg_type = 1; // Type 1 means request to the server
     msg.pid = getpid();
-    snprintf(msg.text, MAX_TEXT, "Request from child PID %d", msg.pid);
+    snprintf(msg.text, MAX_TEXT, "Request from Train %d", trainIndex);
 
     // to do: loop through each intersection in its route
     // requesting to go through them (one at a time?)
@@ -203,7 +228,8 @@ void train_process(int msgid, int trainIndex) {
     // need a while loop to send requests for intersections
     // until all intersections in route are visited
 
-    printf("Child %d received response: %s\n", getpid(), msg.text);
+    printf("Train %d received response: %s\n", trainIndex, msg.text);
+
     exit(0);
 }
 

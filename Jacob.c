@@ -5,8 +5,7 @@
 #include "shared_header.h"
 
 // Global variables for simulation time and log file
-int sim_time = 0;
-FILE *log_file = NULL;
+
 
 // ----------- Utility Functions -----------
 
@@ -62,6 +61,11 @@ void printMessages(const char *train, const char *intersection, int granted, int
     } else {
         logEvent("SERVER: %s is locked. %s added to wait queue.", intersection, train);
     }
+}
+
+void printRequestSent(const char *train, const char *intersection){
+    sim_time++;
+    logEvent("%s: Sent ACQUIRE request for %s.", train, intersection);
 }
 
 
@@ -191,5 +195,3 @@ void GetIntersectionCapacity(Intersection *intersections, int intersectionCount,
         printf("Invalid intersection number.\n");
     }
 }
-
-// Main function or simulation driver will go here...

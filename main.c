@@ -193,7 +193,7 @@ void GetIntersectionResources(Intersection *intersections, int intersectionCount
 
 
 int main() {
-    
+    initialize_sim_time();
     // create key and message queue ID needed for the
     // message queue to work
     key_t key;
@@ -249,7 +249,7 @@ int main() {
     int grantTest = 1;
   
  
-    printMessages(trains[0].name, intersections[0].name, grantTest, intersections[0].capacity);
+    //printMessages(trains[0].name, intersections[0].name, grantTest, intersections[0].capacity);
 
     if (log_file) {
         fclose(log_file);
@@ -271,7 +271,7 @@ int main() {
     // that the created message queue ID can be used in the 
     // rest of the main function.
     msgid = createMessageQueue(key, msgid);
-
+    
     // Fork multiple child processes
     fork_trains(msgid, trainCount, trains, intersections);
 

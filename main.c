@@ -311,7 +311,7 @@ int main() {
     printRAG_list(RAG);
 
     if (detectCycleInRAG(RAG)) {
-        printf("\nCycle in RAG detected (deadlock can occur)\n");
+        printf("\nWARNING: Cycle in RAG detected (deadlock can occur)\n");
     } else {
         printf("\nNo cycle in RAG detected\n");
     }

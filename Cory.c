@@ -139,8 +139,28 @@ void destroyMessageQueue(int msgid) {
 }
 
 // Function for a train to request to acquire an intersection
-void trainRequestAcquire(int msgid) {
+void trainRequestAcquire(int msgid, int trainIndex) {
+    struct message msg;
+    msg.msg_type = 1; // Type 1 means request to the server
+    msg.pid = getpid();
+    snprintf(msg.text, MAX_TEXT, "Request from Train %d", trainIndex);
 
+    // Send request to parent
+    if (msgsnd(msgid, &msg, sizeof(msg) - sizeof(long), 0) == -1) {
+        perror("Child process msgsnd failed");
+        exit(1);
+    }
+
+    // Receive response from the parent
+    if (msgrcv(msgid, &msg, sizeof(msg) - sizeof(long), msg.pid, 0) == -1) {
+        perror("Child process msgrcv failed");
+        exit(1);
+    }
+
+    // need a while loop to send requests for intersections
+    // until all intersections in route are visited
+
+    printf("Train %d received response: %s\n", trainIndex, msg.text);
 }
 
 // Function for a train to request to release an intersection
@@ -205,30 +225,10 @@ void server_process(int msgid, int trainCount) {
 // , Train *trains, Intersection *intersections
 
 void train_process(int msgid, int trainIndex) {
-    struct message msg;
-    msg.msg_type = 1; // Type 1 means request to the server
-    msg.pid = getpid();
-    snprintf(msg.text, MAX_TEXT, "Request from Train %d", trainIndex);
-
     // to do: loop through each intersection in its route
     // requesting to go through them (one at a time?)
 
-    // Send request to parent
-    if (msgsnd(msgid, &msg, sizeof(msg) - sizeof(long), 0) == -1) {
-        perror("Child process msgsnd failed");
-        exit(1);
-    }
-
-    // Receive response from the parent
-    if (msgrcv(msgid, &msg, sizeof(msg) - sizeof(long), msg.pid, 0) == -1) {
-        perror("Child process msgrcv failed");
-        exit(1);
-    }
-
-    // need a while loop to send requests for intersections
-    // until all intersections in route are visited
-
-    printf("Train %d received response: %s\n", trainIndex, msg.text);
+    trainRequestAcquire(msgid, trainIndex);
 
     exit(0);
 }

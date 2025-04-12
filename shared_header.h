@@ -27,7 +27,7 @@ typedef struct {
 
 void printRequestSent(const char *train, const char *intersection);
 
-int sim_time = 0;
+extern int *sim_time;
 FILE *log_file = NULL;
 
 Intersection *intersections; //From * to **

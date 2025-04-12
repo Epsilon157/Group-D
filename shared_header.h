@@ -26,6 +26,7 @@ typedef struct {
 } Intersection;
 
 void printRequestSent(const char *train, const char *intersection);
+void printIntersctionGranted(const char *train, const char *intersection);
 
 extern int *sim_time;
 FILE *log_file = NULL;

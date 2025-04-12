@@ -83,7 +83,9 @@ void printRequestSent(const char *train, const char *intersection){
 }
 
 void printRequestGranted(const char *train, const char *intersection){
-    
+        (*sim_time)++;
+    logEvent("%s: Sent ACQUIRE request for %s.", train, intersection);
+    fprintf(log_file, "\n");
 }
 
 

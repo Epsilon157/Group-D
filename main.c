@@ -306,6 +306,9 @@ int main() {
     // trains[3].heldIntersections[0] = "IntersectionC";
     // trains[3].waitingIntersection = "IntersectionA";
 
+    // hard coded print statements to verify trains
+    printf("\nTrain1's first intersection held: %s\n", trains[0].heldIntersections[0]);
+
     createRAG_dot(trains, trainCount);
     Node *RAG = createRAG_list(trains, trainCount);
     printRAG_list(RAG);

@@ -190,10 +190,11 @@ void GetIntersectionResources(Intersection *intersections, int intersectionCount
         printf("Invalid intersection number.\n");
     }
 }*/
+Intersection *intersections; //From * to **
+Train *trains;
 
 int main() {
-    Intersection *intersections; //From * to **
-    Train *trains;
+    
     // create key and message queue ID needed for the
     // message queue to work
     key_t key;
@@ -273,14 +274,13 @@ int main() {
     msgid = createMessageQueue(key, msgid);
 
     // Fork multiple child processes
-    // this is purely for testing
-    fork_trains(msgid, trainCount);
+    fork_trains(msgid, trainCount, trains, intersections);
 
     // By this point, all child processes have exited,
     // so only the parent will execute the code below
 
     // execute responsibilities of server
-    server_process(msgid, trainCount);
+    server_process(msgid, trainCount, trains, intersections);
 
     // running createRAG in server for now for testing, it should
     // eventually be executed after any train request is made
@@ -291,20 +291,20 @@ int main() {
     // parsed info from text files
     
     // hard coded tests for RAG
-    trains[0].heldIntersectionCount = 2;
-    trains[0].heldIntersections[0] = "IntersectionA";
-    trains[0].heldIntersections[1] = "IntersectionB";
-    trains[0].waitingIntersection = "IntersectionC";
+    // trains[0].heldIntersectionCount = 2;
+    // trains[0].heldIntersections[0] = "IntersectionA";
+    // trains[0].heldIntersections[1] = "IntersectionB";
+    // trains[0].waitingIntersection = "IntersectionC";
 
-    trains[1].heldIntersectionCount = 1;
-    trains[1].heldIntersections[0] = "IntersectionD";
+    // trains[1].heldIntersectionCount = 1;
+    // trains[1].heldIntersections[0] = "IntersectionD";
 
-    trains[2].heldIntersectionCount = 0;
-    trains[2].waitingIntersection = "IntersectionD";
+    // trains[2].heldIntersectionCount = 0;
+    // trains[2].waitingIntersection = "IntersectionD";
     
-    trains[3].heldIntersectionCount = 1;
-    trains[3].heldIntersections[0] = "IntersectionC";
-    trains[3].waitingIntersection = "IntersectionA";
+    // trains[3].heldIntersectionCount = 1;
+    // trains[3].heldIntersections[0] = "IntersectionC";
+    // trains[3].waitingIntersection = "IntersectionA";
 
     createRAG_dot(trains, trainCount);
     Node *RAG = createRAG_list(trains, trainCount);

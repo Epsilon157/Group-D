@@ -25,4 +25,12 @@ typedef struct {
     sem_t Semaphore;
 } Intersection;
 
+void printRequestSent(const char *train, const char *intersection);
+
+int sim_time = 0;
+FILE *log_file = NULL;
+
+Intersection *intersections; //From * to **
+Train *trains;
+
 #endif

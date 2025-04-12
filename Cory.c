@@ -141,18 +141,7 @@ void destroyMessageQueue(int msgid) {
 
 // Function for a train to request to acquire an intersection
 void trainRequestAcquire(int msgid, int trainIndex, const char *intersectionName) {
-
-    log_file = fopen("simulation.log", "a");
-    if (log_file == NULL) {
-        perror("Failed to open simulation.log");
-        exit(EXIT_FAILURE);
-    }
-
-    printRequestSent(trains[trainIndex].name, intersectionName);
-
-    if (log_file) {
-        fclose(log_file);
-    }
+    
 
     Message msg;
     msg.msg_type = 1; // Type 1 = train-to-server
@@ -174,6 +163,21 @@ void trainRequestRelease(int msgid, int trainIndex, const char *intersectionName
 
 // Function for server to grant a train's request
 void serverResponseGrant(int msgid, int trainIndex, const char *intersectionName) {
+
+
+    log_file = fopen("simulation.log", "a");
+    if (log_file == NULL) {
+        perror("Failed to open simulation.log");
+        exit(EXIT_FAILURE);
+    }
+
+    printRequestSent(trains[trainIndex].name, intersectionName);
+
+    if (log_file) {
+        fclose(log_file);
+    }
+
+
     Message msg;
     msg.msg_type = trainIndex + 100; // Each train listens on its own msg_type
     strcpy(msg.response, "GRANT");

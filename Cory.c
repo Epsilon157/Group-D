@@ -21,6 +21,7 @@
 #include <stdbool.h>
 #include "shared_header.h"
 
+
 #define MAX_TEXT 512
 
 // Structure for message queue
@@ -237,10 +238,12 @@ void train_process(int msgid, int trainIndex) {
 // this is not official since this is what Fawaz
 // will implement in Fawaz.c, except to match
 // the required structure of trains
-void fork_trains(int msgid, int trainCount) {
+void fork_trains(int msgid, int trainCount, Train *trains, Intersection *interstections) {
     for (int i = 0; i < trainCount; i++) {
         pid_t pid = fork();
         if (pid == 0) { // child processes run this
+            
+            //makeRequests(pid, trains, trainCount, interstections);
             train_process(msgid, i);
         } else if (pid < 0) { // only runs if a fork fails
             perror("fork failed");

@@ -88,6 +88,26 @@ void printRequestGranted(const char *train, const char *intersection){
     fprintf(log_file, "\n");
 }
 
+void printIntersctionGranted(const char *train, const char *intersection){
+    (*sim_time)++;
+    int i;
+    int matchIndex = -1;
+
+    for (i = 0; i < 100; i++) {
+        if (strcmp(intersections[i].name, intersection) == 0) {
+            matchIndex = i; // Store the found index
+            break;          // Exit after finding the match
+        }
+    }
+    if(intersections[matchIndex].capacity>1){
+        logEvent("SERVER: GRANTED %s to %s. Semaphore count: %d.", intersection, train, intersections[matchIndex].capacity);
+    }else{
+        logEvent("SERVER: %s is locked. %s added to wait queue.", intersection, train);
+    }
+
+
+}
+
 
 // Function to log a deadlock and preemption event
 void printDeadlockAndPreemption(const char *train1, const char *train2, const char *intersection) {

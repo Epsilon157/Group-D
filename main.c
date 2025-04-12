@@ -190,8 +190,7 @@ void GetIntersectionResources(Intersection *intersections, int intersectionCount
         printf("Invalid intersection number.\n");
     }
 }*/
-Intersection *intersections; //From * to **
-Train *trains;
+
 
 int main() {
     

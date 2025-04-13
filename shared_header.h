@@ -28,6 +28,7 @@ typedef struct {
 void printRequestSent(int trainIndex, const char *intersection);
 void printIntersctionGranted(const char *train, const char *intersection);
 void printRequestRelease(int trainIndex, const char *intersection);
+int tryAcquireMutex(Intersection *intersection, const char *trainName);
 
 extern int *sim_time;
 FILE *log_file = NULL;

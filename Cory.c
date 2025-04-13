@@ -382,7 +382,7 @@ void server_process(int msgid, int trainCount, Train *trains, Intersection *inte
             // }
 // %%%%%%%%% Keegan adding here: %%%%%%%%%%%%%%%%%%%%%%%%%
 // This is erroring due to #include "Keegan.c"
-/*
+
         Intersection *targetIntersection = NULL;
 
         for(int i =0; i < trainCount; i++){
@@ -392,13 +392,13 @@ void server_process(int msgid, int trainCount, Train *trains, Intersection *inte
             }
         }
 
-        if(targetIntersection && tryAcquireMutex(targetIntersection)== 0){
+        if(targetIntersection && tryAcquireMutex(targetIntersection, trains[msg.trainIndex].name)== 0){
             serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
             train->heldIntersections[train->heldIntersectionCount] = strdup(msg.intersectionName); // safe string copy
             train->heldIntersectionCount++;
             free(train-> waitingIntersection);
         }
-*/
+
         } else if (msg.action == RELEASE) {
             // server recognizes release request
             printf("Train%d request to release %s\n", msg.trainIndex + 1, msg.intersectionName);

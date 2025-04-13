@@ -44,15 +44,15 @@ void acquireTrainMutex(Intersection *intersection, const char *trainName){
     }
 
 }
-/*
-void tryAcquireMutex(Intersection *intersection, const char *trainName){
+
+int tryAcquireMutex(Intersection *intersection, const char *trainName){
     
     if(strcmp(intersection->lock_type, "Mutex")==0){
          pthread_mutex_trylock(&intersection->Mutex);
     }
      
 }
-*/
+
 //Releasin for intersections that can only fit one process by unlocking
 void releaseTrainMutex(Intersection *intersection, const char *trainName){
     if(strcmp(intersection-> lock_type, "Mutex") == 1){

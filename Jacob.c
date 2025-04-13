@@ -107,27 +107,35 @@ void Deadlock(char train1, char train2, char intersection1){
     logEvent("SERVER: %s released %s forcibly", train1, intersection1);
 }
 
-void printIntersctionGranted(const char *train, const char *intersection){
+void printIntersectionGranted(const char *trainName, const char *intersectionName) {
     (*sim_time)++;
     int i;
     int matchIndex = -1;
 
+    // Find the matching intersection
     for (i = 0; i < 100; i++) {
-        if (strcmp(intersections[i].name, intersection) == 0) {
-            matchIndex = i; // Store the found index
-            break;          // Exit after finding the match
+        if (intersections[i].name == NULL) continue; // skip uninitialized entries
+        if (strcmp(intersections[i].name, intersectionName) == 0) {
+            matchIndex = i;
+            break;
         }
     }
-    if(intersections[matchIndex].capacity>1){
-        logEvent("SERVER: GRANTED %s to %s. Semaphore count: %d.", intersection, train, intersections[matchIndex].capacity);
+
+    if (matchIndex == -1) {
+        logEvent("SERVER: ERROR - Intersection %s not found for train %s", intersectionName, trainName);
         fprintf(log_file, "\n");
-    }else{
-        logEvent("SERVER: %s is locked. %s added to wait queue.", intersection, train);
-        fprintf(log_file, "\n");
+        return;
     }
 
+    if (intersections[matchIndex].capacity > 1) {
+        logEvent("SERVER: GRANTED %s to %s. Semaphore count: %d.", intersectionName, trainName, intersections[matchIndex].capacity);
+    } else {
+        logEvent("SERVER: %s is locked. %s added to wait queue.", intersectionName, trainName);
+    }
 
+    fprintf(log_file, "\n");
 }
+
 
 
 // Function to log a deadlock and preemption event

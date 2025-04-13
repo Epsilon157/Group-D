@@ -20,6 +20,7 @@ typedef struct {
     char lock_type[50];    // "Mutex" or "Semaphore"
     int capacity;         // Capacity
     int lock_state;        // 0 = free, 1 = locked
+    int trainCount;
     Train trains[50];      // Trains currently in intersection
     pthread_mutex_t Mutex;
     sem_t Semaphore;

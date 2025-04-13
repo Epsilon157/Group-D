@@ -21,6 +21,7 @@
 #include <stdbool.h>
 #include <time.h>
 #include "shared_header.h"
+//#include "Keegan.c"
 
 // Enumerations for train action and server response types
 typedef enum {
@@ -363,20 +364,8 @@ void server_process(int msgid, int trainCount, Train *trains, Intersection *inte
             // If the intersection is free, then grant the train's request using serverResponse(GRANT).
 
             // This code:
-            //Keegan adding here:
-/*
-            Intersection *targetIntersection = NULL;
-
-            for(int i =0; i < intersectionCount; i++){
-                if(strcmp(intersections[i].name, msg.intersectionName) ==0){
-                    targetIntersection =&intersection[i];
-                    break;
-                }
-            }
-*/
-            serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
-            train->heldIntersections[train->heldIntersectionCount] = strdup(msg.intersectionName); // safe string copy
-            train->heldIntersectionCount++;
+            
+         
 
             // Should be replaced with something like this:
 
@@ -385,15 +374,31 @@ void server_process(int msgid, int trainCount, Train *trains, Intersection *inte
             //     train->waitingIntersection = strdup(msg.intersectionName); // safe string copy
             // } else {
 
-            //if(strcmp(tryAcquireMutex()== 0)){
-
-           // }
+            
             //     serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
             //     train->heldIntersections[train->heldIntersectionCount] = strdup(msg.intersectionName); // safe string copy
             //     train->heldIntersectionCount++;
             //     free(train->waitingIntersection);
             // }
+// %%%%%%%%% Keegan adding here: %%%%%%%%%%%%%%%%%%%%%%%%%
+// This is erroring due to #include "Keegan.c"
+/*
+        Intersection *targetIntersection = NULL;
 
+        for(int i =0; i < trainCount; i++){
+            if(strcmp(intersections[i].name, msg.intersectionName) ==0){
+                targetIntersection = &intersections[i];
+                break;
+            }
+        }
+
+        if(targetIntersection && tryAcquireMutex(targetIntersection)== 0){
+            serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
+            train->heldIntersections[train->heldIntersectionCount] = strdup(msg.intersectionName); // safe string copy
+            train->heldIntersectionCount++;
+            free(train-> waitingIntersection);
+        }
+*/
         } else if (msg.action == RELEASE) {
             // server recognizes release request
             printf("Train%d request to release %s\n", msg.trainIndex + 1, msg.intersectionName);

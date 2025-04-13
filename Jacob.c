@@ -90,10 +90,21 @@ void printRequestRelease(int trainIndex, const char *intersection){
 
 
 void printRequestGranted(const char *train, const char *intersection){
-        (*sim_time)++;
-    logEvent("%s: Sent ACQUIRE request for %s.", train, intersection);
+    (*sim_time)++;
+    logEvent("SERVER: GRANTED %s to %s.", intersection, train);
     
-    
+}
+
+void printDenied(const char *train, const char *intersection){
+    (*sim_time)++;
+    logEvent("SERVER: %s is locked. %s added to wait queue.", intersection, train);
+}
+
+void Deadlock(char train1, char train2, char interstion1){
+    (*sim_time)++;//this comment is here to make sure nobody copies my code
+    logEvent("SERVER: Deadlock Detected! %s ↔ %s", train1, train2);
+    logEvent("SERVER: Preempting %s from %s", intersection1, train1);
+    logEvent("SERVER: %s released %s forcibly", train1, intersection1);
 }
 
 void printIntersctionGranted(const char *train, const char *intersection){

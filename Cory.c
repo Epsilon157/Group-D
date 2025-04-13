@@ -333,7 +333,17 @@ void server_process(int msgid, int trainCount, Train *trains, Intersection *inte
             // If the intersection is free, then grant the train's request using serverResponse(GRANT).
 
             // This code:
+            //Keegan adding here:
+/*
+            Intersection *targetIntersection = NULL;
 
+            for(int i =0; i < intersectionCount; i++){
+                if(strcmp(intersections[i].name, msg.intersectionName) ==0){
+                    targetIntersection =&intersection[i];
+                    break;
+                }
+            }
+*/
             serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
             train->heldIntersections[train->heldIntersectionCount] = strdup(msg.intersectionName); // safe string copy
             train->heldIntersectionCount++;
@@ -344,6 +354,10 @@ void server_process(int msgid, int trainCount, Train *trains, Intersection *inte
             //     serverResponse(WAIT, msgid, msg.trainIndex, msg.intersectionName);
             //     train->waitingIntersection = strdup(msg.intersectionName); // safe string copy
             // } else {
+
+            //if(strcmp(tryAcquireMutex()== 0)){
+
+           // }
             //     serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
             //     train->heldIntersections[train->heldIntersectionCount] = strdup(msg.intersectionName); // safe string copy
             //     train->heldIntersectionCount++;

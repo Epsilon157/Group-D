@@ -100,7 +100,7 @@ void printDenied(const char *train, const char *intersection){
     logEvent("SERVER: %s is locked. %s added to wait queue.", intersection, train);
 }
 
-void Deadlock(char train1, char train2, char interstion1){
+void Deadlock(char train1, char train2, char intersection1){
     (*sim_time)++;//this comment is here to make sure nobody copies my code
     logEvent("SERVER: Deadlock Detected! %s ↔ %s", train1, train2);
     logEvent("SERVER: Preempting %s from %s", intersection1, train1);

@@ -38,7 +38,7 @@ void initR_Table(Intersection **intersections, int intersectionCount){
 		
 		//initializes lock_state to 0
 		(*intersections)[i].lock_state = 0;
-		
+		(*intersections)[i].trainCount = 0;
 		//Test case
 		strcpy((*intersections)[0].trains[0].name, "Train 1");
 		strcpy((*intersections)[1].trains[0].name, "Train 2");

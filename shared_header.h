@@ -25,8 +25,9 @@ typedef struct {
     sem_t Semaphore;
 } Intersection;
 
-void printRequestSent(const char *train, const char *intersection);
+void printRequestSent(int trainIndex, const char *intersection);
 void printIntersctionGranted(const char *train, const char *intersection);
+void printRequestRelease(int trainIndex, const char *intersection);
 
 extern int *sim_time;
 FILE *log_file = NULL;

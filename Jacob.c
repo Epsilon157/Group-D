@@ -76,11 +76,18 @@ void printMessages(const char *train, const char *intersection, int granted, int
     }
 }
 
-void printRequestSent(const char *train, const char *intersection){
+void printRequestSent(int trainIndex, const char *intersection){
     (*sim_time)++;
-    logEvent("%s: Sent ACQUIRE request for %s.", train, intersection);
+    logEvent("%s: Sent ACQUIRE request for %s.", trains[trainIndex].name, intersection);
     
 }
+
+
+void printRequestRelease(int trainIndex, const char *intersection){
+    (*sim_time)++;
+    logEvent("%s: Released %s.", trains[trainIndex].name, intersection);
+}
+
 
 void printRequestGranted(const char *train, const char *intersection){
         (*sim_time)++;

@@ -236,6 +236,7 @@ int main() {
     if (num_intersections > 0) {
         // Print the initialized intersections
         print_initialized_intersections(intersections, num_intersections);
+        
     } else {
         printf("No intersections to display.\n");
     }
@@ -246,6 +247,7 @@ int main() {
     }
        
     print_initialized_intersections(intersections, num_intersections);
+    fprintf(log_file, "\n");
     int grantTest = 1;
   
  

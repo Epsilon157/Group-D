@@ -264,12 +264,40 @@ bool detectCycleInRAG(Node *graph) {
 
 // Function for a train to request to ACQUIRE or RELEASE an intersection
 void trainRequest(TrainAction act, int msgid, int trainIndex, const char *intersectionName) {
+
     Message msg;
     msg.msg_type = 1; // Type 1 = train-to-server
     msg.trainIndex = trainIndex;
     strcpy(msg.intersectionName, intersectionName);
     msg.action = act;
     msgsnd(msgid, &msg, sizeof(msg) - sizeof(long), 0);
+
+    if (msg.action == ACQUIRE) {
+        log_file = fopen("simulation.log", "a");
+        if (log_file == NULL) {
+            perror("Failed to open simulation.log");
+            exit(EXIT_FAILURE);
+        }
+           
+        printRequestSent( trainIndex, intersectionName);
+        
+        if (log_file) {
+            fclose(log_file);
+        }
+
+    }else if (msg.action == RELEASE){
+        log_file = fopen("simulation.log", "a");
+        if (log_file == NULL) {
+            perror("Failed to open simulation.log");
+            exit(EXIT_FAILURE);
+        }
+           
+        printRequestRelease( trainIndex, intersectionName);
+        
+        if (log_file) {
+            fclose(log_file);
+        }
+    }
 }
 
 // Function for server to GRANT, WAIT, or DENY a train's request
@@ -324,6 +352,8 @@ void server_process(int msgid, int trainCount, Train *trains, Intersection *inte
         Train *train = &trains[msg.trainIndex];
 
         if (msg.action == ACQUIRE) {
+
+
             // server recognizes acquire request
             printf("Train%d request to acquire %s\n", msg.trainIndex + 1, msg.intersectionName);
 

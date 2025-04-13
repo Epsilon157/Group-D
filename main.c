@@ -236,6 +236,7 @@ int main() {
     if (num_intersections > 0) {
         // Print the initialized intersections
         print_initialized_intersections(intersections, num_intersections);
+        
     } else {
         printf("No intersections to display.\n");
     }
@@ -246,6 +247,7 @@ int main() {
     }
        
     print_initialized_intersections(intersections, num_intersections);
+    fprintf(log_file, "\n");
     int grantTest = 1;
   
  
@@ -313,6 +315,9 @@ int main() {
     // trains[3].heldIntersectionCount = 1;
     // trains[3].heldIntersections[0] = "IntersectionC";
     // trains[3].waitingIntersection = "IntersectionA";
+
+    // hard coded print statements to verify trains
+    printf("\nTrain1's first intersection held: %s\n", trains[0].heldIntersections[0]);
 
     createRAG_dot(trains, trainCount);
     RAG = createRAG_list(trains, trainCount);

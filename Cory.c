@@ -151,148 +151,6 @@ void destroyMessageQueue(int msgid) {
     printf("Message queue removed\n");
 }
 
-// Function for a train to request to ACQUIRE or RELEASE an intersection
-void trainRequest(TrainAction act, int msgid, int trainIndex, const char *intersectionName) {
-    Message msg;
-    msg.msg_type = 1; // Type 1 = train-to-server
-    msg.trainIndex = trainIndex;
-    strcpy(msg.intersectionName, intersectionName);
-    msg.action = act;
-    msgsnd(msgid, &msg, sizeof(msg) - sizeof(long), 0);
-}
-
-// Function for server to GRANT, WAIT, or DENY a train's request
-void serverResponse(ServerResponse resp, int msgid, int trainIndex, const char *intersectionName) {
-    Message msg;
-    msg.msg_type = trainIndex + 100; // Each train listens on its own msg_type
-    strcpy(msg.intersectionName, intersectionName);
-    msg.response = resp;
-    msgsnd(msgid, &msg, sizeof(msg) - sizeof(long), 0);
-}
-
-// function to determine how many times a train will
-// have to go through an intersection, only used for
-// server_process function to know how long to loop
-int totalRouteLength(Train *trains, int trainCount) {
-    int count = 0;
-
-    for (int i = 0; i < trainCount; i++) {
-        // printf("Route count: %d\n", trains[i].routeCount);
-        count = count + trains[i].routeCount;
-    }
-
-    return count;
-}
-
-// Function for parent process acting as server
-void server_process(int msgid, int trainCount, Train *trains, Intersection *intersections) {
-    // to do: will need to loop the server as long as
-    // there are still trains that need to pass through
-
-    Message msg;
-    int grants = 0;
-    int routeLength = totalRouteLength(trains, trainCount);
-
-    // printf("Total route length is %d\n", routeLength);
-
-    // This currently loops as many times as there are 
-    // trains * intersections, this is temporary.
-    // We will need a much better way of telling when every
-    // train has passed through.
-    while (grants < routeLength) {
-        msgrcv(msgid, &msg, sizeof(msg) - sizeof(long), 1, 0);
-
-        Train *train = &trains[msg.trainIndex];
-
-        if (msg.action == ACQUIRE) {
-            // server recognizes acquire request
-            printf("Train%d request to acquire %s\n", msg.trainIndex + 1, msg.intersectionName);
-
-            // to do: add conditionals to tell whether the intersection the train is
-            // requesting for is in use or not. If the intersection is in use, then
-            // tell the train to wait using serverResponse(WAIT). If the intersection 
-            // is free, then grant the train's request using serverResponse(GRANT)
-
-            // to do: add a way to update/access intersection.lock_state
-            // to decide whether to grant, wait, or deny
-
-            serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
-            train->heldIntersections[train->heldIntersectionCount] = strdup(msg.intersectionName); // safe string copy
-            train->heldIntersectionCount++;
-            grants++;
-
-        } else if (msg.action == RELEASE) {
-            // server recognizes release request
-            printf("Train%d request to release %s\n", msg.trainIndex + 1, msg.intersectionName);
-            serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
-            // to do: find a good way to have each train release intersections after travelling through them.
-            // This probably can't be done in train_process after sleep(2) because trains don't have access to main memory
-        }
-    }
-
-    // Wait for all children to terminate
-    for (int i = 0; i < trainCount; i++) {
-        wait(NULL);
-    }
-}
-
-// Function for child process behavior
-// This is temporary for testing message queue system, a function 
-// specific to train requirements should replace this
-
-// , Train *trains, Intersection *intersections
-
-void train_process(int msgid, int trainIndex, Train *trains, Intersection *intersections) {
-    // to do: loop through each intersection in its route
-    // requesting to go through them (one at a time?)
-
-    Message msg;
-    Train *train = &trains[trainIndex];
-
-    for (int i = 0; i < train->routeCount; i++) {
-        char *intersectionName = train->route[i];
-
-        trainRequest(ACQUIRE, msgid, trainIndex, intersectionName);
-
-        msgrcv(msgid, &msg, sizeof(msg) - sizeof(long), trainIndex + 100, 0);
-
-        if (msg.response == GRANT) {
-            // request granted
-            printf("Train%d granted %s\n", trainIndex + 1, intersectionName);
-            // simulate travel time
-            sleep(2);
-        } else if (msg.response == WAIT) {
-            // try again later
-            printf("Train%d must wait for %s\n", trainIndex + 1, intersectionName);
-            // wait a long time, then redo iteration to let the train try again
-            sleep(10);
-            i--;
-        } else if (msg.response == DENY) {
-            // request denied
-            // Question: when to deny a request instead of telling it to wait?
-            printf("Train%d denied access to %s\n", trainIndex + 1, intersectionName);
-        }
-    }
-
-    exit(0);
-}
-
-// Temporary function for implementing forking,
-// this is not official since this is what Fawaz
-// will implement in Fawaz.c, except to match
-// the required structure of trains
-void fork_trains(int msgid, int trainCount, Train *trains, Intersection *intersections) {
-    for (int i = 0; i < trainCount; i++) {
-        pid_t pid = fork();
-        if (pid == 0) { // child processes run this
-            train_process(msgid, i, trains, intersections);
-        } else if (pid < 0) { // only runs if a fork fails
-            perror("fork failed");
-            exit(1);
-        }
-    }
-}
-
 // Creates a resource allocation graph in the form of
 // a .dot file for visualization
 void createRAG_dot(Train *trains, int trainCount) {
@@ -402,6 +260,222 @@ bool detectCycleInRAG(Node *graph) {
     }
 
     return false; // No cycles detected
+}
+
+// Function for a train to request to ACQUIRE or RELEASE an intersection
+void trainRequest(TrainAction act, int msgid, int trainIndex, const char *intersectionName) {
+    Message msg;
+    msg.msg_type = 1; // Type 1 = train-to-server
+    msg.trainIndex = trainIndex;
+    strcpy(msg.intersectionName, intersectionName);
+    msg.action = act;
+    msgsnd(msgid, &msg, sizeof(msg) - sizeof(long), 0);
+}
+
+// Function for server to GRANT, WAIT, or DENY a train's request
+void serverResponse(ServerResponse resp, int msgid, int trainIndex, const char *intersectionName) {
+    Message msg;
+    msg.msg_type = trainIndex + 100; // Each train listens on its own msg_type
+    strcpy(msg.intersectionName, intersectionName);
+    msg.response = resp;
+    msgsnd(msgid, &msg, sizeof(msg) - sizeof(long), 0);
+}
+
+// function to determine how many times a train will
+// have to go through an intersection, only used for
+// server_process function to know how long to loop
+int totalRouteLength(Train *trains, int trainCount) {
+    int count = 0;
+
+    for (int i = 0; i < trainCount; i++) {
+        // printf("Route count: %d\n", trains[i].routeCount);
+        count = count + trains[i].routeCount;
+    }
+
+    return count;
+}
+
+// Function for parent process acting as server
+void server_process(int msgid, int trainCount, Train *trains, Intersection *intersections, Node *RAG) {
+    // To do: will need to loop the server as long as
+    // there are still trains that need to pass through.
+    // This implementation currently loops as many times as there are 
+    // trains * intersections, which is a temporary solution.
+    // We will need a much better way of telling when every
+    // train has passed through for the while loop to stop.
+
+    Message msg;
+    int releases = 0;
+    int routeLength = totalRouteLength(trains, trainCount);
+
+    // printf("Total route length is %d\n", routeLength);
+
+    while (releases < routeLength) {
+        createRAG_dot(trains, trainCount);
+        RAG = createRAG_list(trains, trainCount);
+        if (detectCycleInRAG(RAG)) {
+            printf("\nWARNING: Cycle in RAG detected (deadlock can occur)\n");
+        } else {
+            printf("\nNo cycle in RAG detected\n");
+        }
+
+        msgrcv(msgid, &msg, sizeof(msg) - sizeof(long), 1, 0);
+
+        Train *train = &trains[msg.trainIndex];
+
+        if (msg.action == ACQUIRE) {
+            // server recognizes acquire request
+            printf("Train%d request to acquire %s\n", msg.trainIndex + 1, msg.intersectionName);
+
+            // To do: add conditionals to tell whether the intersection the train is
+            // requesting for is in use or not. This is where mutexes/semaphores come in.
+            // If the intersection is in use, then tell the train to wait using serverResponse(WAIT). 
+            // If the intersection is free, then grant the train's request using serverResponse(GRANT).
+
+            // This code:
+
+            serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
+            train->heldIntersections[train->heldIntersectionCount] = strdup(msg.intersectionName); // safe string copy
+            train->heldIntersectionCount++;
+
+            // Should be replaced with something like this:
+
+            // if (intersection is in use - use mutex/semaphore of the intersection to tell) {
+            //     serverResponse(WAIT, msgid, msg.trainIndex, msg.intersectionName);
+            //     train->waitingIntersection = strdup(msg.intersectionName); // safe string copy
+            // } else {
+            //     serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
+            //     train->heldIntersections[train->heldIntersectionCount] = strdup(msg.intersectionName); // safe string copy
+            //     train->heldIntersectionCount++;
+            //     free(train->waitingIntersection);
+            // }
+
+        } else if (msg.action == RELEASE) {
+            // server recognizes release request
+            printf("Train%d request to release %s\n", msg.trainIndex + 1, msg.intersectionName);
+            // serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
+
+            // variable used to find index of intersection to remove from train
+            int found = -1;
+            
+            // Loop to find index of intersection to remove
+            for (int i = 0; i < train->heldIntersectionCount; i++) {
+                if (strcmp(train->heldIntersections[i], msg.intersectionName) == 0) {
+                    found = i;
+                    break;
+                }
+            }
+
+            // Safely remove the intersection from the train list
+            if (found != -1) {
+                free(train->heldIntersections[found]);
+        
+                // Shift remaining intersections left in case a train has multiple intersections (wait, impossible??)
+                for (int j = found; j < train->heldIntersectionCount - 1; j++) {
+                    train->heldIntersections[j] = train->heldIntersections[j + 1];
+                }
+        
+                // Null the last entry
+                train->heldIntersections[train->heldIntersectionCount - 1] = NULL;
+        
+                // One less intersection
+                train->heldIntersectionCount--;
+
+                releases++;
+            } else {
+                printf("WARNING: Train%d tried to release an intersection it does not hold: %s\n", msg.trainIndex + 1, msg.intersectionName);
+            }
+        }
+    }
+
+    // Wait for all children to terminate
+    for (int i = 0; i < trainCount; i++) {
+        wait(NULL);
+    }
+}
+
+// Function for child process behavior
+// This is temporary for testing message queue system, a function 
+// specific to train requirements should replace this
+
+// , Train *trains, Intersection *intersections
+
+void train_process(int msgid, int trainIndex, Train *trains, Intersection *intersections) {
+    Message msg;
+    Train *train = &trains[trainIndex];
+    bool acquireGranted = false;
+
+    for (int i = 0; i < train->routeCount; i++) {
+        acquireGranted = false;
+
+        char *intersectionName = train->route[i];
+
+        trainRequest(ACQUIRE, msgid, trainIndex, intersectionName);
+
+        msgrcv(msgid, &msg, sizeof(msg) - sizeof(long), trainIndex + 100, 0);
+
+        if (msg.response == GRANT) {
+            // request granted
+            printf("Server granted Train%d to acquire%s\n", trainIndex + 1, intersectionName);
+            acquireGranted = true;
+            // simulate travel time
+            sleep(2);
+        } else if (msg.response == WAIT) {
+            // try again later
+            printf("Server told Train%d to wait to acquire %s\n", trainIndex + 1, intersectionName);
+            // wait a long time, then redo iteration to let the train try again
+            sleep(10);
+            i--;
+        } else if (msg.response == DENY) {
+            // request denied
+            // to do: figure out when to deny a request instead of telling it to wait
+            printf("Server denied Train%d to acquire %s\n", trainIndex + 1, intersectionName);
+        }
+
+        // after a request is granted, the train has to release the intersection
+        if (acquireGranted) {
+            trainRequest(RELEASE, msgid, trainIndex, intersectionName);
+
+            // Below code is only needed if the server ever needs to grant/wait/deny release requests
+            // (probably not necessary, right??)
+
+            // msgrcv(msgid, &msg, sizeof(msg) - sizeof(long), trainIndex + 100, 0);
+
+            // if (msg.response == GRANT) {
+            //     // request granted
+            //     printf("Server granted Train%d to release %s\n", trainIndex + 1, intersectionName);
+            // } else if (msg.response == WAIT) {
+            //     // try again later
+            //     printf("Server to Train%d to wait to release %s\n", trainIndex + 1, intersectionName);
+            //     // wait a long time, then redo iteration to let the train try again
+            //     sleep(10);
+            //     i--;
+            // } else if (msg.response == DENY) {
+            //     // request denied
+            //     // to do: figure out when to deny a request instead of telling it to wait
+            //     printf("Server denied Train%d to release %s\n", trainIndex + 1, intersectionName);
+            // }
+        }
+        
+    }
+
+    exit(0);
+}
+
+// Temporary function for implementing forking,
+// this is not official since this is what Fawaz
+// will implement in Fawaz.c, except to match
+// the required structure of trains
+void fork_trains(int msgid, int trainCount, Train *trains, Intersection *intersections) {
+    for (int i = 0; i < trainCount; i++) {
+        pid_t pid = fork();
+        if (pid == 0) { // child processes run this
+            train_process(msgid, i, trains, intersections);
+        } else if (pid < 0) { // only runs if a fork fails
+            perror("fork failed");
+            exit(1);
+        }
+    }
 }
 
 // // This main function will need to be removed, this is only for

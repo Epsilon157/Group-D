@@ -271,6 +271,15 @@ int main() {
     // that the created message queue ID can be used in the 
     // rest of the main function.
     msgid = createMessageQueue(key, msgid);
+
+    // initial RAG generation
+    createRAG_dot(trains, trainCount);
+    Node *RAG = createRAG_list(trains, trainCount);
+    if (detectCycleInRAG(RAG)) {
+        printf("WARNING: Cycle in RAG detected (deadlock can occur)\n");
+    } else {
+        printf("No cycle in RAG detected\n");
+    }
     
     // Fork multiple child processes
     fork_trains(msgid, trainCount, trains, intersections);
@@ -279,7 +288,7 @@ int main() {
     // so only the parent will execute the code below
 
     // execute responsibilities of server
-    server_process(msgid, trainCount, trains, intersections);
+    server_process(msgid, trainCount, trains, intersections, RAG);
 
     // running createRAG in server for now for testing, it should
     // eventually be executed after any train request is made
@@ -309,14 +318,14 @@ int main() {
     printf("\nTrain1's first intersection held: %s\n", trains[0].heldIntersections[0]);
 
     createRAG_dot(trains, trainCount);
-    Node *RAG = createRAG_list(trains, trainCount);
-    printRAG_list(RAG);
-
+    RAG = createRAG_list(trains, trainCount);
     if (detectCycleInRAG(RAG)) {
         printf("\nWARNING: Cycle in RAG detected (deadlock can occur)\n");
     } else {
         printf("\nNo cycle in RAG detected\n");
     }
+
+    printRAG_list(RAG);
 
     // clear up memory from message queue since, it is no longer needed
     destroyMessageQueue(msgid);

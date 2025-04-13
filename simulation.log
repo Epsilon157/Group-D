@@ -4,5 +4,3 @@
 [00:00:00] - IntersectionC (Mutex, Capacity=1)
 [00:00:00] - IntersectionD (Semaphore, Capacity=3)
 [00:00:00] - IntersectionE (Mutex, Capacity=1)
-[00:00:01] Train1: Sent ACQUIRE request for IntersectionA.
-[00:00:01] SERVER: GRANTED IntersectionA to Train1. Semaphore count: 1.

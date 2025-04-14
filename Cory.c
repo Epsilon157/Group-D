@@ -401,7 +401,7 @@ void server_process(int msgid, int trainCount, Train *trains, Intersection *inte
             train->waitingIntersection = NULL; // Clear it after successful grant
         } 
         // keegan added a semaphore section calling aidens acquireTarin function
-        else if(strcmp(targetIntersection-> lock_type, "Semaphore")==0){
+        else if(targetIntersection && targetIntersection->lock_type && strcmp(targetIntersection->lock_type, "Semaphore") == 0){
             acquireTrain(targetIntersection, trains[msg.trainIndex].name);
             serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
             train->heldIntersections[train->heldIntersectionCount] = strdup(msg.intersectionName); // safe string copy

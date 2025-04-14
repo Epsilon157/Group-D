@@ -4,20 +4,23 @@
 // 4/5/2025
 
 // Jacob's Week 2 role: Parsing files
-//parsing for both intersections and trains to put into objects
+// Parsing for both intersections and trains to put into objects
 
-//Jacob's Week 3 role:Simulation Clock and Reallocated work of logging messages.
+// Jacob's Week 3 role: Simulation Clock and Reallocated work of logging messages.
 
 #include <stdio.h>
 #include <sys/mman.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>  // For va_list, va_start, va_end
+#include <pthread.h> // For mutexes
 #include "shared_header.h"
 
-
+// Global variables
 int *sim_time = NULL;
+pthread_mutex_t sim_time_mutex = PTHREAD_MUTEX_INITIALIZER;  // Mutex for protecting sim_time
 
+// Function to initialize simulation time
 void initialize_sim_time() {
     sim_time = mmap(NULL, sizeof(int), PROT_READ | PROT_WRITE,
                     MAP_SHARED | MAP_ANONYMOUS, -1, 0);
@@ -27,13 +30,12 @@ void initialize_sim_time() {
     }
     *sim_time = 0; // Initialize to 0
 }
+
 // Function to format the current simulation time
 void formatTime(char *buffer) {
-    
     int hours = (*sim_time) / 3600;
     int minutes = ((*sim_time) % 3600) / 60;
     int seconds = (*sim_time) % 60;
-    
     sprintf(buffer, "[%02d:%02d:%02d]", hours, minutes, seconds);
 }
 
@@ -54,8 +56,7 @@ void logEvent(const char *format, ...) {
     va_end(args);
 }
 
-
-// Function to print initialized intersections to the log file
+// Function to print initialized intersections
 void print_initialized_intersections(Intersection *intersections, int count) {
     logEvent("SERVER: Initialized intersections:");
     for (int i = 0; i < count; i++) {
@@ -64,52 +65,52 @@ void print_initialized_intersections(Intersection *intersections, int count) {
         else
             logEvent("- %s (Semaphore, Capacity=%d)", intersections[i].name, intersections[i].capacity);
     }
-    
 }
 
-/*void printMessages(const char *train, const char *intersection, int granted, int remaining) {
-    (*sim_time)++;
-    logEvent("%s: Sent ACQUIRE request for %s.", train, intersection);
-    if (granted) {
-        if (remaining >= 0)
-            logEvent("SERVER: GRANTED %s to %s. Semaphore count: %d.", intersection, train, remaining);
-        else
-            logEvent("SERVER: GRANTED %s to %s.", intersection, train);
-    } else {
-        logEvent("SERVER: %s is locked. %s added to wait queue.", intersection, train);
-    }
-}*/
+// Function to print request sent for intersection
+void printRequestSent(int trainIndex, const char *intersection) {
+    pthread_mutex_lock(&sim_time_mutex); // Lock mutex to safely increment sim_time
+    (*sim_time)++;  // Increment simulation time
+    pthread_mutex_unlock(&sim_time_mutex); // Unlock mutex after incrementing sim_time
 
-void printRequestSent(int trainIndex, const char *intersection){
-    
     logEvent("%s: Sent ACQUIRE request for %s.", trains[trainIndex].name, intersection);
-    
 }
 
+// Function to print request release for intersection
+void printRequestRelease(int trainIndex, const char *intersection) {
+    pthread_mutex_lock(&sim_time_mutex); // Lock mutex to safely increment sim_time
+    (*sim_time)++;  // Increment simulation time
+    pthread_mutex_unlock(&sim_time_mutex); // Unlock mutex after incrementing sim_time
 
-void printRequestRelease(int trainIndex, const char *intersection){
-    
     logEvent("%s: Released %s.", trains[trainIndex].name, intersection);
 }
 
+// Function to print denied request for intersection
+void printDenied(const char *train, const char *intersection) {
+    pthread_mutex_lock(&sim_time_mutex); // Lock mutex to safely increment sim_time
+    (*sim_time)++;  // Increment simulation time
+    pthread_mutex_unlock(&sim_time_mutex); // Unlock mutex after incrementing sim_time
 
-
-
-void printDenied(const char *train, const char *intersection){
-    
     logEvent("SERVER: %s is locked. %s added to wait queue.", intersection, train);
 }
 
-void Deadlock(char train1, char train2, char intersection1){
-    //this comment is here to make sure nobody copies my code
+// Function to log a deadlock and preemption event
+void Deadlock(char train1, char train2, char intersection1) {
+    pthread_mutex_lock(&sim_time_mutex); // Lock mutex to safely increment sim_time
+    (*sim_time)++;  // Increment simulation time
+    pthread_mutex_unlock(&sim_time_mutex); // Unlock mutex after incrementing sim_time
+
     logEvent("SERVER: Deadlock Detected! %s ↔ %s", train1, train2);
     logEvent("SERVER: Preempting %s from %s", intersection1, train1);
     logEvent("SERVER: %s released %s forcibly", train1, intersection1);
 }
 
+// Function to print intersection granted for a train
 void printIntersectionGranted(int trainIndex, const char *intersectionName) {
-    
-    
+    pthread_mutex_lock(&sim_time_mutex); // Lock mutex to safely increment sim_time
+    (*sim_time)++;  // Increment simulation time
+    pthread_mutex_unlock(&sim_time_mutex); // Unlock mutex after incrementing sim_time
+
     int i;
     int matchIndex = -1;
 
@@ -137,11 +138,12 @@ void printIntersectionGranted(int trainIndex, const char *intersectionName) {
     fprintf(log_file, "\n");
 }
 
-
-
 // Function to log a deadlock and preemption event
 void printDeadlockAndPreemption(const char *train1, const char *train2, const char *intersection) {
-    
+    pthread_mutex_lock(&sim_time_mutex); // Lock mutex to safely increment sim_time
+    (*sim_time)++;  // Increment simulation time
+    pthread_mutex_unlock(&sim_time_mutex); // Unlock mutex after incrementing sim_time
+
     logEvent("SERVER: Deadlock detected! Cycle: %s ? %s.", train1, train2);
     logEvent("SERVER: Preempting %s from %s.", intersection, train1);
     logEvent("SERVER: %s released %s forcibly.", train1, intersection);
@@ -149,11 +151,12 @@ void printDeadlockAndPreemption(const char *train1, const char *train2, const ch
 
 // Function to log the completion of the simulation
 void printSimulationComplete() {
-    
+    pthread_mutex_lock(&sim_time_mutex); // Lock mutex to safely increment sim_time
+    (*sim_time)++;  // Increment simulation time
+    pthread_mutex_unlock(&sim_time_mutex); // Unlock mutex after incrementing sim_time
+
     logEvent("SIMULATION COMPLETE. All trains reached destinations.");
 }
-
-
 
 // File paths for intersections and trains
 const char *intersectionFilePath = "intersections.txt";

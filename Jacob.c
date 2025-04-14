@@ -81,14 +81,14 @@ void print_initialized_intersections(Intersection *intersections, int count) {
 }*/
 
 void printRequestSent(int trainIndex, const char *intersection){
-    (*sim_time)++;
+    
     logEvent("%s: Sent ACQUIRE request for %s.", trains[trainIndex].name, intersection);
     
 }
 
 
 void printRequestRelease(int trainIndex, const char *intersection){
-    (*sim_time)++;
+    
     logEvent("%s: Released %s.", trains[trainIndex].name, intersection);
 }
 
@@ -96,12 +96,12 @@ void printRequestRelease(int trainIndex, const char *intersection){
 
 
 void printDenied(const char *train, const char *intersection){
-    (*sim_time)++;
+    
     logEvent("SERVER: %s is locked. %s added to wait queue.", intersection, train);
 }
 
 void Deadlock(char train1, char train2, char intersection1){
-    (*sim_time)++;//this comment is here to make sure nobody copies my code
+    //this comment is here to make sure nobody copies my code
     logEvent("SERVER: Deadlock Detected! %s ↔ %s", train1, train2);
     logEvent("SERVER: Preempting %s from %s", intersection1, train1);
     logEvent("SERVER: %s released %s forcibly", train1, intersection1);
@@ -109,7 +109,7 @@ void Deadlock(char train1, char train2, char intersection1){
 
 void printIntersectionGranted(int trainIndex, const char *intersectionName) {
     
-    (*sim_time)++;
+    
     int i;
     int matchIndex = -1;
 
@@ -141,7 +141,7 @@ void printIntersectionGranted(int trainIndex, const char *intersectionName) {
 
 // Function to log a deadlock and preemption event
 void printDeadlockAndPreemption(const char *train1, const char *train2, const char *intersection) {
-    (*sim_time)++;
+    
     logEvent("SERVER: Deadlock detected! Cycle: %s ? %s.", train1, train2);
     logEvent("SERVER: Preempting %s from %s.", intersection, train1);
     logEvent("SERVER: %s released %s forcibly.", train1, intersection);
@@ -149,7 +149,7 @@ void printDeadlockAndPreemption(const char *train1, const char *train2, const ch
 
 // Function to log the completion of the simulation
 void printSimulationComplete() {
-    (*sim_time)++;
+    
     logEvent("SIMULATION COMPLETE. All trains reached destinations.");
 }
 

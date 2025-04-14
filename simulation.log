@@ -5,53 +5,23 @@
 [00:00:00] - IntersectionD (Semaphore, Capacity=3)
 [00:00:00] - IntersectionE (Mutex, Capacity=1)
 
-<<<<<<< HEAD
-[00:00:01] Train2: Sent ACQUIRE request for IntersectionB.
-[00:00:03] Train3: Sent ACQUIRE request for IntersectionC.
-[00:00:02] Train1: Sent ACQUIRE request for IntersectionA.
-[00:00:04] Train4: Sent ACQUIRE request for IntersectionE.
-[00:00:10] Train3: Released IntersectionD.
-[00:00:11] Train3: Sent ACQUIRE request for IntersectionA.
-[00:00:12] Train1: Released IntersectionA.
-[00:00:13] Train1: Sent ACQUIRE request for IntersectionB.
-[00:00:09] Train2: Released IntersectionB.
-[00:00:10] Train2: Sent ACQUIRE request for IntersectionD.
-[00:00:05] Train3: Released IntersectionC.
-[00:00:06] Train3: Sent ACQUIRE request for IntersectionD.
-[00:00:07] Train1: Sent ACQUIRE request for IntersectionA.
-=======
 [00:00:01] Train1: Sent ACQUIRE request for IntersectionA.
 [00:00:02] Train2: Sent ACQUIRE request for IntersectionB.
 [00:00:03] Train3: Sent ACQUIRE request for IntersectionC.
 [00:00:04] Train4: Sent ACQUIRE request for IntersectionE.
-[00:00:05] SERVER: IntersectionA is locked. Train1 added to wait queue.
-
-[00:00:06] SERVER: IntersectionC is locked. Train3 added to wait queue.
-
-[00:00:07] Train1: Released IntersectionA.
-[00:00:08] Train1: Sent ACQUIRE request for IntersectionB.
+[00:00:05] Train1: Released IntersectionA.
+[00:00:06] Train1: Sent ACQUIRE request for IntersectionB.
+[00:00:07] Train2: Released IntersectionB.
+[00:00:08] Train2: Sent ACQUIRE request for IntersectionD.
 [00:00:09] Train3: Released IntersectionC.
 [00:00:10] Train3: Sent ACQUIRE request for IntersectionD.
-[00:00:11] Train2: Sent ACQUIRE request for IntersectionB.
-[00:00:12] Train4: Sent ACQUIRE request for IntersectionE.
-[00:00:13] Train1: Sent ACQUIRE request for IntersectionB.
-[00:00:14] Train3: Sent ACQUIRE request for IntersectionD.
-[00:00:15] Train2: Sent ACQUIRE request for IntersectionB.
-[00:00:16] Train4: Sent ACQUIRE request for IntersectionE.
-[00:00:17] Train1: Sent ACQUIRE request for IntersectionB.
-[00:00:18] Train3: Sent ACQUIRE request for IntersectionD.
-[00:00:19] Train2: Sent ACQUIRE request for IntersectionB.
-[00:00:20] Train4: Sent ACQUIRE request for IntersectionE.
-[00:00:21] Train1: Sent ACQUIRE request for IntersectionB.
-[00:00:22] Train3: Sent ACQUIRE request for IntersectionD.
-[00:00:23] Train2: Sent ACQUIRE request for IntersectionB.
-[00:00:24] Train4: Sent ACQUIRE request for IntersectionE.
-[00:00:25] Train1: Sent ACQUIRE request for IntersectionB.
-[00:00:26] Train3: Sent ACQUIRE request for IntersectionD.
-[00:00:27] Train2: Sent ACQUIRE request for IntersectionB.
+[00:00:11] Train1: Released IntersectionB.
+[00:00:12] Train1: Sent ACQUIRE request for IntersectionC.
+[00:00:13] Train2: Released IntersectionD.
+[00:00:14] Train2: Sent ACQUIRE request for IntersectionE.
+[00:00:15] Train3: Released IntersectionD.
+[00:00:16] Train3: Sent ACQUIRE request for IntersectionA.
+[00:00:27] Train2: Sent ACQUIRE request for IntersectionE.
+[00:00:34] Train4: Sent ACQUIRE request for IntersectionE.
+[00:00:35] Train2: Sent ACQUIRE request for IntersectionE.
 [00:00:28] Train4: Sent ACQUIRE request for IntersectionE.
-[00:00:29] Train1: Sent ACQUIRE request for IntersectionB.
-[00:00:30] Train3: Sent ACQUIRE request for IntersectionD.
-[00:00:31] Train2: Sent ACQUIRE request for IntersectionB.
-[00:00:32] Train4: Sent ACQUIRE request for IntersectionE.
->>>>>>> dac9dafd9a6843423d64f3f7c1093dfa317148a3

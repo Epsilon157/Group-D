@@ -30,7 +30,7 @@ typedef struct {
 
 */
 //Intersection *intersections;
-
+//Test
 //Function that makes the resource allocation table
 void initR_Table(Intersection **intersections, int intersectionCount){
 	

@@ -15,10 +15,7 @@
 #include <stdarg.h>  // For va_list, va_start, va_end
 #include "shared_header.h"
 
-// Global variables for simulation time and log file
 
-
-// ----------- Utility Functions -----------
 int *sim_time = NULL;
 
 void initialize_sim_time() {
@@ -57,8 +54,6 @@ void logEvent(const char *format, ...) {
     va_end(args);
 }
 
-
-// ----------- Simulation Logging -----------
 
 // Function to print initialized intersections to the log file
 void print_initialized_intersections(Intersection *intersections, int count) {
@@ -158,16 +153,11 @@ void printSimulationComplete() {
     logEvent("SIMULATION COMPLETE. All trains reached destinations.");
 }
 
-// ----------- Structure Definitions -----------
-
-// Structure to hold data about intersections
 
 
 // File paths for intersections and trains
 const char *intersectionFilePath = "intersections.txt";
 const char *trainFilePath = "trains.txt";
-
-// ----------- Parsing Functions -----------
 
 // Function to parse the intersection data
 int IntersectionParsing(const char *filename, Intersection **intersections) {
@@ -245,8 +235,6 @@ int TrainParsing(const char *filename, Train **trains) {
     fclose(file);
     return numberOfTrains;
 }
-
-
 
 // Function to free the memory allocated for intersections and trains
 void FreeMemory(Intersection *intersections, int intersectionCount, Train *trains, int trainCount) {

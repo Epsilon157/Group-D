@@ -90,7 +90,7 @@ void releaseTrainMutex(Intersection *intersection, const char *trainName){
         printf("Intersection %s releasing Train %s\n", intersection->name, trainName);
 
     }
-
+}
 }
 //writing a test to ensure the code mutexes are called correctly
 /*

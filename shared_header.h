@@ -32,7 +32,7 @@ void printIntersectionGranted(int trainIndex, const char *intersectionName);
 void printRequestRelease(int trainIndex, const char *intersection);
 
 
-
+void acquireTrainMutex(Intersection *intersection, const char *trainName);
 int tryAcquireMutex(Intersection *intersection, const char *trainName);
 void releaseTrainMutex(Intersection *intersection, const char *trainName);
 void releaseTrain(Intersection *intersection, const char *trainName);

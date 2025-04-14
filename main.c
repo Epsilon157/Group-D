@@ -291,7 +291,7 @@ int main() {
     // so only the parent will execute the code below
 
     // execute responsibilities of server
-    server_process(msgid, trainCount, trains, intersections, RAG);
+    server_process(msgid, trainCount, intersectionCount, trains, intersections, RAG);
 
     // running createRAG in server for now for testing, it should
     // eventually be executed after any train request is made

@@ -325,7 +325,7 @@ int totalRouteLength(Train *trains, int trainCount) {
 }
 
 // Function for parent process acting as server
-void server_process(int msgid, int trainCount, Train *trains, Intersection *intersections, Node *RAG) {
+void server_process(int msgid, int trainCount, int intersectionCount, Train *trains, Intersection *intersections, Node *RAG) {
     // To do: will need to loop the server as long as
     // there are still trains that need to pass through.
     // This implementation currently loops as many times as there are 
@@ -355,7 +355,7 @@ void server_process(int msgid, int trainCount, Train *trains, Intersection *inte
         Train *train = &trains[msg.trainIndex];
         Intersection *targetIntersection = NULL;
 
-        for(int i =0; i < trainCount; i++){
+        for(int i =0; i < intersectionCount; i++){
             if(strcmp(intersections[i].name, msg.intersectionName) ==0){
                 targetIntersection = &intersections[i];
                 break;
@@ -394,33 +394,33 @@ void server_process(int msgid, int trainCount, Train *trains, Intersection *inte
 // %%%%%%%%% Keegan adding here: %%%%%%%%%%%%%%%%%%%%%%%%%
 
         
-        if(targetIntersection && tryAcquireMutex(targetIntersection, trains[msg.trainIndex].name)== 0){
+            if(targetIntersection && targetIntersection->lock_type && strcmp(targetIntersection->lock_type, "Mutex") == 0){
 
-            printf("Server attempting tryAcquireMutex for Train %s on %s\n", train->name, msg.intersectionName);
+                acquireTrainMutex(targetIntersection, trains[msg.trainIndex].name);
+                printf("Server attempting tryAcquireMutex for Train %s on %s\n", train->name, msg.intersectionName);
+                serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
+                train->heldIntersections[train->heldIntersectionCount] = strdup(msg.intersectionName); // safe string copy
+                train->heldIntersectionCount++; 
+                free(train->waitingIntersection);
+                train->waitingIntersection = NULL; // Clear it after successful grant
+            } 
+            // keegan added a semaphore section calling aidens acquireTarin function
+            else if(targetIntersection && targetIntersection->lock_type && strcmp(targetIntersection->lock_type, "Semaphore") == 0){
+                acquireTrain(targetIntersection, trains[msg.trainIndex].name);
+                serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
+                train->heldIntersections[train->heldIntersectionCount] = strdup(msg.intersectionName); // safe string copy
+                train->heldIntersectionCount++;
+                free(train->waitingIntersection);
+                train->waitingIntersection = NULL; // Clear it after successful grant
 
-            serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
-            train->heldIntersections[train->heldIntersectionCount] = strdup(msg.intersectionName); // safe string copy
-            train->heldIntersectionCount++; 
-            free(train->waitingIntersection);
-            train->waitingIntersection = NULL; // Clear it after successful grant
-        } 
-        // keegan added a semaphore section calling aidens acquireTarin function
-        else if(targetIntersection && targetIntersection->lock_type && strcmp(targetIntersection->lock_type, "Semaphore") == 0){
-            acquireTrain(targetIntersection, trains[msg.trainIndex].name);
-            serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
-            train->heldIntersections[train->heldIntersectionCount] = strdup(msg.intersectionName); // safe string copy
-            train->heldIntersectionCount++;
-            free(train->waitingIntersection);
-            train->waitingIntersection = NULL; // Clear it after successful grant
-
-        }
-        else{
-            printf("Train%d can't obtain %s, sending WAIT\n", msg.trainIndex + 1, msg.intersectionName);
-            serverResponse(WAIT, msgid, msg.trainIndex, msg.intersectionName);
-            free(train->waitingIntersection); // Avoid memory leak before overwriting
-            train->waitingIntersection = strdup(msg.intersectionName);
-         } 
-        }
+            }
+            else{
+                printf("Train%d can't obtain %s, sending WAIT\n", msg.trainIndex + 1, msg.intersectionName);
+                serverResponse(WAIT, msgid, msg.trainIndex, msg.intersectionName);
+                free(train->waitingIntersection); // Avoid memory leak before overwriting
+                train->waitingIntersection = strdup(msg.intersectionName);
+            } 
+    }
         else if (msg.action == RELEASE) {
             // server recognizes release request
             printf("Train%d request to release %s\n", msg.trainIndex + 1, msg.intersectionName);

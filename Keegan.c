@@ -84,13 +84,10 @@ int tryAcquireMutex(Intersection *intersection, const char *trainName) {
 //Releasin for intersections that can only fit one process by unlocking
 void releaseTrainMutex(Intersection *intersection, const char *trainName){
     if(strcmp(intersection-> lock_type, "Mutex") == 0){
-    if(strcmp(intersection-> lock_type, "Mutex") == 0){
         pthread_mutex_unlock(&intersection-> Mutex);
         intersection -> lock_state = 0;
         printf("Intersection %s releasing Train %s\n", intersection->name, trainName);
-
     }
-}
 }
 //writing a test to ensure the code mutexes are called correctly
 /*

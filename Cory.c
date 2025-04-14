@@ -339,14 +339,7 @@ void server_process(int msgid, int trainCount, Train *trains, Intersection *inte
 
     // printf("Total route length is %d\n", routeLength);
 
-    Intersection *targetIntersection = NULL;
-
-    for(int i =0; i < trainCount; i++){
-        if(strcmp(intersections[i].name, msg.intersectionName) ==0){
-            targetIntersection = &intersections[i];
-            break;
-        }
-    }
+   
 
     while (releases < routeLength) {
         createRAG_dot(trains, trainCount);
@@ -360,6 +353,14 @@ void server_process(int msgid, int trainCount, Train *trains, Intersection *inte
         msgrcv(msgid, &msg, sizeof(msg) - sizeof(long), 1, 0);
 
         Train *train = &trains[msg.trainIndex];
+        Intersection *targetIntersection = NULL;
+
+        for(int i =0; i < trainCount; i++){
+            if(strcmp(intersections[i].name, msg.intersectionName) ==0){
+                targetIntersection = &intersections[i];
+                break;
+            }
+        }
 
         if (msg.action == ACQUIRE) {
 
@@ -389,23 +390,27 @@ void server_process(int msgid, int trainCount, Train *trains, Intersection *inte
             //     train->heldIntersectionCount++;
             //     free(train->waitingIntersection);
             // }
+            
 // %%%%%%%%% Keegan adding here: %%%%%%%%%%%%%%%%%%%%%%%%%
-// This is erroring due to #include "Keegan.c"
-
-       
 
         if(targetIntersection && tryAcquireMutex(targetIntersection, trains[msg.trainIndex].name)== 0){
-
-
             serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
             train->heldIntersections[train->heldIntersectionCount] = strdup(msg.intersectionName); // safe string copy
             train->heldIntersectionCount++;
             free(train->waitingIntersection);
             train->waitingIntersection = NULL; // Clear it after successful grant
-        }else{
+        } 
+        // keegan added a semaphore section calling aidens acquireTarin function
+        else if(strcmp(targetIntersection-> lock_type, "Semaphore")==0){
+            acquireTrain(targetIntersection, trains[msg.trainIndex].name);
+            serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
+            train->heldIntersections[train->heldIntersectionCount] = strdup(msg.intersectionName); // safe string copy
+            train->heldIntersectionCount++;
+            free(train->waitingIntersection);
+            train->waitingIntersection = NULL; // Clear it after successful grant
 
-            
-
+        }
+        else{
             printf("Train%d can't obtain %s, sending WAIT\n", msg.trainIndex + 1, msg.intersectionName);
             serverResponse(WAIT, msgid, msg.trainIndex, msg.intersectionName);
             free(train->waitingIntersection); // Avoid memory leak before overwriting
@@ -427,9 +432,14 @@ void server_process(int msgid, int trainCount, Train *trains, Intersection *inte
                     break;
                 }
             }
-            // call for releasing mutexes
+            // call for releasing mutexes and semaphores
             if(targetIntersection){
+                if(strcmp(targetIntersection -> lock_type, "Mutex")== 0){
                 releaseTrainMutex(targetIntersection, train->name);
+                }  
+                else if(strcmp(targetIntersection -> lock_type, "Semaphore")== 0){
+                    releaseTrain(targetIntersection, train->name);
+                }
             }
 
             // Safely remove the intersection from the train list

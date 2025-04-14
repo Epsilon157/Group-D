@@ -339,6 +339,8 @@ void server_process(int msgid, int trainCount, Train *trains, Intersection *inte
 
     // printf("Total route length is %d\n", routeLength);
 
+   
+
     while (releases < routeLength) {
         createRAG_dot(trains, trainCount);
         RAG = createRAG_list(trains, trainCount);
@@ -351,6 +353,14 @@ void server_process(int msgid, int trainCount, Train *trains, Intersection *inte
         msgrcv(msgid, &msg, sizeof(msg) - sizeof(long), 1, 0);
 
         Train *train = &trains[msg.trainIndex];
+        Intersection *targetIntersection = NULL;
+
+        for(int i =0; i < trainCount; i++){
+            if(strcmp(intersections[i].name, msg.intersectionName) ==0){
+                targetIntersection = &intersections[i];
+                break;
+            }
+        }
 
         if (msg.action == ACQUIRE) {
 
@@ -380,6 +390,7 @@ void server_process(int msgid, int trainCount, Train *trains, Intersection *inte
             //     train->heldIntersectionCount++;
             //     free(train->waitingIntersection);
             // }
+            
 // %%%%%%%%% Keegan adding here: %%%%%%%%%%%%%%%%%%%%%%%%%
 // This is erroring due to #include "Keegan.c"
 
@@ -434,6 +445,15 @@ void server_process(int msgid, int trainCount, Train *trains, Intersection *inte
                 if (strcmp(train->heldIntersections[i], msg.intersectionName) == 0) {
                     found = i;
                     break;
+                }
+            }
+            // call for releasing mutexes and semaphores
+            if(targetIntersection){
+                if(strcmp(targetIntersection -> lock_type, "Mutex")== 0){
+                releaseTrainMutex(targetIntersection, train->name);
+                }  
+                else if(strcmp(targetIntersection -> lock_type, "Semaphore")== 0){
+                    releaseTrain(targetIntersection, train->name);
                 }
             }
 

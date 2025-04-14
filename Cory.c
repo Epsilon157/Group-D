@@ -273,32 +273,15 @@ void trainRequest(TrainAction act, int msgid, int trainIndex, const char *inters
     msg.action = act;
     msgsnd(msgid, &msg, sizeof(msg) - sizeof(long), 0);
 
+    (*sim_time)++;
+    log_file = fopen("simulation.log", "a");
+    
     if (msg.action == ACQUIRE) {
-        log_file = fopen("simulation.log", "a");
-        if (log_file == NULL) {
-            perror("Failed to open simulation.log");
-            exit(EXIT_FAILURE);
-        }
-           
-        printRequestSent( trainIndex, intersectionName);
-        
-        if (log_file) {
-            fclose(log_file);
-        }
-
-    }else if (msg.action == RELEASE){
-        log_file = fopen("simulation.log", "a");
-        if (log_file == NULL) {
-            perror("Failed to open simulation.log");
-            exit(EXIT_FAILURE);
-        }
-           
-        printRequestRelease( trainIndex, intersectionName);
-        
-        if (log_file) {
-            fclose(log_file);
-        }
+        printRequestSent(msg.trainIndex, msg.intersectionName);
+    } else if (msg.action == RELEASE) {
+        printRequestRelease(msg.trainIndex, msg.intersectionName);
     }
+    fclose(log_file);
 }
 
 // Function for server to GRANT, WAIT, or DENY a train's request
@@ -342,6 +325,7 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
    
 
     while (releases < routeLength) {
+        
         createRAG_dot(trains, trainCount);
         RAG = createRAG_list(trains, trainCount);
         if (detectCycleInRAG(RAG)) {

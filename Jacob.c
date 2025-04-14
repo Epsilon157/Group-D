@@ -1,3 +1,13 @@
+// Group D
+// Jacob Abad
+// jacob.abad10@okstate.edu@okstate.edu
+// 4/5/2025
+
+// Jacob's Week 2 role: Parsing files
+//parsing for both intersections and trains to put into objects
+
+//Jacob's Week 3 role:Simulation Clock and Reallocated work of logging messages.
+
 #include <stdio.h>
 #include <sys/mman.h>
 #include <stdlib.h>

@@ -65,20 +65,12 @@ void acquireTrainMutex(Intersection *intersection, const char *trainName){
 // using a tryAcquireMutex function to allow acquiring trains without blocking anything.
 int tryAcquireMutex(Intersection *intersection, const char *trainName) {
     if (strcmp(intersection->lock_type, "Mutex") == 0) {
-        int result = pthread_mutex_trylock(&intersection->Mutex);
+        int result = intersection->lock_state;
         if (result == 0) {
             intersection->lock_state = 1;
             printf("Train %s has acquired Mutex at %s\n", trainName, intersection->name);
-int tryAcquireMutex(Intersection *intersection, const char *trainName) {
-    if (strcmp(intersection->lock_type, "Mutex") == 0) {
-        int result = intersection->lock_state;
-        if (result == 0) {  // Successfully acquired the lock
-            intersection->lock_state = 1;
-            printf("Train %s has acquired Mutex at %s\n", trainName, intersection->name);
             return 0;
-        } else {
-            printf("Train %s could not acquire Mutex at %s\n", trainName, intersection->name);
-        } else if (result == EBUSY) {  // Mutex is already locked by another train
+        } else if (result == EBUSY) {
             printf("Train %s could not acquire Mutex at %s (Mutex is already locked)\n", trainName, intersection->name);
             return -1;
         } else {
@@ -87,7 +79,6 @@ int tryAcquireMutex(Intersection *intersection, const char *trainName) {
         }
     }
     return -1;
-    return -1;  // If not a Mutex lock type, return -1
 }
 
 //Releasin for intersections that can only fit one process by unlocking

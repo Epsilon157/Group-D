@@ -395,6 +395,9 @@ void server_process(int msgid, int trainCount, Train *trains, Intersection *inte
 
         
         if(targetIntersection && tryAcquireMutex(targetIntersection, trains[msg.trainIndex].name)== 0){
+
+            printf("Server attempting tryAcquireMutex for Train %s on %s\n", train->name, msg.intersectionName);
+
             serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
             train->heldIntersections[train->heldIntersectionCount] = strdup(msg.intersectionName); // safe string copy
             train->heldIntersectionCount++; 
@@ -433,8 +436,13 @@ void server_process(int msgid, int trainCount, Train *trains, Intersection *inte
                     break;
                 }
             }
-            // call for releasing mutexes and semaphores
-            if(targetIntersection){
+            
+
+            // Safely remove the intersection from the train list
+            if (found != -1) {
+
+                // call for releasing mutexes and semaphores
+            if(targetIntersection== NULL){
                 if(strcmp(targetIntersection -> lock_type, "Mutex")== 0){
                 releaseTrainMutex(targetIntersection, train->name);
                 }  
@@ -442,9 +450,6 @@ void server_process(int msgid, int trainCount, Train *trains, Intersection *inte
                     releaseTrain(targetIntersection, train->name);
                 }
             }
-
-            // Safely remove the intersection from the train list
-            if (found != -1) {
                 free(train->heldIntersections[found]);
         
                 // Shift remaining intersections left in case a train has multiple intersections (wait, impossible??)

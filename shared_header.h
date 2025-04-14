@@ -37,6 +37,8 @@ int tryAcquireMutex(Intersection *intersection, const char *trainName);
 void releaseTrainMutex(Intersection *intersection, const char *trainName);
 void releaseTrain(Intersection *intersection, const char *trainName);
 void acquireTrain(Intersection *intersection, const char *trainName);
+
+int tryAcquireSemaphore(Intersection *intersection, const char *trainName);
 extern int *sim_time;
 FILE *log_file = NULL;
 

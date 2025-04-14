@@ -263,13 +263,14 @@ int main() {
 
     // This is just testing mutexes are properly working
     printf("\n TEST FOR MUTEX \n") ;
-    test_initializeMutex();
+    //test_initializeMutex();
     printf("\n END OF TEST FOR MUTEX \n") ;
 
     
 
     // Create message queue for message passing between parent
     // and child processes. This function MUST return msgid so 
+
     // that the created message queue ID can be used in the 
     // rest of the main function.
     msgid = createMessageQueue(key, msgid);

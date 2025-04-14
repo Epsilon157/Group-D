@@ -33,7 +33,7 @@ void printIntersectionGranted(const char *trainName, const char *intersectionNam
 
 
 int tryAcquireMutex(Intersection *intersection, const char *trainName);
-
+void releaseTrainMutex(Intersection *intersection, const char *trainName);
 extern int *sim_time;
 FILE *log_file = NULL;
 

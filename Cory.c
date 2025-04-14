@@ -339,6 +339,15 @@ void server_process(int msgid, int trainCount, Train *trains, Intersection *inte
 
     // printf("Total route length is %d\n", routeLength);
 
+    Intersection *targetIntersection = NULL;
+
+    for(int i =0; i < trainCount; i++){
+        if(strcmp(intersections[i].name, msg.intersectionName) ==0){
+            targetIntersection = &intersections[i];
+            break;
+        }
+    }
+
     while (releases < routeLength) {
         createRAG_dot(trains, trainCount);
         RAG = createRAG_list(trains, trainCount);
@@ -383,14 +392,7 @@ void server_process(int msgid, int trainCount, Train *trains, Intersection *inte
 // %%%%%%%%% Keegan adding here: %%%%%%%%%%%%%%%%%%%%%%%%%
 // This is erroring due to #include "Keegan.c"
 
-        Intersection *targetIntersection = NULL;
-
-        for(int i =0; i < trainCount; i++){
-            if(strcmp(intersections[i].name, msg.intersectionName) ==0){
-                targetIntersection = &intersections[i];
-                break;
-            }
-        }
+       
 
         if(targetIntersection && tryAcquireMutex(targetIntersection, trains[msg.trainIndex].name)== 0){
 
@@ -435,6 +437,10 @@ void server_process(int msgid, int trainCount, Train *trains, Intersection *inte
                     found = i;
                     break;
                 }
+            }
+            // call for releasing mutexes
+            if(targetIntersection){
+                releaseTrainMutex(targetIntersection, train->name);
             }
 
             // Safely remove the intersection from the train list

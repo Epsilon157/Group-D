@@ -21,30 +21,10 @@
 [00:00:14] Train2: Sent ACQUIRE request for IntersectionE.
 [00:00:15] Train3: Released IntersectionD.
 [00:00:16] Train3: Sent ACQUIRE request for IntersectionA.
-[00:00:27] Train2: Sent ACQUIRE request for IntersectionE.
-[00:00:34] Train4: Sent ACQUIRE request for IntersectionE.
-[00:00:35] Train2: Sent ACQUIRE request for IntersectionE.
-[00:00:28] Train4: Sent ACQUIRE request for IntersectionE.
-<<<<<<< HEAD
-[00:00:29] Train1: Sent ACQUIRE request for IntersectionB.
-[00:00:30] Train3: Sent ACQUIRE request for IntersectionD.
-[00:00:31] Train2: Sent ACQUIRE request for IntersectionB.
-[00:00:32] Train4: Sent ACQUIRE request for IntersectionE.
->>>>>>> dac9dafd9a6843423d64f3f7c1093dfa317148a3
-[00:00:49] Train2: Sent ACQUIRE request for IntersectionE.
-[00:00:50] Train2: Sent ACQUIRE request for IntersectionE.
-[00:00:51] Train2: Sent ACQUIRE request for IntersectionE.
-[00:00:45] Train4: Sent ACQUIRE request for IntersectionE.
-[00:00:46] Train2: Sent ACQUIRE request for IntersectionE.
-[00:00:50] Train4: Sent ACQUIRE request for IntersectionE.
-[00:00:47] Train2: Sent ACQUIRE request for IntersectionE.
-[00:00:48] Train4: Sent ACQUIRE request for IntersectionE.
-[00:00:46] Train2: Sent ACQUIRE request for IntersectionE.
-[00:01:02] Train2: Sent ACQUIRE request for IntersectionE.
-[00:00:47] Train2: Sent ACQUIRE request for IntersectionE.
-[00:00:47] Train4: Sent ACQUIRE request for IntersectionE.
-[00:01:03] Train1: Sent ACQUIRE request for IntersectionC.
-[00:01:04] Train1: Sent ACQUIRE request for IntersectionC.
-[00:01:05] Train1: Sent ACQUIRE request for IntersectionC.
-=======
->>>>>>> 481ed18450d0bb34de3132b7e57c22ac99516511
+[00:00:17] Train1: Released IntersectionC.
+[00:00:18] Train3: Released IntersectionA.
+[00:01:23] Train4: Sent ACQUIRE request for IntersectionE.
+[00:01:17] Train4: Sent ACQUIRE request for IntersectionE.
+[00:00:19] Train4: Sent ACQUIRE request for IntersectionE.
+[00:01:24] Train4: Sent ACQUIRE request for IntersectionE.
+[00:01:18] Train4: Sent ACQUIRE request for IntersectionE.

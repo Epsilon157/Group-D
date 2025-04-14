@@ -7,6 +7,7 @@
 #include <pthread.h>
 #include "shared_header.h"
 #include <string.h>
+#include <errno.h>
 //#include "main.c"
 
 /*
@@ -15,29 +16,26 @@
     it would be compatible with mutexes and also only allowing one train can enter at a time in an intersection.
 */
 // method for initializing mutex
-void initializeMutex(Intersection *intersections, int intersectionCount){
-   pthread_mutexattr_t at;
-   pthread_mutexattr_init(&at);
-   pthread_mutexattr_setpshared(&at, PTHREAD_PROCESS_SHARED);
+void initializeMutex(Intersection *intersections, int intersectionCount) {
+    pthread_mutexattr_t at;  // Declare the mutex attributes
+    pthread_mutexattr_init(&at);
+    pthread_mutexattr_setpshared(&at, PTHREAD_PROCESS_SHARED);  // Set mutex to be shared across processes
 
-   for(int i =0; i < intersectionCount; i++){
-    //checking id the resource or capacity is == 1 so the mutex can be initialized
-    if(intersections[i].capacity == 1){
-        pthread_mutex_init(&intersections[i].Mutex, &at);
-        printf("Intersection %s initialized \n", intersections[i].name);
-    }//added error handling
-    else if(intersections[i].capacity < 0){
-        printf("Error: Intersection %s has an invalid resource value: %i (must be greater than 0)", intersections[i].name, intersections[i].capacity);
-        exit(0);
+    for (int i = 0; i < intersectionCount; i++) {  // Declare i inside the loop
+        if (intersections[i].capacity == 1) {
+            pthread_mutex_init(&intersections[i].Mutex, &at);  // Initialize the mutex
+            intersections[i].isMutexInitialized = 1;  // Set the initialization flag
+            printf("Intersection %s initialized \n", intersections[i].name);
+        } else {
+            intersections[i].isMutexInitialized = 0;  // Don't initialize the mutex if capacity != 1
+        }
     }
-   }
-    
 }
 
 //Acquiring a lock for intersections that can only fit one process
 void acquireTrainMutex(Intersection *intersection, const char *trainName){
    //send train in intersection if there is only 1 
-    if(strcmp(intersection-> lock_type, "Mutex") == 0){
+    if(strcmp(intersection-> lock_type, "Mutex") == 0 && intersection->lock_state == 0){
         pthread_mutex_lock(&intersection ->Mutex);
         intersection -> lock_state =1;
         printf("Intersection %s acquried by Train %s\n", intersection->name, trainName);
@@ -45,26 +43,27 @@ void acquireTrainMutex(Intersection *intersection, const char *trainName){
 
 }
 // using a tryAcquireMutex function to allow acquiring trains without blocking anything.
-int tryAcquireMutex(Intersection *intersection, const char *trainName){
-    
-    if(strcmp(intersection->lock_type, "Mutex")==0){
-        int result= pthread_mutex_trylock(&intersection->Mutex);
-        if(result ==0){
-            intersection-> lock_state =1;
-            printf("Train %s has acquried Mutex at %s\n", trainName, intersection->name);
+int tryAcquireMutex(Intersection *intersection, const char *trainName) {
+    if (strcmp(intersection->lock_type, "Mutex") == 0) {
+        int result = intersection->lock_state;
+        if (result == 0) {  // Successfully acquired the lock
+            intersection->lock_state = 1;
+            printf("Train %s has acquired Mutex at %s\n", trainName, intersection->name);
             return 0;
-        }
-        else{
-            printf("Train %s could not acquire Mutex at %s\n", trainName, intersection->name);
+        } else if (result == EBUSY) {  // Mutex is already locked by another train
+            printf("Train %s could not acquire Mutex at %s (Mutex is already locked)\n", trainName, intersection->name);
+            return -1;
+        } else {
+            printf("Train %s failed to acquire Mutex at %s due to error: %d\n", trainName, intersection->name, result);
             return -1;
         }
     }
-     return -1;
+    return -1;  // If not a Mutex lock type, return -1
 }
 
 //Releasin for intersections that can only fit one process by unlocking
 void releaseTrainMutex(Intersection *intersection, const char *trainName){
-    if(strcmp(intersection-> lock_type, "Mutex") == 1){
+    if(strcmp(intersection-> lock_type, "Mutex") == 0){
         pthread_mutex_unlock(&intersection-> Mutex);
         intersection -> lock_state = 0;
         printf("Intersection %s releasing Train %s\n", intersection->name, trainName);
@@ -75,17 +74,14 @@ void releaseTrainMutex(Intersection *intersection, const char *trainName){
 //writing a test to ensure the code mutexes are called correctly
 
 void test_initializeMutex() {
-    Intersection intersections[1];
+    Intersection intersections[1] = {0};
     strcpy(intersections[0].name, "TestIntersection");
-    intersections[0].capacity = 2;  // This should SKIP mutex initialization
+    intersections[0].capacity = 2;
 
     initializeMutex(intersections, 1);
 
-    int lockResult = pthread_mutex_lock(&intersections[0].Mutex);
-
-    if (lockResult == 0) {
-        printf("ERROR: Mutex was lockable for %s, but it should NOT have been initialized!\n", intersections[0].name);
-        pthread_mutex_unlock(&intersections[0].Mutex);
+    if (intersections[0].isMutexInitialized) {
+        printf("ERROR: Mutex should NOT be initialized for %s with capacity > 1\n", intersections[0].name);
     } else {
         printf("Correct behavior: Mutex not initialized for %s (capacity > 1)\n", intersections[0].name);
     }

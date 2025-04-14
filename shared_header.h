@@ -21,6 +21,7 @@ typedef struct {
     int capacity;         // Capacity
     int lock_state;        // 0 = free, 1 = locked
     Train trains[50];      // Trains currently in intersection
+    int isMutexInitialized;
     pthread_mutex_t Mutex;
     sem_t Semaphore;
 } Intersection;

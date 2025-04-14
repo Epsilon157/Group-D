@@ -393,10 +393,11 @@ void server_process(int msgid, int trainCount, Train *trains, Intersection *inte
             
 // %%%%%%%%% Keegan adding here: %%%%%%%%%%%%%%%%%%%%%%%%%
 
+        
         if(targetIntersection && tryAcquireMutex(targetIntersection, trains[msg.trainIndex].name)== 0){
             serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
             train->heldIntersections[train->heldIntersectionCount] = strdup(msg.intersectionName); // safe string copy
-            train->heldIntersectionCount++;
+            train->heldIntersectionCount++; 
             free(train->waitingIntersection);
             train->waitingIntersection = NULL; // Clear it after successful grant
         } 
@@ -415,9 +416,9 @@ void server_process(int msgid, int trainCount, Train *trains, Intersection *inte
             serverResponse(WAIT, msgid, msg.trainIndex, msg.intersectionName);
             free(train->waitingIntersection); // Avoid memory leak before overwriting
             train->waitingIntersection = strdup(msg.intersectionName);
+         } 
         }
-
-        } else if (msg.action == RELEASE) {
+        else if (msg.action == RELEASE) {
             // server recognizes release request
             printf("Train%d request to release %s\n", msg.trainIndex + 1, msg.intersectionName);
             // serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);

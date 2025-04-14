@@ -62,8 +62,7 @@ void print_initialized_intersections(Intersection *intersections, int count) {
     
 }
 
-// Function to print train messages regarding intersection requests and grants
-void printMessages(const char *train, const char *intersection, int granted, int remaining) {
+/*void printMessages(const char *train, const char *intersection, int granted, int remaining) {
     (*sim_time)++;
     logEvent("%s: Sent ACQUIRE request for %s.", train, intersection);
     if (granted) {
@@ -74,7 +73,7 @@ void printMessages(const char *train, const char *intersection, int granted, int
     } else {
         logEvent("SERVER: %s is locked. %s added to wait queue.", intersection, train);
     }
-}
+}*/
 
 void printRequestSent(int trainIndex, const char *intersection){
     (*sim_time)++;
@@ -89,11 +88,7 @@ void printRequestRelease(int trainIndex, const char *intersection){
 }
 
 
-void printRequestGranted(const char *train, const char *intersection){
-    (*sim_time)++;
-    logEvent("SERVER: GRANTED %s to %s.", intersection, train);
-    
-}
+
 
 void printDenied(const char *train, const char *intersection){
     (*sim_time)++;
@@ -107,7 +102,8 @@ void Deadlock(char train1, char train2, char intersection1){
     logEvent("SERVER: %s released %s forcibly", train1, intersection1);
 }
 
-void printIntersectionGranted(const char *trainName, const char *intersectionName) {
+void printIntersectionGranted(int trainIndex, const char *intersectionName) {
+    
     (*sim_time)++;
     int i;
     int matchIndex = -1;
@@ -122,15 +118,15 @@ void printIntersectionGranted(const char *trainName, const char *intersectionNam
     }
 
     if (matchIndex == -1) {
-        logEvent("SERVER: ERROR - Intersection %s not found for train %s", intersectionName, trainName);
+        logEvent("SERVER: ERROR - Intersection %s not found for train %s", intersectionName, trains[trainIndex].name);
         fprintf(log_file, "\n");
         return;
     }
 
     if (intersections[matchIndex].capacity > 1) {
-        logEvent("SERVER: GRANTED %s to %s. Semaphore count: %d.", intersectionName, trainName, intersections[matchIndex].capacity);
+        logEvent("SERVER: GRANTED %s to %s. Semaphore count: %d.", intersectionName, trains[trainIndex].name, intersections[matchIndex].capacity);
     } else {
-        logEvent("SERVER: %s is locked. %s added to wait queue.", intersectionName, trainName);
+        logEvent("SERVER: %s is locked. %s added to wait queue.", intersectionName, trains[trainIndex].name);
     }
 
     fprintf(log_file, "\n");

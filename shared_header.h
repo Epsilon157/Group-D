@@ -26,9 +26,9 @@ typedef struct {
 } Intersection;
 
 void printRequestSent(int trainIndex, const char *intersection);
-void printIntersctionGranted(const char *train, const char *intersection);
+void printIntersectionGranted(int trainIndex, const char *intersectionName);
+
 void printRequestRelease(int trainIndex, const char *intersection);
-void printIntersectionGranted(const char *trainName, const char *intersectionName);
 
 
 

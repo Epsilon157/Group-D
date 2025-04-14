@@ -55,3 +55,18 @@
 [00:00:31] Train2: Sent ACQUIRE request for IntersectionB.
 [00:00:32] Train4: Sent ACQUIRE request for IntersectionE.
 >>>>>>> dac9dafd9a6843423d64f3f7c1093dfa317148a3
+[00:00:49] Train2: Sent ACQUIRE request for IntersectionE.
+[00:00:50] Train2: Sent ACQUIRE request for IntersectionE.
+[00:00:51] Train2: Sent ACQUIRE request for IntersectionE.
+[00:00:45] Train4: Sent ACQUIRE request for IntersectionE.
+[00:00:46] Train2: Sent ACQUIRE request for IntersectionE.
+[00:00:50] Train4: Sent ACQUIRE request for IntersectionE.
+[00:00:47] Train2: Sent ACQUIRE request for IntersectionE.
+[00:00:48] Train4: Sent ACQUIRE request for IntersectionE.
+[00:00:46] Train2: Sent ACQUIRE request for IntersectionE.
+[00:01:02] Train2: Sent ACQUIRE request for IntersectionE.
+[00:00:47] Train2: Sent ACQUIRE request for IntersectionE.
+[00:00:47] Train4: Sent ACQUIRE request for IntersectionE.
+[00:01:03] Train1: Sent ACQUIRE request for IntersectionC.
+[00:01:04] Train1: Sent ACQUIRE request for IntersectionC.
+[00:01:05] Train1: Sent ACQUIRE request for IntersectionC.

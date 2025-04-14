@@ -383,43 +383,43 @@ void server_process(int msgid, int trainCount, Train *trains, Intersection *inte
 // %%%%%%%%% Keegan adding here: %%%%%%%%%%%%%%%%%%%%%%%%%
 // This is erroring due to #include "Keegan.c"
 
-        Intersection *targetIntersection = NULL;
+            Intersection *targetIntersection = NULL;
 
-        for(int i =0; i < trainCount; i++){
-            if(strcmp(intersections[i].name, msg.intersectionName) ==0){
-                targetIntersection = &intersections[i];
-                break;
-            }
-        }
-
-        if(targetIntersection && tryAcquireMutex(targetIntersection, trains[msg.trainIndex].name)== 0){
-
-
-            log_file = fopen("simulation.log", "a");
-            if (log_file == NULL) {
-                perror("Failed to open simulation.log");
-                exit(EXIT_FAILURE);
-            }
-               
-            printIntersectionGranted(trains[msg.trainIndex].name, msg.intersectionName);
-            
-            if (log_file) {
-                fclose(log_file);
+            for(int i =0; i < trainCount; i++){
+                if(strcmp(intersections[i].name, msg.intersectionName) ==0){
+                    targetIntersection = &intersections[i];
+                    break;
+                }
             }
 
+            if(targetIntersection && tryAcquireMutex(targetIntersection, trains[msg.trainIndex].name)== 0){
 
 
-            serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
-            train->heldIntersections[train->heldIntersectionCount] = strdup(msg.intersectionName); // safe string copy
-            train->heldIntersectionCount++;
-            free(train->waitingIntersection);
-            train->waitingIntersection = NULL; // Clear it after successful grant
-        }else{
-            printf("Train%d can't obtain %s, sending WAIT\n", msg.trainIndex + 1, msg.intersectionName);
-            serverResponse(WAIT, msgid, msg.trainIndex, msg.intersectionName);
-            free(train->waitingIntersection); // Avoid memory leak before overwriting
-            train->waitingIntersection = strdup(msg.intersectionName);
-        }
+                log_file = fopen("simulation.log", "a");
+                if (log_file == NULL) {
+                    perror("Failed to open simulation.log");
+                    exit(EXIT_FAILURE);
+                }
+                
+                printIntersectionGranted(trains[msg.trainIndex].name, msg.intersectionName);
+                
+                if (log_file) {
+                    fclose(log_file);
+                }
+
+
+
+                serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
+                train->heldIntersections[train->heldIntersectionCount] = strdup(msg.intersectionName); // safe string copy
+                train->heldIntersectionCount++;
+                free(train->waitingIntersection);
+                train->waitingIntersection = NULL; // Clear it after successful grant
+            }else{
+                printf("Train%d can't obtain %s, sending WAIT\n", msg.trainIndex + 1, msg.intersectionName);
+                serverResponse(WAIT, msgid, msg.trainIndex, msg.intersectionName);
+                free(train->waitingIntersection); // Avoid memory leak before overwriting
+                train->waitingIntersection = strdup(msg.intersectionName);
+            }
 
         } else if (msg.action == RELEASE) {
             // server recognizes release request

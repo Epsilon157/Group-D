@@ -296,15 +296,6 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
     int routeLength = totalRouteLength(trains, trainCount);
 
     while (releases < routeLength) {
-        // Graph the current state of the program (RAG)
-        createRAG_dot(trains, trainCount);
-        RAG = createRAG_list(trains, trainCount);
-        if (detectCycleInRAG(RAG)) {
-            printf("\nWARNING: Cycle in RAG detected (deadlock can occur)\n");
-        } else {
-            printf("\nNo cycle in RAG detected\n");
-        }
-
         // Receive next message in the message queue from a train process
         msgrcv(msgid, &msg, sizeof(msg) - sizeof(long), 1, 0);
 
@@ -357,7 +348,7 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
                 free(train->waitingIntersection);
                 train->waitingIntersection = NULL; // Clear it after successful grant
             } else if (targetIntersection && targetIntersection->lock_type && strcmp(targetIntersection->lock_type, "Semaphore") == 0) {
-                // If the target intersectino is semaphore type
+                // If the target intersection is semaphore type
 
                 // acquire the train's semaphore
                 acquireTrain(targetIntersection, trains[msg.trainIndex].name);
@@ -403,19 +394,16 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
             
             // Safely remove the intersection from the train list
             if (found != -1) {
-
-            // call for releasing mutexes and semaphores
-            if(targetIntersection == NULL){
-                if(strcmp(targetIntersection -> lock_type, "Mutex")== 0){
-                    
-                releaseTrainMutex(targetIntersection, train->name);
-                }  
-                else if(strcmp(targetIntersection -> lock_type, "Semaphore")== 0){
-                   
-                    releaseTrain(targetIntersection, train->name);
+                // call for releasing mutexes and semaphores
+                if(targetIntersection == NULL){
+                    if(strcmp(targetIntersection -> lock_type, "Mutex")== 0){
+                        releaseTrainMutex(targetIntersection, train->name);
+                    }  
+                    else if(strcmp(targetIntersection -> lock_type, "Semaphore")== 0){
+                        releaseTrain(targetIntersection, train->name);
+                    }
                 }
-            }
-                // release intersectin by removing it from train's held intersections list
+                // release intersection by removing it from train's held intersections list
                 free(train->heldIntersections[found]);
         
                 // Shift remaining intersections left in case a train has multiple intersections (wait, impossible??)
@@ -444,6 +432,15 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
         fprintf(log_file, "\n");
         fclose(log_file);
         pthread_mutex_unlock(&sim_time_mutex);
+
+        // Graph the current state of the program (RAG)
+        createRAG_dot(trains, trainCount);
+        RAG = createRAG_list(trains, trainCount);
+        if (detectCycleInRAG(RAG)) {
+            printf("\nWARNING: Cycle in RAG detected (deadlock can occur)\n");
+        } else {
+            printf("\nNo cycle in RAG detected\n");
+        }
     }
 
     // Wait for all trains/child processes to terminate
@@ -456,42 +453,48 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
 void train_process(int msgid, int trainIndex, Train *trains, Intersection *intersections) {
     Message msg;
     Train *train = &trains[trainIndex];
-    bool acquireGranted = false;
     int travelTime;
+    char *prevIntersection = NULL;
 
     for (int i = 0; i < train->routeCount; i++) {
-        acquireGranted = false;
-
+        // Set intersection to be the next one in the train's route
         char *intersectionName = train->route[i];
 
+        // Request to acquire an intersection
         trainRequest(ACQUIRE, msgid, trainIndex, intersectionName);
 
+        // Wait for server response to acquire request
         msgrcv(msgid, &msg, sizeof(msg) - sizeof(long), trainIndex + 100, 0);
 
         if (msg.response == GRANT) {
-            // request granted
+            // Request granted
             printf("Server granted Train%d to acquire%s\n", trainIndex + 1, intersectionName);
-            acquireGranted = true;
-            // simulate travel time, random time from 1 to 8 seconds
+            // Simulate travel time, random time from 1 to 8 seconds
             srand(time(NULL));
             travelTime = (rand() % 8) + 1;
             sleep(travelTime);
+            // Release previous intersection after acquiring and travelling
+            if (prevIntersection != NULL) {
+                trainRequest(RELEASE, msgid, trainIndex, prevIntersection);
+            }
+            // Update previous intersection for next iteration
+            prevIntersection = intersectionName;
         } else if (msg.response == WAIT) {
-            // try again later
+            // Try again later
             printf("Server told Train%d to wait to acquire %s\n", trainIndex + 1, intersectionName);
             // wait a long time, then redo iteration to let the train try again
             sleep(10);
             i--;
         } else if (msg.response == DENY) {
-            // request denied
+            // Request denied
             // to do: figure out when to deny a request instead of telling it to wait
             printf("Server denied Train%d to acquire %s\n", trainIndex + 1, intersectionName);
         }
+    }
 
-        // after a request is granted, the train has to release the intersection
-        if (acquireGranted) {
-            trainRequest(RELEASE, msgid, trainIndex, intersectionName);
-        }
+    // Release the last held intersection to complete the train's route
+    if (prevIntersection != NULL) {
+        trainRequest(RELEASE, msgid, trainIndex, prevIntersection);
     }
     
     exit(0);

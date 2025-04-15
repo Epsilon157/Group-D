@@ -30,6 +30,7 @@ void printRequestSent(int trainIndex, const char *intersection);
 void printIntersectionGranted(int trainIndex, const char *intersectionName);
 
 void printRequestRelease(int trainIndex, const char *intersection);
+void printSimulationComplete();
 
 
 void acquireTrainMutex(Intersection *intersection, const char *trainName);
@@ -39,7 +40,8 @@ void releaseTrain(Intersection *intersection, const char *trainName);
 void acquireTrain(Intersection *intersection, const char *trainName);
 
 int tryAcquireSemaphore(Intersection *intersection, const char *trainName);
-extern int *sim_time;
+extern int *sim_time;  // Simulation time pointer
+extern pthread_mutex_t sim_time_mutex;  // Mutex for controlling sim_time
 FILE *log_file = NULL;
 
 Intersection *intersections; //From * to **

@@ -341,7 +341,11 @@ int main() {
 
   
 
-
+    log_file = fopen("simulation.log", "a");
+                   
+    printSimulationComplete();
+    
+    fclose(log_file);
 
     
     return 0;

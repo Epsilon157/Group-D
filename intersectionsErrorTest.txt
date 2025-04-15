@@ -1,0 +1,14 @@
+IntersectionA:1 
+IntersectionB:2 
+IntersectionC:1 
+IntersectionD:3 
+IntersectionE:1 
+IntersectionF:0
+IntersectionG:-4
+IntersectionA:1
+IntersectionB:3
+intersection
+intersectionH:5
+intersectionA
+intersectiona
+intersectiona:3

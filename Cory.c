@@ -273,15 +273,15 @@ void trainRequest(TrainAction act, int msgid, int trainIndex, const char *inters
     msg.action = act;
     msgsnd(msgid, &msg, sizeof(msg) - sizeof(long), 0);
 
-    (*sim_time)++;
-    log_file = fopen("simulation.log", "a");
+    
+    
     
     if (msg.action == ACQUIRE) {
-        printRequestSent(msg.trainIndex, msg.intersectionName);
+        //printRequestSent(msg.trainIndex, msg.intersectionName);
     } else if (msg.action == RELEASE) {
-        printRequestRelease(msg.trainIndex, msg.intersectionName);
+        
     }
-    fclose(log_file);
+    
 }
 
 // Function for server to GRANT, WAIT, or DENY a train's request
@@ -347,7 +347,9 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
         }
 
         if (msg.action == ACQUIRE) {
-
+            log_file = fopen("simulation.log", "a");
+            printRequestSent(msg.trainIndex, msg.intersectionName);
+            fclose(log_file);
 
             // server recognizes acquire request
             printf("Train%d request to acquire %s\n", msg.trainIndex + 1, msg.intersectionName);
@@ -383,6 +385,13 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
                 acquireTrainMutex(targetIntersection, trains[msg.trainIndex].name);
                 printf("Server attempting tryAcquireMutex for Train %s on %s\n", train->name, msg.intersectionName);
                 serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
+
+                log_file = fopen("simulation.log", "a");
+                   
+                printIntersectionGranted(msg.trainIndex, msg.intersectionName);
+                
+                fclose(log_file);
+
                 train->heldIntersections[train->heldIntersectionCount] = strdup(msg.intersectionName); // safe string copy
                 train->heldIntersectionCount++; 
                 free(train->waitingIntersection);
@@ -406,6 +415,9 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
             } 
     }
         else if (msg.action == RELEASE) {
+            log_file = fopen("simulation.log", "a");
+            printRequestRelease(msg.trainIndex, msg.intersectionName);
+            fclose(log_file);
             // server recognizes release request
             printf("Train%d request to release %s\n", msg.trainIndex + 1, msg.intersectionName);
             // serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
@@ -452,6 +464,14 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
                 printf("WARNING: Train%d tried to release an intersection it does not hold: %s\n", msg.trainIndex + 1, msg.intersectionName);
             }
         }
+        pthread_mutex_lock(&sim_time_mutex);
+        (*sim_time)++;  // One increment per simulation loop
+        log_file = fopen("simulation.log", "a");
+                   
+        fprintf(log_file, "\n");
+        
+        fclose(log_file);
+        pthread_mutex_unlock(&sim_time_mutex);
     }
 
     // Wait for all children to terminate
@@ -481,6 +501,11 @@ void train_process(int msgid, int trainIndex, Train *trains, Intersection *inter
         msgrcv(msgid, &msg, sizeof(msg) - sizeof(long), trainIndex + 100, 0);
 
         if (msg.response == GRANT) {
+
+            if (msg.action == ACQUIRE) {
+
+
+            }
             // request granted
             printf("Server granted Train%d to acquire%s\n", trainIndex + 1, intersectionName);
             acquireGranted = true;

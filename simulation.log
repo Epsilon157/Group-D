@@ -6,16 +6,16 @@
 [00:00:00] - IntersectionE (Mutex, Capacity=1)
 
 [00:00:05] Train1: Sent ACQUIRE request for IntersectionA.
-[00:00:06] Train2: Sent ACQUIRE request for IntersectionB.
-[00:00:07] Train3: Sent ACQUIRE request for IntersectionC.
+[00:00:06] Train3: Sent ACQUIRE request for IntersectionC.
+[00:00:07] Train2: Sent ACQUIRE request for IntersectionB.
 [00:00:08] Train4: Sent ACQUIRE request for IntersectionE.
 [00:00:10] Train1: Released IntersectionA.
 [00:00:13] Train2: Released IntersectionB.
 [00:00:14] Train1: Sent ACQUIRE request for IntersectionB.
-[00:00:18] Train3: Released IntersectionC.
 [00:00:16] Train2: Sent ACQUIRE request for IntersectionD.
-[00:00:21] Train3: Sent ACQUIRE request for IntersectionD.
-[00:00:22] Train4: Released IntersectionE.
+[00:00:18] Train3: Released IntersectionC.
+[00:00:21] Train4: Released IntersectionE.
+[00:00:22] Train3: Sent ACQUIRE request for IntersectionD.
 [00:00:24] Train4: Sent ACQUIRE request for IntersectionB.
 [00:00:26] Train1: Released IntersectionB.
 [00:00:29] Train2: Released IntersectionD.

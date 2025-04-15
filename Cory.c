@@ -1,14 +1,7 @@
 // Group D
 // Cory Thrutchley
 // cory.thrutchley@okstate.edu
-// 4/5/2025
-
-// Cory's Week 2 role: Basic IPC Workflow
-// Crease a message queue system where different train processes 
-// can send messages to and receive messages from one another
-
-// Testing: ensure that IPC successfully allows for message 
-// passing between trains
+// 4/15/2025
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -58,7 +51,7 @@ typedef struct Node {
     struct Node *next;   // Next node in graph
 } Node;
 
-// Digraph helper function to find/create nodes
+// Digraph helper function to find or create nodes
 Node *findOrCreateNode(Node **head, const char *name, int isTrain) {
     Node *curr = *head;
     while (curr) {
@@ -67,7 +60,7 @@ Node *findOrCreateNode(Node **head, const char *name, int isTrain) {
         curr = curr->next;
     }
 
-    // Not found — create and prepend
+    // Node not found: create and add
     Node *newNode = malloc(sizeof(Node));
     strcpy(newNode->name, name);
     newNode->isTrain = isTrain;
@@ -265,23 +258,12 @@ bool detectCycleInRAG(Node *graph) {
 
 // Function for a train to request to ACQUIRE or RELEASE an intersection
 void trainRequest(TrainAction act, int msgid, int trainIndex, const char *intersectionName) {
-
     Message msg;
     msg.msg_type = 1; // Type 1 = train-to-server
     msg.trainIndex = trainIndex;
     strcpy(msg.intersectionName, intersectionName);
     msg.action = act;
     msgsnd(msgid, &msg, sizeof(msg) - sizeof(long), 0);
-
-    
-    
-    
-    if (msg.action == ACQUIRE) {
-        //printRequestSent(msg.trainIndex, msg.intersectionName);
-    } else if (msg.action == RELEASE) {
-        
-    }
-    
 }
 
 // Function for server to GRANT, WAIT, or DENY a train's request
@@ -293,8 +275,8 @@ void serverResponse(ServerResponse resp, int msgid, int trainIndex, const char *
     msgsnd(msgid, &msg, sizeof(msg) - sizeof(long), 0);
 }
 
-// function to determine how many times a train will
-// have to go through an intersection, only used for
+// Function to determine how many times a train will
+// have to go through an intersection, used for
 // server_process function to know how long to loop
 int totalRouteLength(Train *trains, int trainCount) {
     int count = 0;
@@ -309,23 +291,12 @@ int totalRouteLength(Train *trains, int trainCount) {
 
 // Function for parent process acting as server
 void server_process(int msgid, int trainCount, int intersectionCount, Train *trains, Intersection *intersections, Node *RAG) {
-    // To do: will need to loop the server as long as
-    // there are still trains that need to pass through.
-    // This implementation currently loops as many times as there are 
-    // trains * intersections, which is a temporary solution.
-    // We will need a much better way of telling when every
-    // train has passed through for the while loop to stop.
-
     Message msg;
     int releases = 0;
     int routeLength = totalRouteLength(trains, trainCount);
 
-    // printf("Total route length is %d\n", routeLength);
-
-   
-
     while (releases < routeLength) {
-        
+        // Graph the current state of the program (RAG)
         createRAG_dot(trains, trainCount);
         RAG = createRAG_list(trains, trainCount);
         if (detectCycleInRAG(RAG)) {
@@ -334,93 +305,90 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
             printf("\nNo cycle in RAG detected\n");
         }
 
+        // Receive next message in the message queue from a train process
         msgrcv(msgid, &msg, sizeof(msg) - sizeof(long), 1, 0);
 
+        // initialize current working train and intersection
         Train *train = &trains[msg.trainIndex];
         Intersection *targetIntersection = NULL;
 
-        for(int i =0; i < intersectionCount; i++){
-            if(strcmp(intersections[i].name, msg.intersectionName) ==0){
+        // identify address of current working intersection (targetIntersection)
+        for (int i =0; i < intersectionCount; i++) {
+            if (strcmp(intersections[i].name, msg.intersectionName) == 0) {
                 targetIntersection = &intersections[i];
                 break;
             }
         }
 
+        // When a train wants to acquire an intersection
         if (msg.action == ACQUIRE) {
+            // logging
             log_file = fopen("simulation.log", "a");
             printRequestSent(msg.trainIndex, msg.intersectionName);
             fclose(log_file);
 
             // server recognizes acquire request
             printf("Train%d request to acquire %s\n", msg.trainIndex + 1, msg.intersectionName);
-
-            // To do: add conditionals to tell whether the intersection the train is
-            // requesting for is in use or not. This is where mutexes/semaphores come in.
-            // If the intersection is in use, then tell the train to wait using serverResponse(WAIT). 
-            // If the intersection is free, then grant the train's request using serverResponse(GRANT).
-
-            // This code:
             
-         
+            // %%%%%%%%% Keegan adding here: %%%%%%%%%%%%%%%%%%%%%%%%%
+            // Keegan added a semaphore section calling Aidens acquireTarin function
+            // teamwork! :D
 
-            // Should be replaced with something like this:
+            if (targetIntersection && targetIntersection->lock_type && strcmp(targetIntersection->lock_type, "Mutex") == 0){
+                // If the target intersection is mutex type
 
-            // if (intersection is in use - use mutex/semaphore of the intersection to tell) {
-            //     serverResponse(WAIT, msgid, msg.trainIndex, msg.intersectionName);
-            //     train->waitingIntersection = strdup(msg.intersectionName); // safe string copy
-            // } else {
-
-            
-            //     serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
-            //     train->heldIntersections[train->heldIntersectionCount] = strdup(msg.intersectionName); // safe string copy
-            //     train->heldIntersectionCount++;
-            //     free(train->waitingIntersection);
-            // }
-            
-// %%%%%%%%% Keegan adding here: %%%%%%%%%%%%%%%%%%%%%%%%%
-
-        
-            if(targetIntersection && targetIntersection->lock_type && strcmp(targetIntersection->lock_type, "Mutex") == 0){
-
+                // acquire the train's mutex and lock it
                 acquireTrainMutex(targetIntersection, trains[msg.trainIndex].name);
                 printf("Server attempting tryAcquireMutex for Train %s on %s\n", train->name, msg.intersectionName);
+
+                // grant the request to the train
                 serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
 
+                // logging
                 log_file = fopen("simulation.log", "a");
-                   
                 printIntersectionGranted(msg.trainIndex, msg.intersectionName);
-                
                 fclose(log_file);
 
+                // update train to be holding the intersection
                 train->heldIntersections[train->heldIntersectionCount] = strdup(msg.intersectionName); // safe string copy
                 train->heldIntersectionCount++; 
+
+                // train is no longer waiting on this intersection, so remove it from the waiting list
                 free(train->waitingIntersection);
                 train->waitingIntersection = NULL; // Clear it after successful grant
-            } 
-            // keegan added a semaphore section calling aidens acquireTarin function
-            else if(targetIntersection && targetIntersection->lock_type && strcmp(targetIntersection->lock_type, "Semaphore") == 0){
+            } else if (targetIntersection && targetIntersection->lock_type && strcmp(targetIntersection->lock_type, "Semaphore") == 0) {
+                // If the target intersectino is semaphore type
+
+                // acquire the train's semaphore
                 acquireTrain(targetIntersection, trains[msg.trainIndex].name);
+
+                // grant the request to the train
                 serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
+
+                // update train to be holding the intersection
                 train->heldIntersections[train->heldIntersectionCount] = strdup(msg.intersectionName); // safe string copy
                 train->heldIntersectionCount++;
+
+                // train is no longer waiting on this intersection, so remove it from the waiting list
                 free(train->waitingIntersection);
                 train->waitingIntersection = NULL; // Clear it after successful grant
-
-            }
-            else{
+            } else {
+                // If the train can't obtain a mutex or semaphore (if the intersection is full)
                 printf("Train%d can't obtain %s, sending WAIT\n", msg.trainIndex + 1, msg.intersectionName);
                 serverResponse(WAIT, msgid, msg.trainIndex, msg.intersectionName);
+
+                // Add the intersection to the train's waiting list
                 free(train->waitingIntersection); // Avoid memory leak before overwriting
                 train->waitingIntersection = strdup(msg.intersectionName);
             } 
-    }
-        else if (msg.action == RELEASE) {
+        } else if (msg.action == RELEASE) {
+            // logging
             log_file = fopen("simulation.log", "a");
             printRequestRelease(msg.trainIndex, msg.intersectionName);
             fclose(log_file);
+
             // server recognizes release request
             printf("Train%d request to release %s\n", msg.trainIndex + 1, msg.intersectionName);
-            // serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
 
             // variable used to find index of intersection to remove from train
             int found = -1;
@@ -433,12 +401,11 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
                 }
             }
             
-
             // Safely remove the intersection from the train list
             if (found != -1) {
 
-                // call for releasing mutexes and semaphores
-            if(targetIntersection== NULL){
+            // call for releasing mutexes and semaphores
+            if(targetIntersection == NULL){
                 if(strcmp(targetIntersection -> lock_type, "Mutex")== 0){
                 releaseTrainMutex(targetIntersection, train->name);
                 }  
@@ -446,6 +413,7 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
                     releaseTrain(targetIntersection, train->name);
                 }
             }
+                // release intersectin by removing it from train's held intersections list
                 free(train->heldIntersections[found]);
         
                 // Shift remaining intersections left in case a train has multiple intersections (wait, impossible??)
@@ -459,33 +427,30 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
                 // One less intersection
                 train->heldIntersectionCount--;
 
+                // keeping track of how many times an intersection has been release
+                // so that the server will know once it's done (while loop conditional)
                 releases++;
             } else {
                 printf("WARNING: Train%d tried to release an intersection it does not hold: %s\n", msg.trainIndex + 1, msg.intersectionName);
             }
         }
+
+        // reset the clock for the simulation log
         pthread_mutex_lock(&sim_time_mutex);
         (*sim_time)++;  // One increment per simulation loop
         log_file = fopen("simulation.log", "a");
-                   
         fprintf(log_file, "\n");
-        
         fclose(log_file);
         pthread_mutex_unlock(&sim_time_mutex);
     }
 
-    // Wait for all children to terminate
+    // Wait for all trains/child processes to terminate
     for (int i = 0; i < trainCount; i++) {
         wait(NULL);
     }
 }
 
-// Function for child process behavior
-// This is temporary for testing message queue system, a function 
-// specific to train requirements should replace this
-
-// , Train *trains, Intersection *intersections
-
+// Function for train/child process behavior
 void train_process(int msgid, int trainIndex, Train *trains, Intersection *intersections) {
     Message msg;
     Train *train = &trains[trainIndex];
@@ -502,11 +467,6 @@ void train_process(int msgid, int trainIndex, Train *trains, Intersection *inter
         msgrcv(msgid, &msg, sizeof(msg) - sizeof(long), trainIndex + 100, 0);
 
         if (msg.response == GRANT) {
-
-            if (msg.action == ACQUIRE) {
-
-
-            }
             // request granted
             printf("Server granted Train%d to acquire%s\n", trainIndex + 1, intersectionName);
             acquireGranted = true;
@@ -529,30 +489,9 @@ void train_process(int msgid, int trainIndex, Train *trains, Intersection *inter
         // after a request is granted, the train has to release the intersection
         if (acquireGranted) {
             trainRequest(RELEASE, msgid, trainIndex, intersectionName);
-
-            // Below code is only needed if the server ever needs to grant/wait/deny release requests
-            // (probably not necessary, right??)
-
-            // msgrcv(msgid, &msg, sizeof(msg) - sizeof(long), trainIndex + 100, 0);
-
-            // if (msg.response == GRANT) {
-            //     // request granted
-            //     printf("Server granted Train%d to release %s\n", trainIndex + 1, intersectionName);
-            // } else if (msg.response == WAIT) {
-            //     // try again later
-            //     printf("Server to Train%d to wait to release %s\n", trainIndex + 1, intersectionName);
-            //     // wait a long time, then redo iteration to let the train try again
-            //     sleep(10);
-            //     i--;
-            // } else if (msg.response == DENY) {
-            //     // request denied
-            //     // to do: figure out when to deny a request instead of telling it to wait
-            //     printf("Server denied Train%d to release %s\n", trainIndex + 1, intersectionName);
-            // }
         }
-        
     }
-
+    
     exit(0);
 }
 

@@ -28,26 +28,7 @@ void initializeMutex(Intersection *intersections, int intersectionCount){
         printf("MUTEX Intersection %s initialized \n", intersections[i].name);
         printf("Intersection %s initialized with lock type: %s and capacity: %d\n", intersections[i].name, intersections[i].lock_type, intersections[i].capacity);
 
-    }//added error handling
-    /*
-    else if(intersections[i].capacity < 0){
-        printf("Error: Intersection %s has an invalid resource value: %i (must be greater than 0)", intersections[i].name, intersections[i].capacity);
-        exit(0);
-void initializeMutex(Intersection *intersections, int intersectionCount) {
-    pthread_mutexattr_t at;  // Declare the mutex attributes
-    pthread_mutexattr_init(&at);
-    pthread_mutexattr_setpshared(&at, PTHREAD_PROCESS_SHARED);  // Set mutex to be shared across processes
-
-    for (int i = 0; i < intersectionCount; i++) {  // Declare i inside the loop
-        if (intersections[i].capacity == 1) {
-            pthread_mutex_init(&intersections[i].Mutex, &at);  // Initialize the mutex
-            intersections[i].isMutexInitialized = 1;  // Set the initialization flag
-            printf("Intersection %s initialized \n", intersections[i].name);
-        } else {
-            intersections[i].isMutexInitialized = 0;  // Don't initialize the mutex if capacity != 1
-        }
     }
-    */
    }
     
 }
@@ -90,7 +71,7 @@ void releaseTrainMutex(Intersection *intersection, const char *trainName){
     }
 }
 //writing a test to ensure the code mutexes are called correctly
-/*
+
 void test_initializeMutex() {
     Intersection intersections[1] = {0};
     strcpy(intersections[0].name, "TestIntersection");
@@ -104,4 +85,4 @@ void test_initializeMutex() {
         printf("Correct behavior: Mutex not initialized for %s (capacity > 1)\n", intersections[0].name);
     }
 }
-*/
+

@@ -440,9 +440,11 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
                 // call for releasing mutexes and semaphores
             if(targetIntersection== NULL){
                 if(strcmp(targetIntersection -> lock_type, "Mutex")== 0){
+                    
                 releaseTrainMutex(targetIntersection, train->name);
                 }  
                 else if(strcmp(targetIntersection -> lock_type, "Semaphore")== 0){
+                   
                     releaseTrain(targetIntersection, train->name);
                 }
             }

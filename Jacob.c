@@ -69,36 +69,37 @@ void print_initialized_intersections(Intersection *intersections, int count) {
 
 // Function to print request sent for intersection
 void printRequestSent(int trainIndex, const char *intersection) {
-    pthread_mutex_lock(&sim_time_mutex); // Lock mutex to safely increment sim_time
-    (*sim_time)++;  // Increment simulation time
-    pthread_mutex_unlock(&sim_time_mutex); // Unlock mutex after incrementing sim_time
+    //pthread_mutex_lock(&sim_time_mutex); // Lock mutex to safely increment sim_time
+    //(*sim_time)++;  // Increment simulation time
+   // pthread_mutex_unlock(&sim_time_mutex) // Unlock mutex after incrementing sim_time
 
     logEvent("%s: Sent ACQUIRE request for %s.", trains[trainIndex].name, intersection);
 }
 
 // Function to print request release for intersection
 void printRequestRelease(int trainIndex, const char *intersection) {
-    pthread_mutex_lock(&sim_time_mutex); // Lock mutex to safely increment sim_time
-    (*sim_time)++;  // Increment simulation time
-    pthread_mutex_unlock(&sim_time_mutex); // Unlock mutex after incrementing sim_time
+    //pthread_mutex_lock(&sim_time_mutex); // Lock mutex to safely increment sim_time
+    //(*sim_time)++;  // Increment simulation time
+   // pthread_mutex_unlock(&sim_time_mutex) // Unlock mutex after incrementing sim_time
 
     logEvent("%s: Released %s.", trains[trainIndex].name, intersection);
 }
 
 // Function to print denied request for intersection
 void printDenied(const char *train, const char *intersection) {
-    pthread_mutex_lock(&sim_time_mutex); // Lock mutex to safely increment sim_time
-    (*sim_time)++;  // Increment simulation time
-    pthread_mutex_unlock(&sim_time_mutex); // Unlock mutex after incrementing sim_time
+    //pthread_mutex_lock(&sim_time_mutex); // Lock mutex to safely increment sim_time
+    //(*sim_time)++;  // Increment simulation time
+   // pthread_mutex_unlock(&sim_time_mutex) // Unlock mutex after incrementing sim_time
 
     logEvent("SERVER: %s is locked. %s added to wait queue.", intersection, train);
+    //fprintf(log_file, "\n");
 }
 
 // Function to log a deadlock and preemption event
 void Deadlock(char train1, char train2, char intersection1) {
-    pthread_mutex_lock(&sim_time_mutex); // Lock mutex to safely increment sim_time
-    (*sim_time)++;  // Increment simulation time
-    pthread_mutex_unlock(&sim_time_mutex); // Unlock mutex after incrementing sim_time
+    //pthread_mutex_lock(&sim_time_mutex); // Lock mutex to safely increment sim_time
+    //(*sim_time)++;  // Increment simulation time
+   // pthread_mutex_unlock(&sim_time_mutex) // Unlock mutex after incrementing sim_time
 
     logEvent("SERVER: Deadlock Detected! %s ↔ %s", train1, train2);
     logEvent("SERVER: Preempting %s from %s", intersection1, train1);
@@ -107,9 +108,9 @@ void Deadlock(char train1, char train2, char intersection1) {
 
 // Function to print intersection granted for a train
 void printIntersectionGranted(int trainIndex, const char *intersectionName) {
-    pthread_mutex_lock(&sim_time_mutex); // Lock mutex to safely increment sim_time
-    (*sim_time)++;  // Increment simulation time
-    pthread_mutex_unlock(&sim_time_mutex); // Unlock mutex after incrementing sim_time
+    //pthread_mutex_lock(&sim_time_mutex); // Lock mutex to safely increment sim_time
+    //(*sim_time)++;  // Increment simulation time
+   // pthread_mutex_unlock(&sim_time_mutex) // Unlock mutex after incrementing sim_time
 
     int i;
     int matchIndex = -1;
@@ -125,24 +126,25 @@ void printIntersectionGranted(int trainIndex, const char *intersectionName) {
 
     if (matchIndex == -1) {
         logEvent("SERVER: ERROR - Intersection %s not found for train %s", intersectionName, trains[trainIndex].name);
-        fprintf(log_file, "\n");
+        //fprintf(log_file, "\n");
         return;
     }
 
     if (intersections[matchIndex].capacity > 1) {
         logEvent("SERVER: GRANTED %s to %s. Semaphore count: %d.", intersectionName, trains[trainIndex].name, intersections[matchIndex].capacity);
     } else {
-        logEvent("SERVER: %s is locked. %s added to wait queue.", intersectionName, trains[trainIndex].name);
+        logEvent("SERVER: GRANTED %s to %s.", intersectionName, trains[trainIndex].name, intersections[matchIndex].capacity);
     }
 
-    fprintf(log_file, "\n");
+    //fprintf(log_file, "\n");
+    
 }
 
 // Function to log a deadlock and preemption event
 void printDeadlockAndPreemption(const char *train1, const char *train2, const char *intersection) {
-    pthread_mutex_lock(&sim_time_mutex); // Lock mutex to safely increment sim_time
-    (*sim_time)++;  // Increment simulation time
-    pthread_mutex_unlock(&sim_time_mutex); // Unlock mutex after incrementing sim_time
+    //pthread_mutex_lock(&sim_time_mutex); // Lock mutex to safely increment sim_time
+    //(*sim_time)++;  // Increment simulation time
+   // pthread_mutex_unlock(&sim_time_mutex) // Unlock mutex after incrementing sim_time
 
     logEvent("SERVER: Deadlock detected! Cycle: %s ? %s.", train1, train2);
     logEvent("SERVER: Preempting %s from %s.", intersection, train1);
@@ -151,9 +153,9 @@ void printDeadlockAndPreemption(const char *train1, const char *train2, const ch
 
 // Function to log the completion of the simulation
 void printSimulationComplete() {
-    pthread_mutex_lock(&sim_time_mutex); // Lock mutex to safely increment sim_time
-    (*sim_time)++;  // Increment simulation time
-    pthread_mutex_unlock(&sim_time_mutex); // Unlock mutex after incrementing sim_time
+    //pthread_mutex_lock(&sim_time_mutex); // Lock mutex to safely increment sim_time
+    //(*sim_time)++;  // Increment simulation time
+   // pthread_mutex_unlock(&sim_time_mutex) // Unlock mutex after incrementing sim_time
 
     logEvent("SIMULATION COMPLETE. All trains reached destinations.");
 }

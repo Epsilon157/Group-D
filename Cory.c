@@ -470,6 +470,7 @@ void train_process(int msgid, int trainIndex, Train *trains, Intersection *inter
     Message msg;
     Train *train = &trains[trainIndex];
     bool acquireGranted = false;
+    int travelTime;
 
     for (int i = 0; i < train->routeCount; i++) {
         acquireGranted = false;
@@ -484,8 +485,10 @@ void train_process(int msgid, int trainIndex, Train *trains, Intersection *inter
             // request granted
             printf("Server granted Train%d to acquire%s\n", trainIndex + 1, intersectionName);
             acquireGranted = true;
-            // simulate travel time
-            sleep(2);
+            // simulate travel time, random time from 1 to 8 seconds
+            srand(time(NULL));
+            travelTime = (rand() % 8) + 1;
+            sleep(travelTime);
         } else if (msg.response == WAIT) {
             // try again later
             printf("Server told Train%d to wait to acquire %s\n", trainIndex + 1, intersectionName);
@@ -543,35 +546,3 @@ void fork_trains(int msgid, int trainCount, Train *trains, Intersection *interse
         }
     }
 }
-
-// // This main function will need to be removed, this is only for
-// // forking and IPC testing purposes
-// int main() {
-//     // create key and message queue ID needed for the
-//     // message queue to work
-//     key_t key;
-//     int msgid;
-
-//     // testing 
-//     int trainCount = 3;
-
-//     // Create message queue for message passing between parent
-//     // and child processes. This function MUST return msgid so 
-//     // that the created message queue ID can be used in the 
-//     // rest of the main function.
-//     msgid = createMessageQueue(key, msgid);
-
-//     // Fork multiple child processes
-//     // this is purely for testing
-//     fork_trains(msgid, trainCount);
-
-//     // By this point, all child processes have exited,
-//     // so only the parent will execute the code below
-
-//     // execute responsibilities of server
-//     server_process(msgid, trainCount);
-
-//     // clear up memory from message queue since, it is no longer needed
-//     destroyMessageQueue(msgid);
-
-//     return 0;

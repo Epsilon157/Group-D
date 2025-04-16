@@ -451,9 +451,11 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
         createRAG_dot(trains, trainCount);
         RAG = createRAG_list(trains, trainCount);
         if (detectCycleInRAG(RAG)) {
-            printf("\nWARNING: Cycle in RAG detected (deadlock can occur)\n");
+            printf("\nServer has detected a cycle\n");
+            // %%% Add logging code below (Jacob) %%%
+
         } else {
-            printf("\nNo cycle in RAG detected\n");
+            // printf("\nNo cycle in RAG detected\n");
         }
     }
 

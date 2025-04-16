@@ -483,14 +483,14 @@ void train_process(int msgid, int trainIndex, Train *trains, Intersection *inter
         if (msg.response == GRANT) {
             // Request granted
             printf("Server granted Train%d to acquire%s\n", trainIndex + 1, intersectionName);
-            // Simulate travel time, random time from 1 to 8 seconds
-            srand(time(NULL));
-            travelTime = (rand() % 8) + 1;
-            sleep(travelTime);
             // Release previous intersection after acquiring and travelling
             if (prevIntersection != NULL) {
                 trainRequest(RELEASE, msgid, trainIndex, prevIntersection);
             }
+            // Simulate travel time, random time from 1 to 8 seconds
+            srand(time(NULL));
+            travelTime = (rand() % 8) + 1;
+            sleep(travelTime);
             // Update previous intersection for next iteration
             prevIntersection = intersectionName;
         } else if (msg.response == WAIT) {

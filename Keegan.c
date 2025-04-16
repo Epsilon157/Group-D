@@ -39,7 +39,7 @@ void acquireTrainMutex(Intersection *intersection, const char *trainName){
     if(strcmp(intersection-> lock_type, "Mutex") == 0 && intersection->lock_state == 0){
         pthread_mutex_lock(&intersection ->Mutex);
         intersection -> lock_state =1;
-        printf("Intersection %s acquried by Train %s\n", intersection->name, trainName);
+        printf("Mutex Intersection %s acquried by %s\n", intersection->name, trainName);
     }
 
 }
@@ -67,7 +67,7 @@ void releaseTrainMutex(Intersection *intersection, const char *trainName){
     if(strcmp(intersection-> lock_type, "Mutex") == 0){
         pthread_mutex_unlock(&intersection-> Mutex);
         intersection -> lock_state = 0;
-        printf("Intersection %s releasing Train %s\n", intersection->name, trainName);
+        printf("Mutex Intersection %s releasing %s\n", intersection->name, trainName);
     }
 }
 //writing a test to ensure the code mutexes are called correctly

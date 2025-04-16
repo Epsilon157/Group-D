@@ -325,10 +325,11 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
             // Keegan added a semaphore section calling Aidens acquireTarin function
             // teamwork! :D
 
-            if (targetIntersection && targetIntersection->lock_type && strcmp(targetIntersection->lock_type, "Mutex") == 0){
+            if (targetIntersection && strcmp(targetIntersection->lock_type, "Mutex") == 0){
                 // If the target intersection is mutex type
 
                 // acquire the train's mutex and lock it
+                if(targetIntersection-> lock_state == 0){
                 acquireTrainMutex(targetIntersection, trains[msg.trainIndex].name);
                 printf("Server attempting tryAcquireMutex for Train %s on %s\n", train->name, msg.intersectionName);
 
@@ -347,10 +348,22 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
                 // train is no longer waiting on this intersection, so remove it from the waiting list
                 free(train->waitingIntersection);
                 train->waitingIntersection = NULL; // Clear it after successful grant
+                }
+                else {
+                    // It's locked, deny for now
+                    printf("Train%d cannot acquire %s, already locked. Sending WAIT.\n", msg.trainIndex + 1, msg.intersectionName);
+                    serverResponse(WAIT, msgid, msg.trainIndex, msg.intersectionName);
+            
+                    free(train->waitingIntersection);
+                    train->waitingIntersection = strdup(msg.intersectionName);
+            
+                    
+                }
             } else if (targetIntersection && targetIntersection->lock_type && strcmp(targetIntersection->lock_type, "Semaphore") == 0) {
                 // If the target intersection is semaphore type
 
                 // acquire the train's semaphore
+                if(strcmp(targetIntersection->lock_type, "Semaphore") ==0){
                 acquireTrain(targetIntersection, trains[msg.trainIndex].name);
 
                 // grant the request to the train
@@ -363,6 +376,7 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
                 // train is no longer waiting on this intersection, so remove it from the waiting list
                 free(train->waitingIntersection);
                 train->waitingIntersection = NULL; // Clear it after successful grant
+                }
             } else {
                 // If the train can't obtain a mutex or semaphore (if the intersection is full)
                 printf("Train%d can't obtain %s, sending WAIT\n", msg.trainIndex + 1, msg.intersectionName);
@@ -395,7 +409,7 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
             // Safely remove the intersection from the train list
             if (found != -1) {
                 // call for releasing mutexes and semaphores
-                if(targetIntersection == NULL){
+                if(targetIntersection != NULL){
                     if(strcmp(targetIntersection -> lock_type, "Mutex")== 0){
                         releaseTrainMutex(targetIntersection, train->name);
                     }  
@@ -480,6 +494,10 @@ void train_process(int msgid, int trainIndex, Train *trains, Intersection *inter
             // Update previous intersection for next iteration
             prevIntersection = intersectionName;
         } else if (msg.response == WAIT) {
+            if (prevIntersection != NULL) {
+                trainRequest(RELEASE, msgid, trainIndex, prevIntersection);
+                prevIntersection = NULL;
+            }
             // Try again later
             printf("Server told Train%d to wait to acquire %s\n", trainIndex + 1, intersectionName);
             // wait a long time, then redo iteration to let the train try again

@@ -494,10 +494,12 @@ void train_process(int msgid, int trainIndex, Train *trains, Intersection *inter
             // Update previous intersection for next iteration
             prevIntersection = intersectionName;
         } else if (msg.response == WAIT) {
-            if (prevIntersection != NULL) {
-                trainRequest(RELEASE, msgid, trainIndex, prevIntersection);
-                prevIntersection = NULL;
-            }
+
+// %%%%% added this section and was not allowing deadlocks %%%%%
+           // if (prevIntersection != NULL) {
+             //   trainRequest(RELEASE, msgid, trainIndex, prevIntersection);
+              //  prevIntersection = NULL;
+            //}
             // Try again later
             printf("Server told Train%d to wait to acquire %s\n", trainIndex + 1, intersectionName);
             // wait a long time, then redo iteration to let the train try again

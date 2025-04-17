@@ -129,10 +129,14 @@ void printIntersectionGranted(int trainIndex, const char *intersectionName) {
         //fprintf(log_file, "\n");
         return;
     }
-
-    if (intersections[matchIndex].capacity > 1) {
-        logEvent("SERVER: GRANTED %s to %s. Semaphore count: %d.", intersectionName, trains[trainIndex].name, intersections[matchIndex].capacity);
-    } else {
+    if (strcmp(intersections[matchIndex].lock_type, "Semaphore") == 0) {
+        int semValue;
+        sem_getvalue(&intersections[matchIndex].Semaphore, &semValue);
+    
+        logEvent("SERVER: GRANTED %s to %s. Semaphore count: %d.",
+                 intersectionName, trains[trainIndex].name, semValue);
+    }
+     else {
         logEvent("SERVER: GRANTED %s to %s.", intersectionName, trains[trainIndex].name, intersections[matchIndex].capacity);
     }
 

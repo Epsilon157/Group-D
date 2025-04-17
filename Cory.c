@@ -368,7 +368,9 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
 
                 // grant the request to the train
                 serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
-
+                log_file = fopen("simulation.log", "a");
+                printIntersectionGranted(msg.trainIndex, msg.intersectionName);
+                fclose(log_file);
                 // update train to be holding the intersection
                 train->heldIntersections[train->heldIntersectionCount] = strdup(msg.intersectionName); // safe string copy
                 train->heldIntersectionCount++;

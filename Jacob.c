@@ -133,8 +133,7 @@ void printIntersectionGranted(int trainIndex, const char *intersectionName) {
         int semValue;
         sem_getvalue(&intersections[matchIndex].Semaphore, &semValue);
     
-        logEvent("SERVER: GRANTED %s to %s. Semaphore count: %d.",
-                 intersectionName, trains[trainIndex].name, semValue);
+        logEvent("SERVER: GRANTED %s to %s. Semaphore count: %d.",intersectionName, trains[trainIndex].name, semValue);
     }
      else {
         logEvent("SERVER: GRANTED %s to %s.", intersectionName, trains[trainIndex].name, intersections[matchIndex].capacity);
@@ -155,6 +154,8 @@ void printDeadlockDetected1(const char *train1, const char *train2, const char *
     //logEvent("SERVER: %s released %s forcibly.", train1, intersection);
 }
 
+
+
 void printDeadlockDetected(char *deadlockedTrains[], int deadlockedCount) {
     // Start the log message with the "Deadlock detected!" message
     char logMessage[1024];  // Adjust size as needed to fit all train names
@@ -172,6 +173,16 @@ void printDeadlockDetected(char *deadlockedTrains[], int deadlockedCount) {
     // Log the entire cycle in one line
     strncat(logMessage, ".", sizeof(logMessage) - strlen(logMessage) - 1);
     logEvent("%s", logMessage);
+}
+
+void AttemptingDeadlockResolve(const char *intersectionName, const char *victim) {
+    //pthread_mutex_lock(&sim_time_mutex); // Lock mutex to safely increment sim_time
+    //(*sim_time)++;  // Increment simulation time
+   // pthread_mutex_unlock(&sim_time_mutex) // Unlock mutex after incrementing sim_time
+
+    logEvent("SERVER: Preempting %s from %s.\n", intersectionName, victim);
+    //logEvent("SERVER: Preempting %s from %s.", intersection, train1);
+    //logEvent("SERVER: %s released %s forcibly.", train1, intersection);
 }
 
 

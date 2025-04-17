@@ -451,9 +451,60 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
         createRAG_dot(trains, trainCount);
         RAG = createRAG_list(trains, trainCount);
         if (detectCycleInRAG(RAG)) {
-            printf("\nServer has detected a cycle\n");
-            // %%% Add logging code below (Jacob) %%%
-
+            printf("\nDeadlock detected!\n");
+        
+            // Declare inside the block
+            #define MAX_DEADLOCKED_TRAINS 100
+            #define NAME_LEN 50
+        
+            char *deadlockedTrains[MAX_DEADLOCKED_TRAINS];
+            int deadlockedCount = 0;
+        
+            Node *curr = RAG;
+            while (curr) {
+                if (curr->isTrain && curr->edges != NULL) {
+                    Edge *e = curr->edges;
+                    while (e) {
+                        Node *intersection = getNodeByName(RAG, e->target);
+                        if (intersection) {
+                            Edge *back = intersection->edges;
+                            while (back) {
+                                Node *holdingTrain = getNodeByName(RAG, back->target);
+                                if (holdingTrain && holdingTrain->edges != NULL) {
+                                    // Check if already added
+                                    int alreadyAdded = 0;
+                                    for (int i = 0; i < deadlockedCount; i++) {
+                                        if (strcmp(deadlockedTrains[i], curr->name) == 0) {
+                                            alreadyAdded = 1;
+                                            break;
+                                        }
+                                    }
+                                    if (!alreadyAdded && deadlockedCount < MAX_DEADLOCKED_TRAINS) {
+                                        deadlockedTrains[deadlockedCount] = malloc(NAME_LEN);
+                                        strncpy(deadlockedTrains[deadlockedCount], curr->name, NAME_LEN - 1);
+                                        deadlockedTrains[deadlockedCount][NAME_LEN - 1] = '\0';
+                                        deadlockedCount++;
+                                    }
+                                    goto next;
+                                }
+                                back = back->next;
+                            }
+                        }
+                        e = e->next;
+                    }
+                }
+            next:
+                curr = curr->next;
+            }
+            log_file = fopen("simulation.log", "a");
+            printDeadlockDetected(deadlockedTrains, deadlockedCount);
+            fclose(log_file);
+            // Print trains involved in deadlock
+            printf("Trains involved in deadlock:\n");
+            for (int i = 0; i < deadlockedCount; i++) {
+                printf(" - %s\n", deadlockedTrains[i]);
+                free(deadlockedTrains[i]);  // Clean up
+            }
         } else {
             // printf("\nNo cycle in RAG detected\n");
         }

@@ -22,39 +22,46 @@
 Preempted Train1 (Train1) released intersection IntersectionA due to deadlock resolution.
 [00:00:06] Train1: Sent ACQUIRE request for IntersectionB.
 
-[00:00:07] Train3: Sent ACQUIRE request for IntersectionA.
-[00:00:07] SERVER: GRANTED IntersectionA to Train3.
+[00:00:07] Train2: Sent ACQUIRE request for IntersectionC.
 
-[00:00:08] Train3: Released IntersectionC.
+[00:00:08] Train3: Sent ACQUIRE request for IntersectionA.
+[00:00:08] SERVER: GRANTED IntersectionA to Train3.
 
-[00:00:09] Train2: Sent ACQUIRE request for IntersectionC.
-[00:00:09] SERVER: GRANTED IntersectionC to Train2.
+[00:00:09] Train3: Released IntersectionC.
 
-[00:00:10] Train2: Released IntersectionB.
+[00:00:10] Train3: Sent ACQUIRE request for IntersectionB.
 
-[00:00:11] Train3: Sent ACQUIRE request for IntersectionB.
-[00:00:11] SERVER: GRANTED IntersectionB to Train3.
+[00:00:11] Train1: Sent ACQUIRE request for IntersectionB.
 
-[00:00:12] Train3: Released IntersectionA.
+[00:00:12] Train2: Sent ACQUIRE request for IntersectionC.
+[00:00:12] SERVER: GRANTED IntersectionC to Train2.
 
-[00:00:13] Train2: Sent ACQUIRE request for IntersectionA.
-[00:00:13] SERVER: GRANTED IntersectionA to Train2.
+[00:00:13] Train2: Released IntersectionB.
 
-[00:00:14] Train2: Released IntersectionC.
+[00:00:14] Train3: Sent ACQUIRE request for IntersectionB.
+[00:00:14] SERVER: GRANTED IntersectionB to Train3.
 
-[00:00:15] Train3: Released IntersectionB.
+[00:00:15] Train3: Released IntersectionA.
 
-[00:00:16] Train2: Released IntersectionA.
+[00:00:16] Train2: Sent ACQUIRE request for IntersectionA.
+[00:00:16] SERVER: GRANTED IntersectionA to Train2.
 
-[00:00:17] Train1: Sent ACQUIRE request for IntersectionB.
-[00:00:17] SERVER: GRANTED IntersectionB to Train1.
+[00:00:17] Train2: Released IntersectionC.
 
-[00:00:18] Train1: Released IntersectionA.
+[00:00:18] Train3: Released IntersectionB.
 
-[00:00:19] Train1: Sent ACQUIRE request for IntersectionC.
-[00:00:19] SERVER: GRANTED IntersectionC to Train1.
+[00:00:19] Train1: Sent ACQUIRE request for IntersectionB.
+[00:00:19] SERVER: GRANTED IntersectionB to Train1.
 
-[00:00:20] Train1: Released IntersectionB.
+[00:00:20] Train1: Released IntersectionA.
 
-[00:00:21] Train1: Released IntersectionC.
+[00:00:21] Train2: Released IntersectionA.
 
+[00:00:22] Train1: Sent ACQUIRE request for IntersectionC.
+[00:00:22] SERVER: GRANTED IntersectionC to Train1.
+
+[00:00:23] Train1: Released IntersectionB.
+
+[00:00:24] Train1: Released IntersectionC.
+
+[00:00:25] SIMULATION COMPLETE. All trains reached destinations.

@@ -51,6 +51,8 @@ typedef struct Node {
     struct Node *next;   // Next node in graph
 } Node;
 
+int releases = 0;
+
 // Digraph helper function to find or create nodes
 Node *findOrCreateNode(Node **head, const char *name, int isTrain) {
     Node *curr = *head;
@@ -302,7 +304,8 @@ void resolveDeadlock(Train *trains, int trainCount, Intersection *intersections,
         victim->heldIntersections[i] = NULL;
     }
 
-    victim->heldIntersectionCount = 0;
+    releases++;
+    victim->heldIntersectionCount--;
 }
 
 // Function for a train to request to ACQUIRE or RELEASE an intersection
@@ -341,7 +344,6 @@ int totalRouteLength(Train *trains, int trainCount) {
 // Function for parent process acting as server
 void server_process(int msgid, int trainCount, int intersectionCount, Train *trains, Intersection *intersections, Node *RAG) {
     Message msg;
-    int releases = 0;
     int routeLength = totalRouteLength(trains, trainCount);
 
     while (releases < routeLength) {

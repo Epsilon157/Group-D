@@ -256,6 +256,55 @@ bool detectCycleInRAG(Node *graph) {
     return false; // No cycles detected
 }
 
+void resolveDeadlock(Train *trains, int trainCount, Intersection *intersections, int intersectionCount, int msgid) {
+    // Simple strategy: pick the train holding the most resources
+    int victimIndex = -1;
+    int maxHeld = 0;
+
+    for (int i = 0; i < trainCount; i++) {
+        if (trains[i].heldIntersectionCount > maxHeld) {
+            maxHeld = trains[i].heldIntersectionCount;
+            victimIndex = i;
+        }
+    }
+
+    if (victimIndex == -1) return;
+
+    Train *victim = &trains[victimIndex];
+    printf("Preempting Train%d (%s)\n", victimIndex + 1, victim->name);
+    
+    for (int i = 0; i < victim->heldIntersectionCount; i++) {
+        char *intersectionName = victim->heldIntersections[i];
+        Intersection *targetIntersection = NULL;
+        
+        for (int j = 0; j < intersectionCount; j++) {
+            if (strcmp(intersections[j].name, intersectionName) == 0) {
+                targetIntersection = &intersections[j];
+                break;
+            }
+        }
+
+        if (targetIntersection != NULL) {
+            if (strcmp(targetIntersection->lock_type, "Mutex") == 0) {
+                releaseTrainMutex(targetIntersection, victim->name);
+            } else if (strcmp(targetIntersection->lock_type, "Semaphore") == 0) {
+                releaseTrain(targetIntersection, victim->name);
+            }
+        }
+
+        // Logging
+        log_file = fopen("simulation.log", "a");
+        fprintf(log_file, "Preempted Train%d (%s) released intersection %s due to deadlock resolution.\n", 
+                victimIndex + 1, victim->name, intersectionName);
+        fclose(log_file);
+
+        free(intersectionName);
+        victim->heldIntersections[i] = NULL;
+    }
+
+    victim->heldIntersectionCount = 0;
+}
+
 // Function for a train to request to ACQUIRE or RELEASE an intersection
 void trainRequest(TrainAction act, int msgid, int trainIndex, const char *intersectionName) {
     Message msg;
@@ -507,6 +556,7 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
                 printf(" - %s\n", deadlockedTrains[i]);
                 free(deadlockedTrains[i]);  // Clean up
             }
+            resolveDeadlock(trains, trainCount, intersections, intersectionCount, msgid);
         } else {
             // printf("\nNo cycle in RAG detected\n");
         }
@@ -517,6 +567,8 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
         wait(NULL);
     }
 }
+
+
 
 // Function for train/child process behavior
 void train_process(int msgid, int trainIndex, Train *trains, Intersection *intersections) {

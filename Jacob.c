@@ -129,10 +129,14 @@ void printIntersectionGranted(int trainIndex, const char *intersectionName) {
         //fprintf(log_file, "\n");
         return;
     }
-
-    if (intersections[matchIndex].capacity > 1) {
-        logEvent("SERVER: GRANTED %s to %s. Semaphore count: %d.", intersectionName, trains[trainIndex].name, intersections[matchIndex].capacity);
-    } else {
+    if (strcmp(intersections[matchIndex].lock_type, "Semaphore") == 0) {
+        int semValue;
+        sem_getvalue(&intersections[matchIndex].Semaphore, &semValue);
+    
+        logEvent("SERVER: GRANTED %s to %s. Semaphore count: %d.",
+                 intersectionName, trains[trainIndex].name, semValue);
+    }
+     else {
         logEvent("SERVER: GRANTED %s to %s.", intersectionName, trains[trainIndex].name, intersections[matchIndex].capacity);
     }
 
@@ -141,15 +145,35 @@ void printIntersectionGranted(int trainIndex, const char *intersectionName) {
 }
 
 // Function to log a deadlock and preemption event
-void printDeadlockAndPreemption(const char *train1, const char *train2, const char *intersection) {
+void printDeadlockDetected1(const char *train1, const char *train2, const char *intersection) {
     //pthread_mutex_lock(&sim_time_mutex); // Lock mutex to safely increment sim_time
     //(*sim_time)++;  // Increment simulation time
    // pthread_mutex_unlock(&sim_time_mutex) // Unlock mutex after incrementing sim_time
 
     logEvent("SERVER: Deadlock detected! Cycle: %s ? %s.", train1, train2);
-    logEvent("SERVER: Preempting %s from %s.", intersection, train1);
-    logEvent("SERVER: %s released %s forcibly.", train1, intersection);
+    //logEvent("SERVER: Preempting %s from %s.", intersection, train1);
+    //logEvent("SERVER: %s released %s forcibly.", train1, intersection);
 }
+
+void printDeadlockDetected(char *deadlockedTrains[], int deadlockedCount) {
+    // Start the log message with the "Deadlock detected!" message
+    char logMessage[1024];  // Adjust size as needed to fit all train names
+
+    // Format the initial part of the log message
+    snprintf(logMessage, sizeof(logMessage), "SERVER: Deadlock detected! Cycle: %s", deadlockedTrains[0]);
+
+    // Append the rest of the trains in the cycle
+    for (int i = 1; i < deadlockedCount; i++) {
+        // Concatenate " ↔ " and the next train name
+        strncat(logMessage, " ↔ ", sizeof(logMessage) - strlen(logMessage) - 1);
+        strncat(logMessage, deadlockedTrains[i], sizeof(logMessage) - strlen(logMessage) - 1);
+    }
+
+    // Log the entire cycle in one line
+    strncat(logMessage, ".", sizeof(logMessage) - strlen(logMessage) - 1);
+    logEvent("%s", logMessage);
+}
+
 
 // Function to log the completion of the simulation
 void printSimulationComplete() {

@@ -28,7 +28,7 @@ typedef struct {
 
 void printRequestSent(int trainIndex, const char *intersection);
 void printIntersectionGranted(int trainIndex, const char *intersectionName);
-
+void AttemptingDeadlockResolve(const char *intersectionName, const char *victim);
 void printRequestRelease(int trainIndex, const char *intersection);
 void printSimulationComplete();
 

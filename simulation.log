@@ -3,55 +3,87 @@
 [00:00:00] - IntersectionB (Mutex, Capacity=1)
 [00:00:00] - IntersectionC (Mutex, Capacity=1)
 
-[00:00:00] Train1: Sent ACQUIRE request for IntersectionA.
-[00:00:00] SERVER: GRANTED IntersectionA to Train1.
-
-[00:00:01] Train2: Sent ACQUIRE request for IntersectionA.
-
-[00:00:02] Train3: Sent ACQUIRE request for IntersectionA.
-
-[00:00:03] Train1: Sent ACQUIRE request for IntersectionB.
-[00:00:03] SERVER: GRANTED IntersectionB to Train1.
-
-[00:00:04] Train1: Released IntersectionA.
+[00:00:00] Train3: Released IntersectionA.
 
 [00:00:05] Train1: Sent ACQUIRE request for IntersectionC.
 [00:00:05] SERVER: GRANTED IntersectionC to Train1.
 
+<<<<<<< HEAD
 [00:00:06] Train1: Released IntersectionB.
 
 [00:00:07] Train2: Sent ACQUIRE request for IntersectionA.
 [00:00:07] SERVER: GRANTED IntersectionA to Train2.
+=======
+[00:00:06] SERVER: Deadlock detected! Cycle: Train3 ↔ Train2 ↔ Train1.
+Preempted Train1 (Train1) released intersection IntersectionA due to deadlock resolution.
+[00:00:06] Train1: Sent ACQUIRE request for IntersectionB.
 
-[00:00:08] Train3: Sent ACQUIRE request for IntersectionA.
+[00:00:07] Train3: Sent ACQUIRE request for IntersectionA.
+[00:00:07] SERVER: GRANTED IntersectionA to Train3.
+>>>>>>> 15e73e5f9588231cb837dd574eac7df5a4b46ebb
 
-[00:00:09] Train2: Sent ACQUIRE request for IntersectionB.
-[00:00:09] SERVER: GRANTED IntersectionB to Train2.
+[00:00:08] Train3: Released IntersectionC.
 
-[00:00:10] Train2: Released IntersectionA.
+[00:00:09] Train2: Sent ACQUIRE request for IntersectionC.
+[00:00:09] SERVER: GRANTED IntersectionC to Train2.
 
-[00:00:11] Train1: Released IntersectionC.
+[00:00:10] Train2: Released IntersectionB.
 
-[00:00:12] Train2: Sent ACQUIRE request for IntersectionC.
-[00:00:12] SERVER: GRANTED IntersectionC to Train2.
+[00:00:11] Train3: Sent ACQUIRE request for IntersectionB.
+[00:00:11] SERVER: GRANTED IntersectionB to Train3.
 
-[00:00:13] Train2: Released IntersectionB.
+[00:00:12] Train3: Released IntersectionA.
 
-[00:00:14] Train3: Sent ACQUIRE request for IntersectionA.
-[00:00:14] SERVER: GRANTED IntersectionA to Train3.
+[00:00:13] Train2: Sent ACQUIRE request for IntersectionA.
+[00:00:13] SERVER: GRANTED IntersectionA to Train2.
 
-[00:00:15] Train2: Released IntersectionC.
+[00:00:14] Train2: Released IntersectionC.
 
-[00:00:16] Train3: Sent ACQUIRE request for IntersectionB.
-[00:00:16] SERVER: GRANTED IntersectionB to Train3.
+[00:00:15] Train3: Released IntersectionB.
 
-[00:00:17] Train3: Released IntersectionA.
+[00:00:16] Train2: Released IntersectionA.
 
-[00:00:18] Train3: Sent ACQUIRE request for IntersectionC.
-[00:00:18] SERVER: GRANTED IntersectionC to Train3.
+[00:00:17] Train1: Sent ACQUIRE request for IntersectionB.
+[00:00:17] SERVER: GRANTED IntersectionB to Train1.
 
-[00:00:19] Train3: Released IntersectionB.
+[00:00:18] Train1: Released IntersectionA.
 
-[00:00:20] Train3: Released IntersectionC.
+[00:00:19] Train1: Sent ACQUIRE request for IntersectionC.
+[00:00:19] SERVER: GRANTED IntersectionC to Train1.
 
-[00:00:21] SIMULATION COMPLETE. All trains reached destinations.
+[00:00:20] Train1: Released IntersectionB.
+
+[00:00:21] Train1: Released IntersectionC.
+
+[00:00:09] Train1: Released IntersectionC.
+
+[00:00:10] Train2: Sent ACQUIRE request for IntersectionB.
+[00:00:10] SERVER: GRANTED IntersectionB to Train2.
+
+[00:00:11] Train2: Released IntersectionA.
+
+[00:00:12] Train3: Sent ACQUIRE request for IntersectionA.
+[00:00:12] SERVER: GRANTED IntersectionA to Train3.
+
+[00:00:13] Train3: Sent ACQUIRE request for IntersectionB.
+
+[00:00:14] Train2: Sent ACQUIRE request for IntersectionC.
+[00:00:14] SERVER: GRANTED IntersectionC to Train2.
+
+[00:00:15] Train2: Released IntersectionB.
+
+[00:00:16] Train2: Released IntersectionC.
+
+[00:00:17] Train3: Sent ACQUIRE request for IntersectionB.
+[00:00:17] SERVER: GRANTED IntersectionB to Train3.
+
+[00:00:18] Train3: Released IntersectionA.
+
+[00:00:19] Train3: Sent ACQUIRE request for IntersectionC.
+[00:00:19] SERVER: GRANTED IntersectionC to Train3.
+
+[00:00:20] Train3: Released IntersectionB.
+
+[00:00:21] Train3: Released IntersectionC.
+
+[00:00:22] SIMULATION COMPLETE. All trains reached destinations.

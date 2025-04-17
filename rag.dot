@@ -4,4 +4,5 @@ digraph RAG {
   "Train1" [shape=circle, fillcolor=lightgreen];
   "Train2" [shape=circle, fillcolor=lightgreen];
   "Train3" [shape=circle, fillcolor=lightgreen];
+  "IntersectionA" -> "Train3";
 }

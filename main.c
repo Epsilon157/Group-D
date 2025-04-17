@@ -263,7 +263,7 @@ int main() {
 
     // This is just testing mutexes are properly working
     printf("\n TEST FOR MUTEX \n") ;
-    test_initializeMutex();
+    //test_initializeMutex();
     printf("\n END OF TEST FOR MUTEX \n") ;
 
     

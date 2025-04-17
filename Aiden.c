@@ -29,7 +29,7 @@ void initializeSemaphores(Intersection *intersections, int intersectionCount){
 void acquireTrain(Intersection *intersection, const char *trainName){
     if((*intersection).lock_type == "Semaphore"){
         sem_wait(&((*intersection).Semaphore));
-        printf("Semaphore Intersection %s acquired by Train %s\n", intersection->name, trainName);
+        printf("Intersection %s acquired by Train %s\n", intersection->name, trainName);
     }
 }
 //Function for a train to clear an intersection
@@ -37,7 +37,7 @@ void acquireTrain(Intersection *intersection, const char *trainName){
 void releaseTrain(Intersection *intersection, const char *trainName){
     if((*intersection).lock_type == "Semaphore"){
         sem_post(&((*intersection).Semaphore));
-        printf("Semaphore Intersection %s releasing Train %s\n", intersection->name, trainName);
+        printf("Intersection %s releasing Train %s\n", intersection->name, trainName);
     }
 }
 //Function to destroy the semaphores and free them from memory

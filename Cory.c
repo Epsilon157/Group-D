@@ -296,8 +296,7 @@ void resolveDeadlock(Train *trains, int trainCount, Intersection *intersections,
 
         // Logging
         log_file = fopen("simulation.log", "a");
-        fprintf(log_file, "Preempted Train%d (%s) released intersection %s due to deadlock resolution.\n", 
-                victimIndex + 1, victim->name, intersectionName);
+        AttemptingDeadlockResolve(intersectionName, victim->name);
         fclose(log_file);
 
         free(intersectionName);

@@ -300,6 +300,9 @@ void resolveDeadlock(Train *trains, int trainCount, Intersection *intersections,
 
         free(intersectionName);
         victim->heldIntersections[i] = NULL;
+
+        // Set forced release to 1 so we can know the intersection has already been released
+        targetIntersection->forcedRelease = 1;
     }
 
     victim->heldIntersectionCount = 0;
@@ -369,7 +372,12 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
 
             // server recognizes acquire request
             printf("Train%d request to acquire %s\n", msg.trainIndex + 1, msg.intersectionName);
-            
+
+            // Important: if another train has been forced to release the target intersection
+            // in the past, then the next train to acquire the intersection
+            // needs forcedRelease set to 0 so that it can release it later
+            targetIntersection->forcedRelease = 0;
+
             // %%%%%%%%% Keegan adding here: %%%%%%%%%%%%%%%%%%%%%%%%%
             // Keegan added a semaphore section calling Aidens acquireTarin function
             // teamwork! :D
@@ -437,7 +445,7 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
                 free(train->waitingIntersection); // Avoid memory leak before overwriting
                 train->waitingIntersection = strdup(msg.intersectionName);
             } 
-        } else if (msg.action == RELEASE) {
+        } else if (msg.action == RELEASE && !targetIntersection->forcedRelease) {
             // logging
             log_file = fopen("simulation.log", "a");
             printRequestRelease(msg.trainIndex, msg.intersectionName);

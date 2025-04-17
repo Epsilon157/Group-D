@@ -16,12 +16,6 @@ void initializeSemaphores(Intersection *intersections, int intersectionCount){
         if(intersections[i].capacity > 1){
            // (*intersections)[i].Semaphore = malloc(sizeof(sem_t));
             sem_init(&intersections[i].Semaphore, 0, intersections[i].capacity);
-            printf("Semaphore initialized for %s with value of %i\n", intersections[i].name,intersections[i].capacity);
-            int semValue;
-
-            sem_getvalue(&intersections[i].Semaphore, &semValue);
-
-            printf("Semaphore value is %d\n", semValue);
         }
         //else if((*intersections)[i].resources < 0){
           //  printf("Error: Intersection %c has an invalid resource value: %i (must be greater than 0)", (*intersections)[i].name, (*intersections)[i].resources);
@@ -33,17 +27,17 @@ void initializeSemaphores(Intersection *intersections, int intersectionCount){
 //Takes the desired intersection and the name of the train wanting to go through
 //-----Both of these need to be combined with Keegan's-----
 void acquireTrain(Intersection *intersection, const char *trainName){
-    if(intersection->lock_type == "Semaphore"){
-        sem_wait(&intersection->Semaphore);
-        printf("Semaphore Intersection %s acquired by Train %s\n", intersection->name, trainName);
+    if((*intersection).lock_type == "Semaphore"){
+        sem_wait(&((*intersection).Semaphore));
+        printf("Intersection %s acquired by Train %s\n", intersection->name, trainName);
     }
 }
 //Function for a train to clear an intersection
 //Takes the desired intersection and the name of the train wanting to go through
 void releaseTrain(Intersection *intersection, const char *trainName){
-    if(intersection->lock_type == "Semaphore"){
-        sem_post(&intersection->Semaphore);
-        printf("Semaphore Intersection %s releasing Train %s\n", intersection->name, trainName);
+    if((*intersection).lock_type == "Semaphore"){
+        sem_post(&((*intersection).Semaphore));
+        printf("Intersection %s releasing Train %s\n", intersection->name, trainName);
     }
 }
 //Function to destroy the semaphores and free them from memory

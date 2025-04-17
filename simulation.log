@@ -6,21 +6,54 @@
 [00:00:00] Train1: Sent ACQUIRE request for IntersectionA.
 [00:00:00] SERVER: GRANTED IntersectionA to Train1.
 
-[00:00:01] Train2: Sent ACQUIRE request for IntersectionB.
-[00:00:01] SERVER: GRANTED IntersectionB to Train2.
+[00:00:01] Train2: Sent ACQUIRE request for IntersectionA.
 
-[00:00:02] Train3: Sent ACQUIRE request for IntersectionC.
-[00:00:02] SERVER: GRANTED IntersectionC to Train3.
+[00:00:02] Train3: Sent ACQUIRE request for IntersectionA.
 
 [00:00:03] Train1: Sent ACQUIRE request for IntersectionB.
+[00:00:03] SERVER: GRANTED IntersectionB to Train1.
 
-[00:00:04] Train2: Sent ACQUIRE request for IntersectionC.
+[00:00:04] Train1: Released IntersectionA.
 
-[00:00:05] Train3: Sent ACQUIRE request for IntersectionA.
+[00:00:05] Train1: Sent ACQUIRE request for IntersectionC.
+[00:00:05] SERVER: GRANTED IntersectionC to Train1.
 
-[00:00:06] Train1: Sent ACQUIRE request for IntersectionB.
+[00:00:06] Train1: Released IntersectionB.
 
-[00:00:07] Train2: Sent ACQUIRE request for IntersectionC.
+[00:00:07] Train2: Sent ACQUIRE request for IntersectionA.
+[00:00:07] SERVER: GRANTED IntersectionA to Train2.
 
 [00:00:08] Train3: Sent ACQUIRE request for IntersectionA.
 
+[00:00:09] Train1: Released IntersectionC.
+
+[00:00:10] Train2: Sent ACQUIRE request for IntersectionB.
+[00:00:10] SERVER: GRANTED IntersectionB to Train2.
+
+[00:00:11] Train2: Released IntersectionA.
+
+[00:00:12] Train3: Sent ACQUIRE request for IntersectionA.
+[00:00:12] SERVER: GRANTED IntersectionA to Train3.
+
+[00:00:13] Train3: Sent ACQUIRE request for IntersectionB.
+
+[00:00:14] Train2: Sent ACQUIRE request for IntersectionC.
+[00:00:14] SERVER: GRANTED IntersectionC to Train2.
+
+[00:00:15] Train2: Released IntersectionB.
+
+[00:00:16] Train2: Released IntersectionC.
+
+[00:00:17] Train3: Sent ACQUIRE request for IntersectionB.
+[00:00:17] SERVER: GRANTED IntersectionB to Train3.
+
+[00:00:18] Train3: Released IntersectionA.
+
+[00:00:19] Train3: Sent ACQUIRE request for IntersectionC.
+[00:00:19] SERVER: GRANTED IntersectionC to Train3.
+
+[00:00:20] Train3: Released IntersectionB.
+
+[00:00:21] Train3: Released IntersectionC.
+
+[00:00:22] SIMULATION COMPLETE. All trains reached destinations.

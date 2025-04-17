@@ -2,12 +2,6 @@ digraph RAG {
   rankdir=LR;
   node [shape=rectangle, style=filled, fillcolor=lightblue];
   "Train1" [shape=circle, fillcolor=lightgreen];
-  "IntersectionA" -> "Train1";
-  "Train1" -> "IntersectionB";
   "Train2" [shape=circle, fillcolor=lightgreen];
-  "IntersectionB" -> "Train2";
-  "Train2" -> "IntersectionC";
   "Train3" [shape=circle, fillcolor=lightgreen];
-  "IntersectionC" -> "Train3";
-  "Train3" -> "IntersectionA";
 }

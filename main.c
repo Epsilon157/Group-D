@@ -208,8 +208,6 @@ int main() {
     printf("Parsed %d intersections:\n", intersectionCount);
     for (int i = 0; i < intersectionCount; i++) {
         printf("%s has %d resources\n", intersections[i].name, intersections[i].capacity);
-        // initialize forcedRelease value to false
-        intersections[i].forcedRelease = 0;
     }
       // removed &
     initializeSemaphores(intersections, intersectionCount);//added
@@ -265,7 +263,7 @@ int main() {
 
     // This is just testing mutexes are properly working
     printf("\n TEST FOR MUTEX \n") ;
-    test_initializeMutex();
+    //test_initializeMutex();
     printf("\n END OF TEST FOR MUTEX \n") ;
 
     

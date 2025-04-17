@@ -24,6 +24,7 @@ typedef struct {
     int isMutexInitialized;
     pthread_mutex_t Mutex;
     sem_t Semaphore;
+    int forcedRelease;     // tells if an intersection's release has been forced
 } Intersection;
 
 void printRequestSent(int trainIndex, const char *intersection);

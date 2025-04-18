@@ -423,13 +423,13 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
                 // If the target intersection is semaphore type
                 // acquire the train's semaphore 
                 //printf("Intersection %s, capacity: %d\n", targetIntersection->name, targetIntersection->capacity);
+                log_file = fopen("simulation.log", "a");
+                printIntersectionGranted(msg.trainIndex, msg.intersectionName);
+                fclose(log_file);
                 if(sem_trywait(&targetIntersection->Semaphore) == 0){
                     // grant the request to the train
                     printf("Semaphore  %s acquried by %s\n", targetIntersection->name, train->name);
                     serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
-                    log_file = fopen("simulation.log", "a");
-                    printIntersectionGranted(msg.trainIndex, msg.intersectionName);
-                    fclose(log_file);
                     // update train to be holding the intersection
                     train->heldIntersections[train->heldIntersectionCount] = strdup(msg.intersectionName); // safe string copy
                     train->heldIntersectionCount++;

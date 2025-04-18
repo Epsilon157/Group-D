@@ -89,5 +89,63 @@ void printR_Table(Intersection **intersections, int intersectionCount) {
     printf("---------------------------------------------------------------\n");
 }
 
+void resetTrain(Train *train) {
+    // Free each dynamically allocated string in the route
+    if (train->route != NULL) {
+        for (int j = 0; j < train->routeCount; ++j) {
+            if (train->route[j] != NULL) {
+                free(train->route[j]);
+            }
+        }
+        free(train->route);
+        train->route = NULL;
+    }
 
+    // Reset other fields
+    for (int j = 0; j < train->heldIntersectionCount; ++j) {
+        train->heldIntersections[j] = NULL;
+    }
+    train->waitingIntersection = NULL;
+    train->heldIntersectionCount = 0;
+    train->routeCount = 0;
+    memset(train->name, 0, sizeof(train->name));
+}
+
+void resetIntersection(Intersection *intersection) {
+    // Destroy mutex if initialized
+    if (intersection->isMutexInitialized) {
+        pthread_mutex_destroy(&intersection->Mutex);
+        intersection->isMutexInitialized = 0;
+    }
+
+    // Destroy semaphore
+    sem_destroy(&intersection->Semaphore);
+
+    // Reset fields
+    memset(intersection->name, 0, sizeof(intersection->name));
+    memset(intersection->type, 0, sizeof(intersection->type));
+    memset(intersection->lock_type, 0, sizeof(intersection->lock_type));
+    intersection->capacity = 0;
+    intersection->lock_state = 0;
+    intersection->forcedRelease = 0;
+
+    // Reset the embedded trains
+    for (int i = 0; i < 50; i++) {
+        resetTrain(&intersection->trains[i]);
+    }
+}
+
+void cleanupAll(Train *trains, int trainCount, Intersection *intersections, int intersectionCount) {
+    for (int i = 0; i < trainCount; i++) {
+        resetTrain(&trains[i]);
+    }
+
+    for (int i = 0; i < intersectionCount; i++) {
+        resetIntersection(&intersections[i]);
+    }
+
+    // Optional: free arrays if dynamically allocated
+    // free(trains);
+    // free(intersections);
+}
 

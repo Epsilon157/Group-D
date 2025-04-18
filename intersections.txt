@@ -1,3 +1,1 @@
-IntersectionA:3
-IntersectionB:1
-IntersectionC:1
+IntersectionA:2

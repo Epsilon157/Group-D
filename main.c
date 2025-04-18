@@ -255,6 +255,7 @@ int main() {
         fclose(log_file);
     }
 
+
     initR_Table(&intersections, intersectionCount);
     printR_Table(&intersections, intersectionCount);
     initializeSemaphores(intersections, intersectionCount);//added
@@ -345,8 +346,8 @@ int main() {
     printSimulationComplete();
     
     fclose(log_file);
+    cleanupAll(trains, trainCount, intersections, intersectionCount);
 
-    
     return 0;
 
 }

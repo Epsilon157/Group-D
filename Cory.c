@@ -405,9 +405,6 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
                     // update train to be holding the intersection
                     train->heldIntersections[train->heldIntersectionCount] = strdup(msg.intersectionName); // safe string copy
                     train->heldIntersectionCount++; 
-                    // update train to be holding the intersection
-                    train->heldIntersections[train->heldIntersectionCount] = strdup(msg.intersectionName); // safe string copy
-                    train->heldIntersectionCount++; 
 
                     // train is no longer waiting on this intersection, so remove it from the waiting list
                     free(train->waitingIntersection);

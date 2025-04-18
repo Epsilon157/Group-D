@@ -185,7 +185,7 @@ void AttemptingDeadlockResolve(const char *intersectionName, const char *victim)
     //(*sim_time)++;  // Increment simulation time
    // pthread_mutex_unlock(&sim_time_mutex) // Unlock mutex after incrementing sim_time
 
-    logEvent("SERVER: Preempting %s from %s.\n", intersectionName, victim);
+    logEvent("SERVER: Preempting %s from %s.", intersectionName, victim);
     //logEvent("SERVER: Preempting %s from %s.", intersection, train1);
     //logEvent("SERVER: %s released %s forcibly.", train1, intersection);
 }

@@ -22,51 +22,47 @@
 
 [00:00:05] Train1: Released IntersectionA.
 
-[00:00:06] Train3: Sent ACQUIRE request for IntersectionD.
-[00:00:06] SERVER: GRANTED IntersectionD to Train3. Semaphore count: 2.
+[00:00:06] Train2: Sent ACQUIRE request for IntersectionD.
+[00:00:06] SERVER: GRANTED IntersectionD to Train2. Semaphore count: 2.
 
-[00:00:07] Train4: Sent ACQUIRE request for IntersectionB.
+[00:00:07] Train3: Sent ACQUIRE request for IntersectionD.
+[00:00:07] SERVER: GRANTED IntersectionD to Train3. Semaphore count: 1.
 
-[00:00:08] Train3: Released IntersectionC.
+[00:00:08] Train2: Released IntersectionB.
 
-[00:00:09] Train2: Sent ACQUIRE request for IntersectionD.
-[00:00:09] SERVER: GRANTED IntersectionD to Train2. Semaphore count: 1.
+[00:00:09] Train3: Released IntersectionC.
 
-[00:00:10] Train2: Released IntersectionB.
+[00:00:10] Train4: Sent ACQUIRE request for IntersectionB.
+[00:00:10] SERVER: GRANTED IntersectionB to Train4. Semaphore count: 0.
 
-[00:00:11] Train1: Sent ACQUIRE request for IntersectionC.
-[00:00:11] SERVER: GRANTED IntersectionC to Train1.
+[00:00:11] Train4: Released IntersectionE.
 
-[00:00:12] Train1: Released IntersectionB.
+[00:00:12] Train1: Sent ACQUIRE request for IntersectionC.
+[00:00:12] SERVER: GRANTED IntersectionC to Train1.
 
-[00:00:13] Train2: Sent ACQUIRE request for IntersectionE.
+[00:00:13] Train1: Released IntersectionB.
 
-[00:00:14] Train3: Sent ACQUIRE request for IntersectionA.
-[00:00:14] SERVER: GRANTED IntersectionA to Train3.
+[00:00:14] Train2: Sent ACQUIRE request for IntersectionE.
+[00:00:14] SERVER: GRANTED IntersectionE to Train2.
 
-[00:00:15] Train3: Released IntersectionD.
+[00:00:15] Train3: Sent ACQUIRE request for IntersectionA.
+[00:00:15] SERVER: GRANTED IntersectionA to Train3.
 
-[00:00:16] Train1: Released IntersectionC.
+[00:00:16] Train2: Released IntersectionD.
 
-[00:00:17] Train3: Released IntersectionA.
+[00:00:17] Train3: Released IntersectionD.
 
-[00:00:18] Train4: Sent ACQUIRE request for IntersectionB.
-[00:00:18] SERVER: GRANTED IntersectionB to Train4. Semaphore count: 1.
+[00:00:18] Train4: Sent ACQUIRE request for IntersectionD.
+[00:00:18] SERVER: GRANTED IntersectionD to Train4. Semaphore count: 2.
 
-[00:00:19] Train4: Released IntersectionE.
+[00:00:19] Train4: Released IntersectionB.
 
-[00:00:20] Train4: Sent ACQUIRE request for IntersectionD.
-[00:00:20] SERVER: GRANTED IntersectionD to Train4. Semaphore count: 1.
+[00:00:20] Train1: Released IntersectionC.
 
-[00:00:21] Train4: Released IntersectionB.
+[00:00:21] Train2: Released IntersectionE.
 
-[00:00:22] Train2: Sent ACQUIRE request for IntersectionE.
-[00:00:22] SERVER: GRANTED IntersectionE to Train2.
+[00:00:22] Train3: Released IntersectionA.
 
-[00:00:23] Train2: Released IntersectionD.
+[00:00:23] Train4: Released IntersectionD.
 
-[00:00:24] Train4: Released IntersectionD.
-
-[00:00:25] Train2: Released IntersectionE.
-
-[00:00:26] SIMULATION COMPLETE. All trains reached destinations.
+[00:00:24] SIMULATION COMPLETE. All trains reached destinations.

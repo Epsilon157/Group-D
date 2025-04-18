@@ -381,7 +381,7 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
                 // acquire the train's mutex and lock it
                 if(pthread_mutex_trylock(&targetIntersection->Mutex) == 0){
                     //printf("Server attempting tryAcquireMutex for Train %s on %s\n", train->name, msg.intersectionName);
-                    printf("Mutex Intersection %s acquried by %s\n", targetIntersection->name, train->name);
+                    printf("Mutex Intersection %s acquired by %s\n", targetIntersection->name, train->name);
                     // grant the request to the train
                     serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
 
@@ -411,10 +411,10 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
             } else if (targetIntersection && targetIntersection->lock_type && strcmp(targetIntersection->lock_type, "Semaphore") == 0) {
                 // If the target intersection is semaphore type
                 // acquire the train's semaphore 
-                printf("Intersection %s, capacity: %d\n", targetIntersection->name, targetIntersection->capacity);
+                //printf("Intersection %s, capacity: %d\n", targetIntersection->name, targetIntersection->capacity);
                 if(sem_trywait(&targetIntersection->Semaphore) == 0){
                     // grant the request to the train
-                    printf("Semaphore Intersection %s acquried by %s\n", targetIntersection->name, train->name);
+                    printf("Semaphore  %s acquried by %s\n", targetIntersection->name, train->name);
                     serverResponse(GRANT, msgid, msg.trainIndex, msg.intersectionName);
                     log_file = fopen("simulation.log", "a");
                     printIntersectionGranted(msg.trainIndex, msg.intersectionName);
@@ -429,7 +429,7 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
                  } else {
                     int sval;
                     if (sem_getvalue(&targetIntersection->Semaphore, &sval) == 0) {
-                        printf("Semaphore for Intersection %s is busy (value: %d). Train %s cannot acquire it.\n",
+                        printf("Semaphore for  %s is busy (value: %d).  %s cannot acquire it.\n",
                                targetIntersection->name, sval, train->name);
                     } else {
                         // If sem_getvalue fails, it's an error (semaphore might be uninitialized or corrupted)
@@ -468,11 +468,11 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
             if (found != -1) {
                 // call for releasing mutexes and semaphores
                 if(targetIntersection && strcmp(targetIntersection->lock_type, "Mutex") == 0){
-                    printf("Mutex Intersection %s releasing %s\n", targetIntersection->name, train->name);
+                    printf("Mutex  %s releasing %s\n", targetIntersection->name, train->name);
                     pthread_mutex_unlock(&targetIntersection->Mutex);
                 }
                 if(targetIntersection && strcmp(targetIntersection->lock_type, "Semaphore") == 0){
-                    printf("Semaphore Intersection %s releasing %s\n", targetIntersection->name, train->name);
+                    printf("Semaphore %s releasing %s\n", targetIntersection->name, train->name);
                     sem_post(&targetIntersection->Semaphore);
                 }
                 if(targetIntersection != NULL){

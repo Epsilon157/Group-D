@@ -299,6 +299,7 @@ void resolveDeadlock(Train *trains, int trainCount, Intersection *intersections,
 
         // Logging
         log_file = fopen("simulation.log", "a");
+        AttemptingDeadlockResolve(intersectionName, victim->name);
         ForceRelease(victim->name, intersectionName);
         fclose(log_file);
 

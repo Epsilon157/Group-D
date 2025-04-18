@@ -95,6 +95,9 @@ void printDenied(const char *train, const char *intersection) {
     //fprintf(log_file, "\n");
 }
 
+void ForceRelease(const char *train, const char *intersection){
+    logEvent("SERVER: %s released %s forcibly");
+}
 // Function to log a deadlock and preemption event
 void Deadlock(char train1, char train2, char intersection1) {
     //pthread_mutex_lock(&sim_time_mutex); // Lock mutex to safely increment sim_time

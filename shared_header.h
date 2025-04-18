@@ -34,6 +34,7 @@ void printRequestRelease(int trainIndex, const char *intersection);
 void printSimulationComplete();
 void printDenied(const char *train, const char *intersection);
 void ForceRelease(const char *train, const char *intersection);
+void AttemptingDeadlockResolve(const char *intersectionName, const char *victim);
 
 void acquireTrainMutex(Intersection *intersection, const char *trainName);
 int tryAcquireMutex(Intersection *intersection, const char *trainName);

@@ -65,24 +65,35 @@ int tryAcquireMutex(Intersection *intersection, const char *trainName) {
 //Releasin for intersections that can only fit one process by unlocking
 void releaseTrainMutex(Intersection *intersection, const char *trainName){
     if(strcmp(intersection-> lock_type, "Mutex") == 0){
+
         pthread_mutex_unlock(&intersection-> Mutex);
+        //lock state being 0 for mutex
         intersection -> lock_state = 0;
+        //printing the Mutex intersection and train associated with the mutex
         printf("Mutex Intersection %s releasing %s\n", intersection->name, trainName);
     }
 }
-//writing a test to ensure the code mutexes are called correctly
+//writing a test to ensure the code mutexes are called correctly 
+//for capacity of 1
 
 void test_initializeMutex() {
-    Intersection intersections[1] = {0};
+    //zeroing out array 
+    Intersection intersections[1] ={0};
+    //testig if the capacity is > 1 to cause an invalid case for mutexs
     strcpy(intersections[0].name, "TestIntersection");
     intersections[0].capacity = 2;
 
+    //testing the initalization
     initializeMutex(intersections, 1);
-
+    
+      //throwing a check to see if mutex is incorrect
     if (intersections[0].isMutexInitialized) {
+        //print out an error if it is initialized incorrectly
         printf("ERROR: Mutex should NOT be initialized for %s with capacity > 1\n", intersections[0].name);
+        //print out an correrct if it is not initialized incorrectly... meaning its passes the test/
     } else {
         printf("Correct behavior: Mutex not initialized for %s (capacity > 1)\n", intersections[0].name);
     }
 }
 
+// write more tests and comments

@@ -1,5 +1,6 @@
 [00:00:00] SERVER: Initialized intersections:
 [00:00:00] - IntersectionA (Semaphore, Capacity=2)
+<<<<<<< HEAD
 [00:00:00] - IntersectionB (Semaphore, Capacity=2)
 [00:00:00] - IntersectionC (Semaphore, Capacity=2)
 [00:00:00] - IntersectionD (Semaphore, Capacity=3)
@@ -7,11 +8,17 @@
 
 [00:00:00] Train1: Sent ACQUIRE request for IntersectionA.
 [00:00:00] SERVER: GRANTED IntersectionA to Train1. Semaphore count: 1.
+=======
+
+[00:00:00] Train1: Sent ACQUIRE request for IntersectionA.
+[00:00:00] SERVER: GRANTED IntersectionA to Train1. Semaphore count: 0.
+>>>>>>> 8648dff1810d8056df67bc3dab9c63316a37bdf8
 
 [00:00:01] Train2: Sent ACQUIRE request for IntersectionA.
 [00:00:01] SERVER: GRANTED IntersectionA to Train2. Semaphore count: 0.
 
 [00:00:02] Train3: Sent ACQUIRE request for IntersectionA.
+<<<<<<< HEAD
 
 [00:00:03] Train4: Sent ACQUIRE request for IntersectionA.
 
@@ -39,3 +46,19 @@
 [00:00:13] Train4: Released IntersectionA.
 
 [00:00:14] SIMULATION COMPLETE. All trains reached destinations.
+=======
+[00:00:02] SERVER: GRANTED IntersectionA to Train3. Semaphore count: 0.
+
+[00:00:03] Train4: Sent ACQUIRE request for IntersectionA.
+[00:00:03] SERVER: GRANTED IntersectionA to Train4. Semaphore count: 0.
+
+[00:00:04] Train1: Released IntersectionA.
+
+[00:00:05] Train2: Released IntersectionA.
+
+[00:00:06] Train3: Released IntersectionA.
+
+[00:00:07] Train4: Released IntersectionA.
+
+[00:00:08] SIMULATION COMPLETE. All trains reached destinations.
+>>>>>>> 8648dff1810d8056df67bc3dab9c63316a37bdf8

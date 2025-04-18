@@ -5,5 +5,8 @@ digraph RAG {
   "Train2" [shape=circle, fillcolor=lightgreen];
   "Train3" [shape=circle, fillcolor=lightgreen];
   "Train4" [shape=circle, fillcolor=lightgreen];
+<<<<<<< HEAD
   "Train5" [shape=circle, fillcolor=lightgreen];
+=======
+>>>>>>> 8648dff1810d8056df67bc3dab9c63316a37bdf8
 }

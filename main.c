@@ -208,6 +208,8 @@ int main() {
     printf("Parsed %d intersections:\n", intersectionCount);
     for (int i = 0; i < intersectionCount; i++) {
         printf("%s has %d resources\n", intersections[i].name, intersections[i].capacity);
+        // Initialize each intersection to have forcedRelease value of false
+        intersections[i].forcedRelease = 0;
     }
       // removed &
     int trainCount = TrainParsing(trainFilePath, &trains);

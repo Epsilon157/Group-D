@@ -231,10 +231,9 @@ int main() {
         printf("\n");
     }
    
-    int num_intersections = IntersectionParsing("intersections.txt", &intersections);
-    if (num_intersections > 0) {
+    if (intersectionCount > 0) {
         // Print the initialized intersections
-        print_initialized_intersections(intersections, num_intersections);
+        print_initialized_intersections(intersections, intersectionCount);
         
     } else {
         printf("No intersections to display.\n");
@@ -245,7 +244,7 @@ int main() {
         exit(EXIT_FAILURE);
     }
        
-    print_initialized_intersections(intersections, num_intersections);
+    print_initialized_intersections(intersections, intersectionCount);
     fprintf(log_file, "\n");
     int grantTest = 1;
   

@@ -16,41 +16,6 @@
 #include "shared_header.h"
 //#include "Keegan.c"
 
-// Enumerations for train action and server response types
-typedef enum {
-    ACQUIRE,
-    RELEASE
-} TrainAction;
-
-typedef enum {
-    GRANT,
-    WAIT,
-    DENY
-} ServerResponse;
-
-// Structure for message queue
-typedef struct msg_buffer {
-    long msg_type;      // Message type (used for routing)
-    int trainIndex;
-    char intersectionName[50];
-    int action;
-    int response;
-} Message;
-
-// Graph data structure elements needed for resource
-// allocation graph generation (digraph)
-typedef struct Edge {
-    char target[50];
-    struct Edge *next;
-} Edge;
-
-typedef struct Node {
-    char name[50];
-    int isTrain;         // 1 = Train, 0 = Intersection
-    Edge *edges;         // Outgoing edges
-    struct Node *next;   // Next node in graph
-} Node;
-
 int releases = 0;
 
 // Digraph helper function to find or create nodes
@@ -259,7 +224,6 @@ bool detectCycleInRAG(Node *graph) {
 }
 
 void resolveDeadlock(Train *trains, int trainCount, Intersection *intersections, int intersectionCount, int msgid) {
-    // Simple strategy: pick the train holding the most resources
     int victimIndex = -1;
     int maxHeld = 0;
 
@@ -274,11 +238,15 @@ void resolveDeadlock(Train *trains, int trainCount, Intersection *intersections,
 
     Train *victim = &trains[victimIndex];
     printf("Preempting Train%d (%s)\n", victimIndex + 1, victim->name);
-    
-    for (int i = 0; i < victim->heldIntersectionCount; i++) {
+
+    // Store the original count because we'll reset the array as we go
+    int originalHeldCount = victim->heldIntersectionCount;
+
+    for (int i = 0; i < originalHeldCount; i++) {
         char *intersectionName = victim->heldIntersections[i];
+        if (intersectionName == NULL) continue;
+
         Intersection *targetIntersection = NULL;
-        
         for (int j = 0; j < intersectionCount; j++) {
             if (strcmp(intersections[j].name, intersectionName) == 0) {
                 targetIntersection = &intersections[j];
@@ -286,31 +254,33 @@ void resolveDeadlock(Train *trains, int trainCount, Intersection *intersections,
             }
         }
 
-        // Intersection's release is being forced
-        targetIntersection->forcedRelease = 1;
-
         if (targetIntersection != NULL) {
+            targetIntersection->forcedRelease = 1;
+
             if (strcmp(targetIntersection->lock_type, "Mutex") == 0) {
                 pthread_mutex_unlock(&targetIntersection->Mutex);
             } else if (strcmp(targetIntersection->lock_type, "Semaphore") == 0) {
                 sem_post(&targetIntersection->Semaphore);
             }
+        } else {
+            fprintf(stderr, "Warning: Intersection '%s' not found\n", intersectionName);
         }
 
         // Logging
         log_file = fopen("simulation.log", "a");
-        AttemptingDeadlockResolve(intersectionName, victim->name);
-        ForceRelease(victim->name, intersectionName);
-        fclose(log_file);
+        if (log_file) {
+            AttemptingDeadlockResolve(intersectionName, victim->name);
+            ForceRelease(victim->name, intersectionName);
+            fclose(log_file);
+        }
 
-        // Remove intersection
+        // Free and nullify
         free(intersectionName);
         victim->heldIntersections[i] = NULL;
-
-        // Each time an intersection is released, releases increments and held intersections decreases
         releases++;
-        victim->heldIntersectionCount--;
     }
+
+    victim->heldIntersectionCount = 0;
 }
 
 // Function for a train to request to ACQUIRE or RELEASE an intersection
@@ -519,9 +489,9 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
         fprintf(log_file, "\n");
         fclose(log_file);
         pthread_mutex_unlock(&sim_time_mutex);
-
         // Graph the current state of the program (RAG)
         createRAG_dot(trains, trainCount);
+        freeRAG(RAG);
         RAG = createRAG_list(trains, trainCount);
         if (detectCycleInRAG(RAG)) {
             printf("\nDeadlock detected!\n");
@@ -588,6 +558,8 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train *tra
     for (int i = 0; i < trainCount; i++) {
         wait(NULL);
     }
+
+    freeRAG(RAG);
 }
 
 
@@ -618,7 +590,7 @@ void train_process(int msgid, int trainIndex, Train *trains, Intersection *inter
             }
             // Simulate travel time, random time from 1 to 8 seconds
             srand(time(NULL));
-            travelTime = (rand() % 8) + 1;
+            travelTime = (rand() % 5) + 1;
             sleep(travelTime);
             // Update previous intersection for next iteration
             prevIntersection = intersectionName;
@@ -632,7 +604,7 @@ void train_process(int msgid, int trainIndex, Train *trains, Intersection *inter
             // Try again later
             printf("Server told Train%d to wait to acquire %s\n", trainIndex + 1, intersectionName);
             // wait a long time, then redo iteration to let the train try again
-            sleep(3);
+            sleep(6);
             i--;
         } else if (msg.response == DENY) {
             // Request denied

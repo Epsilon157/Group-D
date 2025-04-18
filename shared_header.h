@@ -5,6 +5,41 @@
 #include <pthread.h>
 #include <semaphore.h>
 
+// Enumerations for train action and server response types
+typedef enum {
+    ACQUIRE,
+    RELEASE
+} TrainAction;
+
+typedef enum {
+    GRANT,
+    WAIT,
+    DENY
+} ServerResponse;
+
+// Structure for message queue
+typedef struct msg_buffer {
+    long msg_type;      // Message type (used for routing)
+    int trainIndex;
+    char intersectionName[50];
+    int action;
+    int response;
+} Message;
+
+// Graph data structure elements needed for resource
+// allocation graph generation (digraph)
+typedef struct Edge {
+    char target[50];
+    struct Edge *next;
+} Edge;
+
+typedef struct Node {
+    char name[50];
+    int isTrain;         // 1 = Train, 0 = Intersection
+    Edge *edges;         // Outgoing edges
+    struct Node *next;   // Next node in graph
+} Node;
+
 typedef struct {
     char name[50];  // Train name (e.g., Train1)
     char **route;   // Array of intersection names the train passes through
@@ -13,6 +48,7 @@ typedef struct {
     int heldIntersectionCount;  // how many intersecions the train holds
     int routeCount;
 } Train;
+
 
 typedef struct {
     char name[50];         // Intersection name
@@ -35,7 +71,7 @@ void printSimulationComplete();
 void printDenied(const char *train, const char *intersection);
 void ForceRelease(const char *train, const char *intersection);
 void AttemptingDeadlockResolve(const char *intersectionName, const char *victim);
-
+void freeRAG(Node *head);
 void acquireTrainMutex(Intersection *intersection, const char *trainName);
 int tryAcquireMutex(Intersection *intersection, const char *trainName);
 void releaseTrainMutex(Intersection *intersection, const char *trainName);

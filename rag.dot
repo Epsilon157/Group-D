@@ -4,4 +4,7 @@ digraph RAG {
   "Train1" [shape=circle, fillcolor=lightgreen];
   "Train2" [shape=circle, fillcolor=lightgreen];
   "Train3" [shape=circle, fillcolor=lightgreen];
+  "Train4" [shape=circle, fillcolor=lightgreen];
+  "Train5" [shape=circle, fillcolor=lightgreen];
+  "Train6" [shape=circle, fillcolor=lightgreen];
 }

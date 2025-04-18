@@ -16,6 +16,8 @@ void initializeSemaphores(Intersection *intersections, int intersectionCount){
         if(intersections[i].capacity > 1){
            // (*intersections)[i].Semaphore = malloc(sizeof(sem_t));
             sem_init(&intersections[i].Semaphore, 0, intersections[i].capacity);
+            printf("Semaphore Intersection %s initialized \n", intersections[i].name);
+            printf("Intersection %s initialized with lock type: %s and capacity: %d\n", intersections[i].name, intersections[i].lock_type, intersections[i].capacity);
         }
         //else if((*intersections)[i].resources < 0){
           //  printf("Error: Intersection %c has an invalid resource value: %i (must be greater than 0)", (*intersections)[i].name, (*intersections)[i].resources);

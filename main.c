@@ -210,9 +210,6 @@ int main() {
         printf("%s has %d resources\n", intersections[i].name, intersections[i].capacity);
     }
       // removed &
-    initializeSemaphores(intersections, intersectionCount);//added
-    initializeMutex(intersections, intersectionCount);//added
-  
     int trainCount = TrainParsing(trainFilePath, &trains);
     // added error handling for train parsing
     if(trainCount <=0){
@@ -259,7 +256,8 @@ int main() {
 
     initR_Table(&intersections, intersectionCount);
     printR_Table(&intersections, intersectionCount);
-
+    initializeSemaphores(intersections, intersectionCount);//added
+    initializeMutex(intersections, intersectionCount);//added
 
     // This is just testing mutexes are properly working
     printf("\n TEST FOR MUTEX \n") ;

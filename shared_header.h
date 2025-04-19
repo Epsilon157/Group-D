@@ -78,6 +78,7 @@ void releaseTrainMutex(Intersection *intersection, const char *trainName);
 void releaseTrain(Intersection *intersection, const char *trainName);
 void acquireTrain(Intersection *intersection, const char *trainName);
 void printDeadlockDetected(char *deadlockedTrains[], int deadlockedCount);
+int mutexAcqu(Intersection *targetIntersection, Train *train, int msgid, int trainIndex, const *intersectionName);
 
 
 int tryAcquireSemaphore(Intersection *intersection, const char *trainName);

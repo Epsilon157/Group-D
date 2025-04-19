@@ -223,11 +223,7 @@ bool detectCycleInRAG(Node *graph) {
     return false; // No cycles detected
 }
 
-<<<<<<< HEAD
-void resolveDeadlock(Train **trains, int trainCount, Intersection **intersections, int intersectionCount, int msgid) {
-=======
 void resolveDeadlock(Train *trains, int trainCount, Intersection *intersections, int intersectionCount, int msgid) {
->>>>>>> aa2c58ea01a62c8aba870f52a802c05edda7ab53
     int victimIndex = -1;
     int maxHeld = 0;
 
@@ -243,32 +239,20 @@ void resolveDeadlock(Train *trains, int trainCount, Intersection *intersections,
     Train *victim = &(*trains)[victimIndex];
     printf("Preempting Train%d (%s)\n", victimIndex + 1, victim->name);
 
-<<<<<<< HEAD
-    for (int i = 0; i < maxHeld; i++) { // use original count (maxHeld), not a mutated field
-=======
     // Store the original count because we'll reset the array as we go
     int originalHeldCount = victim->heldIntersectionCount;
 
     for (int i = 0; i < originalHeldCount; i++) {
->>>>>>> aa2c58ea01a62c8aba870f52a802c05edda7ab53
         char *intersectionName = victim->heldIntersections[i];
         if (intersectionName == NULL) continue;
 
         Intersection *targetIntersection = NULL;
-<<<<<<< HEAD
-
-=======
->>>>>>> aa2c58ea01a62c8aba870f52a802c05edda7ab53
         for (int j = 0; j < intersectionCount; j++) {
             if (strcmp((*intersections)[j].name, intersectionName) == 0) {
                 targetIntersection = &(*intersections)[j];
                 break;
             }
         }
-<<<<<<< HEAD
-=======
-
->>>>>>> aa2c58ea01a62c8aba870f52a802c05edda7ab53
         if (targetIntersection != NULL) {
             targetIntersection->forcedRelease = 1;
 
@@ -279,23 +263,6 @@ void resolveDeadlock(Train *trains, int trainCount, Intersection *intersections,
                 printf("Semaphore %s releasing %s\n", targetIntersection->name, victim->name);
                 sem_post(&targetIntersection->Semaphore);
             }
-<<<<<<< HEAD
-
-            // Logging
-            log_file = fopen("simulation.log", "a");
-            AttemptingDeadlockResolve(intersectionName, victim->name);
-            ForceRelease(victim->name, intersectionName);
-            fclose(log_file);
-
-            free(intersectionName);
-            victim->heldIntersections[i] = NULL;
-            printf("Releases%d\n", releases);
-            releases++;
-        } else {
-            printf("Target intersection is null\n");
-        }
-    }
-=======
         } else {
             fprintf(stderr, "Warning: Intersection '%s' not found\n", intersectionName);
         }
@@ -314,7 +281,6 @@ void resolveDeadlock(Train *trains, int trainCount, Intersection *intersections,
         releases++;
     }
 
->>>>>>> aa2c58ea01a62c8aba870f52a802c05edda7ab53
     victim->heldIntersectionCount = 0;
 }
 
@@ -394,7 +360,11 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train **tr
                 // If the target intersection is mutex type
 
                 // acquire the train's mutex and lock it
-                if(pthread_mutex_trylock(&targetIntersection->Mutex) == 0){
+                //if(pthread_mutex_trylock(&targetIntersection->Mutex) == 0){
+
+                //%%%% for consolidation function from Keegan.c %%%%
+                int mutexAcqu(Intersection *targetIntersection, Train *train, int msgid, int trainIndex, const *intersectionName);
+               /*if(tryAcquireMutex(targetIntersection, train->name)==0){
                     //printf("Server attempting tryAcquireMutex for Train %s on %s\n", train->name, msg.intersectionName);
                     printf("Mutex Intersection %s acquired by %s\n", targetIntersection->name, train->name);
                     // grant the request to the train
@@ -424,6 +394,7 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train **tr
                     serverResponse(WAIT, msgid, msg.trainIndex, msg.intersectionName);
             
                 }
+                */
             } else if (targetIntersection && targetIntersection->lock_type && strcmp(targetIntersection->lock_type, "Semaphore") == 0) {
                 // If the target intersection is semaphore type
                 // acquire the train's semaphore 
@@ -520,14 +491,9 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train **tr
         fclose(log_file);
         pthread_mutex_unlock(&sim_time_mutex);
         // Graph the current state of the program (RAG)
-<<<<<<< HEAD
-        createRAG_dot(*trains, trainCount);  // Dereferencing trains
-        RAG = createRAG_list(*trains, trainCount);  // Dereferencing trains
-=======
         createRAG_dot(trains, trainCount);
         freeRAG(RAG);
         RAG = createRAG_list(trains, trainCount);
->>>>>>> aa2c58ea01a62c8aba870f52a802c05edda7ab53
         if (detectCycleInRAG(RAG)) {
             printf("\nDeadlock detected!\n");
         
@@ -626,11 +592,8 @@ void train_process(int msgid, int trainIndex, Train *trains, Intersection *inter
                 prevIntersection = NULL;
             }
             // Simulate travel time, random time from 1 to 8 seconds
-<<<<<<< HEAD
-=======
             srand(time(NULL));
             travelTime = (rand() % 5) + 1;
->>>>>>> aa2c58ea01a62c8aba870f52a802c05edda7ab53
             sleep(travelTime);
             // Update previous intersection for next iteration
             prevIntersection = intersectionName;
@@ -644,15 +607,8 @@ void train_process(int msgid, int trainIndex, Train *trains, Intersection *inter
             // Try again later
             printf("Server told Train%d to wait to acquire %s\n", trainIndex + 1, intersectionName);
             // wait a long time, then redo iteration to let the train try again
-<<<<<<< HEAD
-            sleep(3);
-            if (i > 0) {
-                i--;
-            }
-=======
             sleep(6);
             i--;
->>>>>>> aa2c58ea01a62c8aba870f52a802c05edda7ab53
         } else if (msg.response == DENY) {
             // Request denied
             // to do: figure out when to deny a request instead of telling it to wait

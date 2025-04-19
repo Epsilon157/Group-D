@@ -15,13 +15,93 @@
 [00:00:02] SERVER: GRANTED IntersectionB to Train3. Semaphore count: 1.
 [00:00:02] Train3: Acquired IntersectionB. Proceeding...
 
-[00:00:03] Train1: Released IntersectionA.
+[00:00:03] Train4: Sent ACQUIRE request for IntersectionB.
+[00:00:03] SERVER: GRANTED IntersectionB to Train4. Semaphore count: 0.
+[00:00:03] Train4: Acquired IntersectionB. Proceeding...
 
-[00:00:04] Train2: Released IntersectionA.
+[00:00:04] Train5: Sent ACQUIRE request for IntersectionC.
+[00:00:04] SERVER: GRANTED IntersectionC to Train5. Semaphore count: 1.
+[00:00:04] Train5: Acquired IntersectionC. Proceeding...
 
-[00:00:05] Train3: Sent ACQUIRE request for IntersectionA.
-[00:00:05] SERVER: GRANTED IntersectionA to Train3. Semaphore count: 1.
+[00:00:05] Train6: Sent ACQUIRE request for IntersectionC.
+[00:00:05] SERVER: GRANTED IntersectionC to Train6. Semaphore count: 0.
+[00:00:05] Train6: Acquired IntersectionC. Proceeding...
 
-[00:00:06] Train3: Released IntersectionA.
+[00:00:06] Train1: Sent ACQUIRE request for IntersectionB.
 
-[00:00:07] SIMULATION COMPLETE. All trains reached destinations.
+[00:00:07] Train2: Sent ACQUIRE request for IntersectionB.
+
+[00:00:08] Train3: Sent ACQUIRE request for IntersectionC.
+
+[00:00:09] Train4: Sent ACQUIRE request for IntersectionC.
+
+[00:00:10] Train5: Sent ACQUIRE request for IntersectionA.
+
+[00:00:11] SERVER: Deadlock detected! Cycle: Train5 ↔ Train4 ↔ Train3 ↔ Train2 ↔ Train1.
+[00:00:11] SERVER: Preempting IntersectionA from Train1.
+[00:00:11] SERVER: IntersectionA released IntersectionA forcibly
+[00:00:11] Train6: Sent ACQUIRE request for IntersectionA.
+[00:00:11] SERVER: GRANTED IntersectionA to Train6. Semaphore count: 0.
+[00:00:11] Train6: Acquired IntersectionA. Proceeding...
+
+[00:00:12] SERVER: Deadlock detected! Cycle: Train5 ↔ Train4 ↔ Train3 ↔ Train2 ↔ Train1.
+[00:00:12] SERVER: Preempting IntersectionC from Train6.
+[00:00:12] SERVER: IntersectionC released IntersectionC forcibly
+[00:00:12] SERVER: Preempting IntersectionA from Train6.
+[00:00:12] SERVER: IntersectionA released IntersectionA forcibly
+[00:00:12] Train6: Released IntersectionC.
+
+[00:00:13] SERVER: Deadlock detected! Cycle: Train5 ↔ Train4 ↔ Train3 ↔ Train2 ↔ Train1.
+[00:00:13] SERVER: Preempting IntersectionA from Train2.
+[00:00:13] SERVER: IntersectionA released IntersectionA forcibly
+[00:00:13] Train6: Released IntersectionA.
+
+[00:00:14] Train1: Sent ACQUIRE request for IntersectionB.
+
+[00:00:15] Train2: Sent ACQUIRE request for IntersectionB.
+
+[00:00:16] Train3: Sent ACQUIRE request for IntersectionC.
+[00:00:16] SERVER: GRANTED IntersectionC to Train3. Semaphore count: 0.
+[00:00:16] Train3: Acquired IntersectionC. Proceeding...
+
+[00:00:17] Train4: Sent ACQUIRE request for IntersectionC.
+
+[00:00:18] Train3: Released IntersectionB.
+
+[00:00:19] Train5: Sent ACQUIRE request for IntersectionA.
+[00:00:19] SERVER: GRANTED IntersectionA to Train5. Semaphore count: 1.
+[00:00:19] Train5: Acquired IntersectionA. Proceeding...
+
+[00:00:20] Train5: Released IntersectionC.
+
+[00:00:21] Train3: Released IntersectionC.
+
+[00:00:22] Train5: Released IntersectionA.
+
+[00:00:23] Train1: Sent ACQUIRE request for IntersectionB.
+[00:00:23] SERVER: GRANTED IntersectionB to Train1. Semaphore count: 0.
+[00:00:23] Train1: Acquired IntersectionB. Proceeding...
+
+[00:00:24] Train2: Sent ACQUIRE request for IntersectionB.
+
+[00:00:25] Train1: Released IntersectionA.
+
+[00:00:26] Train4: Sent ACQUIRE request for IntersectionC.
+[00:00:26] SERVER: GRANTED IntersectionC to Train4. Semaphore count: 1.
+[00:00:26] Train4: Acquired IntersectionC. Proceeding...
+
+[00:00:27] Train4: Released IntersectionB.
+
+[00:00:28] Train1: Released IntersectionB.
+
+[00:00:29] Train4: Released IntersectionC.
+
+[00:00:30] Train2: Sent ACQUIRE request for IntersectionB.
+[00:00:30] SERVER: GRANTED IntersectionB to Train2. Semaphore count: 1.
+[00:00:30] Train2: Acquired IntersectionB. Proceeding...
+
+[00:00:31] Train2: Released IntersectionA.
+
+[00:00:32] Train2: Released IntersectionB.
+
+[00:00:33] SIMULATION COMPLETE. All trains reached destinations.

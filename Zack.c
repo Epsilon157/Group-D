@@ -103,7 +103,6 @@ void resetIntersection(Intersection *intersection) {
     memset(intersection->lock_type, 0, sizeof(intersection->lock_type));
     intersection->capacity = 0;
     intersection->lock_state = 0;
-    intersection->forcedRelease = 0;
 
     // Reset trains in intersection object
     for (int i = 0; i < 50; i++) {
@@ -143,4 +142,59 @@ void freeRAG(Node* head) {
         free(currNode); 
         currNode = nextNode;
     }
+}
+
+void resolveDeadlock(Train **trains, int trainCount, Intersection **intersections, int intersectionCount, int msgid) {
+    int victimIndex = -1;
+    int maxHeld = 0;
+
+    for (int i = 0; i < trainCount; i++) {
+        if ((*trains)[i].heldIntersectionCount > maxHeld) {
+            maxHeld = (*trains)[i].heldIntersectionCount;
+            victimIndex = i;
+        }
+    }
+
+    if (victimIndex == -1) return;
+
+    Train *victim = &(*trains)[victimIndex];
+    printf("Preempting Train%d (%s)\n", victimIndex + 1, victim->name);
+
+    for (int i = 0; i < maxHeld; i++) { // use original count (maxHeld), not a mutated field
+        char *intersectionName = victim->heldIntersections[i];
+        if (intersectionName == NULL) continue;
+
+        Intersection *targetIntersection = NULL;
+        for (int j = 0; j < intersectionCount; j++) {
+            if (strcmp((*intersections)[j].name, intersectionName) == 0) {
+                targetIntersection = &(*intersections)[j];
+                break;
+            }
+        }
+        if (targetIntersection != NULL) {
+            if (strcmp(targetIntersection->lock_type, "Mutex") == 0) {
+                printf("Mutex  %s releasing %s\n", targetIntersection->name, victim->name);
+                pthread_mutex_unlock(&targetIntersection->Mutex);
+            } else if (strcmp(targetIntersection->lock_type, "Semaphore") == 0) {
+                printf("Semaphore %s releasing %s\n", targetIntersection->name, victim->name);
+                sem_post(&targetIntersection->Semaphore);
+            }
+
+            // Logging
+            log_file = fopen("simulation.log", "a");
+            AttemptingDeadlockResolve(intersectionName, victim->name);
+            ForceRelease(victim->name, intersectionName);
+            fclose(log_file);
+
+            free(intersectionName);
+            victim->heldIntersections[i] = NULL;
+
+            releases++;
+            printf("Releases%d\n", releases);
+        } else {
+            printf("Target intersection is null\n");
+        }
+    }
+    
+    victim->heldIntersectionCount = 0;
 }

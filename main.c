@@ -289,7 +289,7 @@ int main() {
 
     // By this point, all child processes have exited,
     // so only the parent will execute the code below
-
+    //cleanupAll(trains, trainCount, intersections, intersectionCount);
     // execute responsibilities of server
     server_process(msgid, trainCount, intersectionCount, &trains, &intersections, RAG);
 
@@ -346,6 +346,7 @@ int main() {
     printSimulationComplete();
     
     fclose(log_file);
+    freeRAG(RAG);
     cleanupAll(trains, trainCount, intersections, intersectionCount);
 
     return 0;

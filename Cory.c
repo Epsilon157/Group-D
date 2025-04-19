@@ -16,41 +16,6 @@
 #include "shared_header.h"
 //#include "Keegan.c"
 
-// Enumerations for train action and server response types
-typedef enum {
-    ACQUIRE,
-    RELEASE
-} TrainAction;
-
-typedef enum {
-    GRANT,
-    WAIT,
-    DENY
-} ServerResponse;
-
-// Structure for message queue
-typedef struct msg_buffer {
-    long msg_type;      // Message type (used for routing)
-    int trainIndex;
-    char intersectionName[50];
-    int action;
-    int response;
-} Message;
-
-// Graph data structure elements needed for resource
-// allocation graph generation (digraph)
-typedef struct Edge {
-    char target[50];
-    struct Edge *next;
-} Edge;
-
-typedef struct Node {
-    char name[50];
-    int isTrain;         // 1 = Train, 0 = Intersection
-    Edge *edges;         // Outgoing edges
-    struct Node *next;   // Next node in graph
-} Node;
-
 int releases = 0;
 
 // Digraph helper function to find or create nodes
@@ -258,7 +223,11 @@ bool detectCycleInRAG(Node *graph) {
     return false; // No cycles detected
 }
 
+<<<<<<< HEAD
 void resolveDeadlock(Train **trains, int trainCount, Intersection **intersections, int intersectionCount, int msgid) {
+=======
+void resolveDeadlock(Train *trains, int trainCount, Intersection *intersections, int intersectionCount, int msgid) {
+>>>>>>> aa2c58ea01a62c8aba870f52a802c05edda7ab53
     int victimIndex = -1;
     int maxHeld = 0;
 
@@ -274,19 +243,35 @@ void resolveDeadlock(Train **trains, int trainCount, Intersection **intersection
     Train *victim = &(*trains)[victimIndex];
     printf("Preempting Train%d (%s)\n", victimIndex + 1, victim->name);
 
+<<<<<<< HEAD
     for (int i = 0; i < maxHeld; i++) { // use original count (maxHeld), not a mutated field
+=======
+    // Store the original count because we'll reset the array as we go
+    int originalHeldCount = victim->heldIntersectionCount;
+
+    for (int i = 0; i < originalHeldCount; i++) {
+>>>>>>> aa2c58ea01a62c8aba870f52a802c05edda7ab53
         char *intersectionName = victim->heldIntersections[i];
         if (intersectionName == NULL) continue;
 
         Intersection *targetIntersection = NULL;
+<<<<<<< HEAD
 
+=======
+>>>>>>> aa2c58ea01a62c8aba870f52a802c05edda7ab53
         for (int j = 0; j < intersectionCount; j++) {
             if (strcmp((*intersections)[j].name, intersectionName) == 0) {
                 targetIntersection = &(*intersections)[j];
                 break;
             }
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> aa2c58ea01a62c8aba870f52a802c05edda7ab53
         if (targetIntersection != NULL) {
+            targetIntersection->forcedRelease = 1;
+
             if (strcmp(targetIntersection->lock_type, "Mutex") == 0) {
                 printf("Mutex  %s releasing %s\n", targetIntersection->name, victim->name);
                 pthread_mutex_unlock(&targetIntersection->Mutex);
@@ -294,6 +279,7 @@ void resolveDeadlock(Train **trains, int trainCount, Intersection **intersection
                 printf("Semaphore %s releasing %s\n", targetIntersection->name, victim->name);
                 sem_post(&targetIntersection->Semaphore);
             }
+<<<<<<< HEAD
 
             // Logging
             log_file = fopen("simulation.log", "a");
@@ -309,6 +295,26 @@ void resolveDeadlock(Train **trains, int trainCount, Intersection **intersection
             printf("Target intersection is null\n");
         }
     }
+=======
+        } else {
+            fprintf(stderr, "Warning: Intersection '%s' not found\n", intersectionName);
+        }
+
+        // Logging
+        log_file = fopen("simulation.log", "a");
+        if (log_file) {
+            AttemptingDeadlockResolve(intersectionName, victim->name);
+            ForceRelease(victim->name, intersectionName);
+            fclose(log_file);
+        }
+
+        // Free and nullify
+        free(intersectionName);
+        victim->heldIntersections[i] = NULL;
+        releases++;
+    }
+
+>>>>>>> aa2c58ea01a62c8aba870f52a802c05edda7ab53
     victim->heldIntersectionCount = 0;
 }
 
@@ -513,10 +519,15 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train **tr
         fprintf(log_file, "\n");
         fclose(log_file);
         pthread_mutex_unlock(&sim_time_mutex);
-
         // Graph the current state of the program (RAG)
+<<<<<<< HEAD
         createRAG_dot(*trains, trainCount);  // Dereferencing trains
         RAG = createRAG_list(*trains, trainCount);  // Dereferencing trains
+=======
+        createRAG_dot(trains, trainCount);
+        freeRAG(RAG);
+        RAG = createRAG_list(trains, trainCount);
+>>>>>>> aa2c58ea01a62c8aba870f52a802c05edda7ab53
         if (detectCycleInRAG(RAG)) {
             printf("\nDeadlock detected!\n");
         
@@ -582,6 +593,8 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train **tr
     for (int i = 0; i < trainCount; i++) {
         wait(NULL);
     }
+
+    freeRAG(RAG);
 }
 
 
@@ -613,6 +626,11 @@ void train_process(int msgid, int trainIndex, Train *trains, Intersection *inter
                 prevIntersection = NULL;
             }
             // Simulate travel time, random time from 1 to 8 seconds
+<<<<<<< HEAD
+=======
+            srand(time(NULL));
+            travelTime = (rand() % 5) + 1;
+>>>>>>> aa2c58ea01a62c8aba870f52a802c05edda7ab53
             sleep(travelTime);
             // Update previous intersection for next iteration
             prevIntersection = intersectionName;
@@ -626,10 +644,15 @@ void train_process(int msgid, int trainIndex, Train *trains, Intersection *inter
             // Try again later
             printf("Server told Train%d to wait to acquire %s\n", trainIndex + 1, intersectionName);
             // wait a long time, then redo iteration to let the train try again
+<<<<<<< HEAD
             sleep(3);
             if (i > 0) {
                 i--;
             }
+=======
+            sleep(6);
+            i--;
+>>>>>>> aa2c58ea01a62c8aba870f52a802c05edda7ab53
         } else if (msg.response == DENY) {
             // Request denied
             // to do: figure out when to deny a request instead of telling it to wait

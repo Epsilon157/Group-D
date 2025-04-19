@@ -142,7 +142,24 @@ void cleanupAll(Train *trains, int trainCount, Intersection *intersections, int 
     }
 
     // Optional: free arrays if dynamically allocated
-    // free(trains);
-    // free(intersections);
+     free(trains);
+     free(intersections);
 }
 
+void freeRAG(Node* head) {
+    Node* currNode = head;
+    while (currNode != NULL) {
+        Node* nextNode = currNode->next;
+
+        // Free all edges of this node
+        Edge* edge = currNode->edges;
+        while (edge != NULL) {
+            Edge* nextEdge = edge->next;
+            free(edge);
+            edge = nextEdge;
+        }
+
+        free(currNode); // Only the node, no need to free .name
+        currNode = nextNode;
+    }
+}

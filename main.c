@@ -90,7 +90,7 @@ int main() {
     printR_Table(&intersections, intersectionCount);
     initializeSemaphores(&intersections, intersectionCount);//added
     initializeMutex(&intersections, intersectionCount);//added
-
+    //cleanupAll(trains, trainCount, intersections, intersectionCount);
     // This is just testing mutexes are properly working
     printf("\n TEST FOR MUTEX \n") ;
     //test_initializeMutex();

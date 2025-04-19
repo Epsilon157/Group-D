@@ -23,6 +23,8 @@ and detection of cycles/deadlocks.
 //#include "Keegan.c"
 
 int releases = 0;
+int trainsCompleted = 0;
+pthread_mutex_t finished_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 // Digraph helper function to find or create nodes
 Node *findOrCreateNode(Node **head, const char *name, int isTrain) {
@@ -265,7 +267,9 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train **tr
     Message msg;
     int routeLength = totalRouteLength(*trains, trainCount);
 
-    while (releases < routeLength) {
+    while (trainsCompleted < trainCount) {
+
+        printf("Trains count %d\n", trainCount);
         // Receive next message in the message queue from a train process
         msgrcv(msgid, &msg, sizeof(msg) - sizeof(long), 1, 0);
 
@@ -280,7 +284,11 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train **tr
                 break;
             }
         }
-
+        if(msg.action == FINISHED){
+            pthread_mutex_lock(&finished_mutex);
+            trainCount--;
+            pthread_mutex_unlock(&finished_mutex);
+        }
         // When a train wants to acquire an intersection
         if (msg.action == ACQUIRE) {
             // logging
@@ -405,7 +413,6 @@ void train_process(int msgid, int trainIndex, Train *trains, Intersection *inter
         travelTime = (rand() % 5) + 1;
         // Request to acquire an intersection
         trainRequest(ACQUIRE, msgid, trainIndex, intersectionName);
-
         // Wait for server response to acquire request
         msgrcv(msgid, &msg, sizeof(msg) - sizeof(long), trainIndex + 100, 0);
 
@@ -439,13 +446,12 @@ void train_process(int msgid, int trainIndex, Train *trains, Intersection *inter
             printf("Server denied Train%d to acquire %s\n", trainIndex + 1, intersectionName);
         }
     }
-
     // Release the last held intersection to complete the train's route
     if (prevIntersection != NULL) {
         trainRequest(RELEASE, msgid, trainIndex, prevIntersection);
+        trainRequest(FINISHED, msgid, trainIndex, prevIntersection);
         prevIntersection = NULL;
     }
-    
     exit(0);
 }
 

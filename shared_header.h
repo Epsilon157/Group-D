@@ -8,7 +8,8 @@
 // Enumerations for train action and server response types
 typedef enum {
     ACQUIRE,
-    RELEASE
+    RELEASE,
+    FINISHED
 } TrainAction;
 
 typedef enum {
@@ -83,6 +84,7 @@ void semaphoreAcqu(Intersection *targetIntersection, Train *train, int msgid, in
 int tryAcquireSemaphore(Intersection *intersection, const char *trainName);
 extern int *sim_time;  // Simulation time pointer
 extern pthread_mutex_t sim_time_mutex;  // Mutex for controlling sim_time
+extern pthread_mutex_t finished_mutex;  
 FILE *log_file = NULL;
 
 

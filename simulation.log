@@ -1,167 +1,1206 @@
 [00:00:00] SERVER: Initialized intersections:
-[00:00:00] - IntersectionA (Semaphore, Capacity=13)
-[00:00:00] - IntersectionB (Semaphore, Capacity=9)
+[00:00:00] - IntersectionA (Semaphore, Capacity=17)
+[00:00:00] - IntersectionB (Semaphore, Capacity=12)
 [00:00:00] - IntersectionC (Mutex, Capacity=1)
-[00:00:00] - IntersectionD (Mutex, Capacity=1)
-[00:00:00] - IntersectionE (Mutex, Capacity=1)
+[00:00:00] - IntersectionD (Semaphore, Capacity=8)
+[00:00:00] - IntersectionE (Semaphore, Capacity=15)
 [00:00:00] - IntersectionF (Mutex, Capacity=1)
-[00:00:00] - IntersectionG (Mutex, Capacity=1)
-[00:00:00] - IntersectionH (Semaphore, Capacity=13)
-[00:00:00] - IntersectionI (Semaphore, Capacity=4)
-[00:00:00] - IntersectionJ (Semaphore, Capacity=5)
-[00:00:00] - IntersectionK (Mutex, Capacity=1)
-[00:00:00] - IntersectionL (Semaphore, Capacity=12)
-[00:00:00] - IntersectionM (Semaphore, Capacity=9)
-[00:00:00] - IntersectionN (Semaphore, Capacity=9)
-[00:00:00] - IntersectionO (Semaphore, Capacity=9)
-[00:00:00] - IntersectionP (Mutex, Capacity=1)
-[00:00:00] - IntersectionQ (Semaphore, Capacity=5)
-[00:00:00] - IntersectionR (Semaphore, Capacity=4)
-[00:00:00] - IntersectionS (Semaphore, Capacity=13)
-[00:00:00] - IntersectionT (Semaphore, Capacity=4)
-[00:00:00] - IntersectionU (Mutex, Capacity=1)
-[00:00:00] - IntersectionV (Mutex, Capacity=1)
-[00:00:00] - IntersectionW (Semaphore, Capacity=9)
-[00:00:00] - IntersectionX (Semaphore, Capacity=7)
-[00:00:00] - IntersectionY (Semaphore, Capacity=2)
+[00:00:00] - IntersectionG (Semaphore, Capacity=9)
+[00:00:00] - IntersectionH (Semaphore, Capacity=11)
+[00:00:00] - IntersectionI (Semaphore, Capacity=3)
+[00:00:00] - IntersectionJ (Mutex, Capacity=1)
+[00:00:00] - IntersectionK (Semaphore, Capacity=13)
+[00:00:00] - IntersectionL (Semaphore, Capacity=18)
+[00:00:00] - IntersectionM (Semaphore, Capacity=6)
+[00:00:00] - IntersectionN (Mutex, Capacity=1)
+[00:00:00] - IntersectionO (Semaphore, Capacity=16)
+[00:00:00] - IntersectionP (Semaphore, Capacity=10)
+[00:00:00] - IntersectionQ (Semaphore, Capacity=14)
+[00:00:00] - IntersectionR (Mutex, Capacity=1)
+[00:00:00] - IntersectionS (Semaphore, Capacity=20)
+[00:00:00] - IntersectionT (Semaphore, Capacity=5)
+[00:00:00] - IntersectionU (Semaphore, Capacity=2)
+[00:00:00] - IntersectionV (Semaphore, Capacity=7)
+[00:00:00] - IntersectionW (Semaphore, Capacity=19)
+[00:00:00] - IntersectionX (Mutex, Capacity=1)
+[00:00:00] - IntersectionY (Semaphore, Capacity=4)
 [00:00:00] - IntersectionZ (Mutex, Capacity=1)
 
-[00:00:00] Train1: Sent ACQUIRE request for IntersectionA.
-<<<<<<< HEAD
-[00:00:00] SERVER: GRANTED IntersectionA to Train1. Semaphore count: 12.
-[00:00:00] Train1: Acquired IntersectionA. Proceeding...
+[00:00:01] Train1: Sent ACQUIRE request for IntersectionA.
+[00:00:01] SERVER: GRANTED IntersectionA to Train1. Semaphore count: 16.
+[00:00:01] Train1: Acquired IntersectionA. Proceeding...
 
-[00:00:01] Train2: Sent ACQUIRE request for IntersectionA.
-[00:00:01] SERVER: GRANTED IntersectionA to Train2. Semaphore count: 11.
-[00:00:01] Train2: Acquired IntersectionA. Proceeding...
+[00:00:02] Train2: Sent ACQUIRE request for IntersectionA.
+[00:00:02] SERVER: GRANTED IntersectionA to Train2. Semaphore count: 15.
+[00:00:02] Train2: Acquired IntersectionA. Proceeding...
 
-[00:00:02] Train3: Sent ACQUIRE request for IntersectionT.
-[00:00:02] SERVER: GRANTED IntersectionT to Train3. Semaphore count: 3.
-[00:00:02] Train3: Acquired IntersectionT. Proceeding...
+[00:00:03] Train3: Sent ACQUIRE request for IntersectionT.
+[00:00:03] SERVER: GRANTED IntersectionT to Train3. Semaphore count: 4.
+[00:00:03] Train3: Acquired IntersectionT. Proceeding...
 
-[00:00:03] Train4: Sent ACQUIRE request for IntersectionN.
-[00:00:03] SERVER: GRANTED IntersectionN to Train4. Semaphore count: 8.
-[00:00:03] Train4: Acquired IntersectionN. Proceeding...
+[00:00:04] Train4: Sent ACQUIRE request for IntersectionN.
+[00:00:04] SERVER: GRANTED IntersectionN to Train4.
+[00:00:04] Train4: Acquired IntersectionN. Proceeding...
 
-[00:00:04] Train5: Sent ACQUIRE request for IntersectionH.
-[00:00:04] SERVER: GRANTED IntersectionH to Train5. Semaphore count: 12.
-[00:00:04] Train5: Acquired IntersectionH. Proceeding...
+[00:00:05] Train5: Sent ACQUIRE request for IntersectionH.
+[00:00:05] SERVER: GRANTED IntersectionH to Train5. Semaphore count: 10.
+[00:00:05] Train5: Acquired IntersectionH. Proceeding...
 
-[00:00:05] Train6: Sent ACQUIRE request for IntersectionA.
-[00:00:05] SERVER: GRANTED IntersectionA to Train6. Semaphore count: 10.
-[00:00:05] Train6: Acquired IntersectionA. Proceeding...
+[00:00:06] Train6: Sent ACQUIRE request for IntersectionA.
+[00:00:06] SERVER: GRANTED IntersectionA to Train6. Semaphore count: 14.
+[00:00:06] Train6: Acquired IntersectionA. Proceeding...
 
-[00:00:06] Train7: Sent ACQUIRE request for IntersectionM.
-[00:00:06] SERVER: GRANTED IntersectionM to Train7. Semaphore count: 8.
-[00:00:06] Train7: Acquired IntersectionM. Proceeding...
+[00:00:07] Train7: Sent ACQUIRE request for IntersectionM.
+[00:00:07] SERVER: GRANTED IntersectionM to Train7. Semaphore count: 5.
+[00:00:07] Train7: Acquired IntersectionM. Proceeding...
 
-[00:00:07] Train8: Sent ACQUIRE request for IntersectionE.
-[00:00:07] SERVER: GRANTED IntersectionE to Train8.
-[00:00:07] Train8: Acquired IntersectionE. Proceeding...
-[00:00:07] SERVER: GRANTED IntersectionE to Train8.
-[00:00:07] Train8: Acquired IntersectionE. Proceeding...
+[00:00:08] Train8: Sent ACQUIRE request for IntersectionE.
+[00:00:08] SERVER: GRANTED IntersectionE to Train8. Semaphore count: 14.
+[00:00:08] Train8: Acquired IntersectionE. Proceeding...
 
-[00:00:08] Train9: Sent ACQUIRE request for IntersectionM.
-[00:00:08] SERVER: GRANTED IntersectionM to Train9. Semaphore count: 7.
-[00:00:08] Train9: Acquired IntersectionM. Proceeding...
+[00:00:09] Train9: Sent ACQUIRE request for IntersectionM.
+[00:00:09] SERVER: GRANTED IntersectionM to Train9. Semaphore count: 4.
+[00:00:09] Train9: Acquired IntersectionM. Proceeding...
 
-[00:00:09] Train10: Sent ACQUIRE request for IntersectionA.
-[00:00:09] SERVER: GRANTED IntersectionA to Train10. Semaphore count: 9.
-[00:00:09] Train10: Acquired IntersectionA. Proceeding...
+[00:00:10] Train10: Sent ACQUIRE request for IntersectionA.
+[00:00:10] SERVER: GRANTED IntersectionA to Train10. Semaphore count: 13.
+[00:00:10] Train10: Acquired IntersectionA. Proceeding...
 
-[00:00:10] Train11: Sent ACQUIRE request for IntersectionB.
-[00:00:10] SERVER: GRANTED IntersectionB to Train11. Semaphore count: 8.
-[00:00:10] Train11: Acquired IntersectionB. Proceeding...
+[00:00:11] Train11: Sent ACQUIRE request for IntersectionB.
+[00:00:11] SERVER: GRANTED IntersectionB to Train11. Semaphore count: 11.
+[00:00:11] Train11: Acquired IntersectionB. Proceeding...
 
-[00:00:11] Train12: Sent ACQUIRE request for IntersectionC.
-[00:00:11] SERVER: GRANTED IntersectionC to Train12.
-[00:00:11] Train12: Acquired IntersectionC. Proceeding...
-[00:00:11] SERVER: GRANTED IntersectionC to Train12.
-[00:00:11] Train12: Acquired IntersectionC. Proceeding...
+[00:00:12] Train12: Sent ACQUIRE request for IntersectionC.
+[00:00:12] SERVER: GRANTED IntersectionC to Train12.
+[00:00:12] Train12: Acquired IntersectionC. Proceeding...
 
-[00:00:12] Train13: Sent ACQUIRE request for IntersectionE.
+[00:00:13] Train13: Sent ACQUIRE request for IntersectionE.
+[00:00:13] SERVER: GRANTED IntersectionE to Train13. Semaphore count: 13.
+[00:00:13] Train13: Acquired IntersectionE. Proceeding...
 
-[00:00:13] Train14: Sent ACQUIRE request for IntersectionF.
-[00:00:13] SERVER: GRANTED IntersectionF to Train14.
-[00:00:13] Train14: Acquired IntersectionF. Proceeding...
-[00:00:13] SERVER: GRANTED IntersectionF to Train14.
-[00:00:13] Train14: Acquired IntersectionF. Proceeding...
+[00:00:14] Train14: Sent ACQUIRE request for IntersectionF.
+[00:00:14] SERVER: GRANTED IntersectionF to Train14.
+[00:00:14] Train14: Acquired IntersectionF. Proceeding...
 
-[00:00:14] Train15: Sent ACQUIRE request for IntersectionG.
-[00:00:14] SERVER: GRANTED IntersectionG to Train15.
-[00:00:14] Train15: Acquired IntersectionG. Proceeding...
-[00:00:14] SERVER: GRANTED IntersectionG to Train15.
-[00:00:14] Train15: Acquired IntersectionG. Proceeding...
+[00:00:15] Train15: Sent ACQUIRE request for IntersectionG.
+[00:00:15] SERVER: GRANTED IntersectionG to Train15. Semaphore count: 8.
+[00:00:15] Train15: Acquired IntersectionG. Proceeding...
 
-[00:00:15] Train16: Sent ACQUIRE request for IntersectionH.
-[00:00:15] SERVER: GRANTED IntersectionH to Train16. Semaphore count: 11.
-[00:00:15] Train16: Acquired IntersectionH. Proceeding...
+[00:00:16] Train16: Sent ACQUIRE request for IntersectionH.
+[00:00:16] SERVER: GRANTED IntersectionH to Train16. Semaphore count: 9.
+[00:00:16] Train16: Acquired IntersectionH. Proceeding...
 
-[00:00:16] Train17: Sent ACQUIRE request for IntersectionI.
-[00:00:16] SERVER: GRANTED IntersectionI to Train17. Semaphore count: 3.
-[00:00:16] Train17: Acquired IntersectionI. Proceeding...
+[00:00:17] Train17: Sent ACQUIRE request for IntersectionI.
+[00:00:17] SERVER: GRANTED IntersectionI to Train17. Semaphore count: 2.
+[00:00:17] Train17: Acquired IntersectionI. Proceeding...
 
-[00:00:17] Train18: Sent ACQUIRE request for IntersectionJ.
-[00:00:17] SERVER: GRANTED IntersectionJ to Train18. Semaphore count: 4.
-[00:00:17] Train18: Acquired IntersectionJ. Proceeding...
+[00:00:18] Train18: Sent ACQUIRE request for IntersectionJ.
+[00:00:18] SERVER: GRANTED IntersectionJ to Train18.
+[00:00:18] Train18: Acquired IntersectionJ. Proceeding...
 
-[00:00:18] Train19: Sent ACQUIRE request for IntersectionK.
-[00:00:18] SERVER: GRANTED IntersectionK to Train19.
-[00:00:18] Train19: Acquired IntersectionK. Proceeding...
-[00:00:18] SERVER: GRANTED IntersectionK to Train19.
-[00:00:18] Train19: Acquired IntersectionK. Proceeding...
+[00:00:19] Train19: Sent ACQUIRE request for IntersectionK.
+[00:00:19] SERVER: GRANTED IntersectionK to Train19. Semaphore count: 12.
+[00:00:19] Train19: Acquired IntersectionK. Proceeding...
 
-[00:00:19] Train20: Sent ACQUIRE request for IntersectionL.
-[00:00:19] SERVER: GRANTED IntersectionL to Train20. Semaphore count: 11.
-[00:00:19] Train20: Acquired IntersectionL. Proceeding...
+[00:00:20] Train20: Sent ACQUIRE request for IntersectionL.
+[00:00:20] SERVER: GRANTED IntersectionL to Train20. Semaphore count: 17.
+[00:00:20] Train20: Acquired IntersectionL. Proceeding...
 
-=======
+[00:00:21] Train21: Sent ACQUIRE request for IntersectionA.
+[00:00:21] SERVER: GRANTED IntersectionA to Train21. Semaphore count: 12.
+[00:00:21] Train21: Acquired IntersectionA. Proceeding...
 
-[00:00:01] Train2: Sent ACQUIRE request for IntersectionA.
+[00:00:22] Train22: Sent ACQUIRE request for IntersectionB.
+[00:00:22] SERVER: GRANTED IntersectionB to Train22. Semaphore count: 10.
+[00:00:22] Train22: Acquired IntersectionB. Proceeding...
 
-[00:00:02] Train3: Sent ACQUIRE request for IntersectionB.
+[00:00:23] Train23: Sent ACQUIRE request for IntersectionC.
+[00:00:23] SERVER: IntersectionC is locked. Train23 added to wait queue.
 
-[00:00:03] Train4: Sent ACQUIRE request for IntersectionB.
+[00:00:24] Train24: Sent ACQUIRE request for IntersectionD.
+[00:00:24] SERVER: GRANTED IntersectionD to Train24. Semaphore count: 7.
+[00:00:24] Train24: Acquired IntersectionD. Proceeding...
 
-[00:00:04] Train5: Sent ACQUIRE request for IntersectionC.
+[00:00:25] Train25: Sent ACQUIRE request for IntersectionE.
+[00:00:25] SERVER: GRANTED IntersectionE to Train25. Semaphore count: 12.
+[00:00:25] Train25: Acquired IntersectionE. Proceeding...
 
-[00:00:05] Train6: Sent ACQUIRE request for IntersectionC.
+[00:00:26] Train26: Sent ACQUIRE request for IntersectionF.
+[00:00:26] SERVER: IntersectionF is locked. Train26 added to wait queue.
 
-[00:00:06] Train1: Sent ACQUIRE request for IntersectionB.
+[00:00:27] Train27: Sent ACQUIRE request for IntersectionG.
+[00:00:27] SERVER: GRANTED IntersectionG to Train27. Semaphore count: 7.
+[00:00:27] Train27: Acquired IntersectionG. Proceeding...
 
-[00:00:07] Train2: Sent ACQUIRE request for IntersectionB.
+[00:00:28] Train28: Sent ACQUIRE request for IntersectionH.
+[00:00:28] SERVER: GRANTED IntersectionH to Train28. Semaphore count: 8.
+[00:00:28] Train28: Acquired IntersectionH. Proceeding...
 
-[00:00:08] Train3: Sent ACQUIRE request for IntersectionC.
+[00:00:29] Train29: Sent ACQUIRE request for IntersectionI.
+[00:00:29] SERVER: GRANTED IntersectionI to Train29. Semaphore count: 1.
+[00:00:29] Train29: Acquired IntersectionI. Proceeding...
 
-[00:00:09] Train4: Sent ACQUIRE request for IntersectionC.
+[00:00:30] Train30: Sent ACQUIRE request for IntersectionJ.
+[00:00:30] SERVER: IntersectionJ is locked. Train30 added to wait queue.
 
-[00:00:10] Train5: Sent ACQUIRE request for IntersectionA.
+[00:00:31] Train31: Sent ACQUIRE request for IntersectionK.
+[00:00:31] SERVER: GRANTED IntersectionK to Train31. Semaphore count: 11.
+[00:00:31] Train31: Acquired IntersectionK. Proceeding...
 
-[00:00:11] Train6: Sent ACQUIRE request for IntersectionA.
+[00:00:32] Train32: Sent ACQUIRE request for IntersectionL.
+[00:00:32] SERVER: GRANTED IntersectionL to Train32. Semaphore count: 16.
+[00:00:32] Train32: Acquired IntersectionL. Proceeding...
 
-[00:00:12] Train1: Released IntersectionA.
+[00:00:33] Train33: Sent ACQUIRE request for IntersectionM.
+[00:00:33] SERVER: GRANTED IntersectionM to Train33. Semaphore count: 3.
+[00:00:33] Train33: Acquired IntersectionM. Proceeding...
 
-[00:00:13] Train1: Released IntersectionB.
+[00:00:34] Train34: Sent ACQUIRE request for IntersectionN.
+[00:00:34] SERVER: IntersectionN is locked. Train34 added to wait queue.
 
-[00:00:14] Train2: Released IntersectionA.
+[00:00:35] Train35: Sent ACQUIRE request for IntersectionO.
+[00:00:35] SERVER: GRANTED IntersectionO to Train35. Semaphore count: 15.
+[00:00:35] Train35: Acquired IntersectionO. Proceeding...
 
-[00:00:15] Train2: Released IntersectionB.
+[00:00:36] Train36: Sent ACQUIRE request for IntersectionP.
+[00:00:36] SERVER: GRANTED IntersectionP to Train36. Semaphore count: 9.
+[00:00:36] Train36: Acquired IntersectionP. Proceeding...
 
-[00:00:16] Train3: Released IntersectionB.
+[00:00:37] Train37: Sent ACQUIRE request for IntersectionQ.
+[00:00:37] SERVER: GRANTED IntersectionQ to Train37. Semaphore count: 13.
+[00:00:37] Train37: Acquired IntersectionQ. Proceeding...
 
-[00:00:17] Train3: Released IntersectionC.
+[00:00:38] Train38: Sent ACQUIRE request for IntersectionR.
+[00:00:38] SERVER: GRANTED IntersectionR to Train38.
+[00:00:38] Train38: Acquired IntersectionR. Proceeding...
 
-[00:00:18] Train4: Released IntersectionB.
+[00:00:39] Train39: Sent ACQUIRE request for IntersectionS.
+[00:00:39] SERVER: GRANTED IntersectionS to Train39. Semaphore count: 19.
+[00:00:39] Train39: Acquired IntersectionS. Proceeding...
 
-[00:00:19] Train4: Released IntersectionC.
+[00:00:40] Train40: Sent ACQUIRE request for IntersectionT.
+[00:00:40] SERVER: GRANTED IntersectionT to Train40. Semaphore count: 3.
+[00:00:40] Train40: Acquired IntersectionT. Proceeding...
 
-[00:00:20] Train5: Released IntersectionC.
+[00:00:41] Train1: Sent ACQUIRE request for IntersectionB.
+[00:00:41] SERVER: GRANTED IntersectionB to Train1. Semaphore count: 9.
+[00:00:41] Train1: Acquired IntersectionB. Proceeding...
 
-[00:00:21] Train5: Released IntersectionA.
+[00:00:42] Train2: Sent ACQUIRE request for IntersectionB.
+[00:00:42] SERVER: GRANTED IntersectionB to Train2. Semaphore count: 8.
+[00:00:42] Train2: Acquired IntersectionB. Proceeding...
 
-[00:00:22] Train6: Released IntersectionC.
+[00:00:43] Train1: Released IntersectionA.
 
-[00:00:23] Train6: Released IntersectionA.
+[00:00:44] Train2: Released IntersectionA.
 
-[00:00:24] SIMULATION COMPLETE. All trains reached destinations.
->>>>>>> 6f009bdf6b7110b2d5769de7a623f9be805338ae
+[00:00:45] Train3: Sent ACQUIRE request for IntersectionG.
+[00:00:45] SERVER: GRANTED IntersectionG to Train3. Semaphore count: 6.
+[00:00:45] Train3: Acquired IntersectionG. Proceeding...
+
+[00:00:46] Train4: Sent ACQUIRE request for IntersectionQ.
+[00:00:46] SERVER: GRANTED IntersectionQ to Train4. Semaphore count: 12.
+[00:00:46] Train4: Acquired IntersectionQ. Proceeding...
+
+[00:00:47] Train5: Sent ACQUIRE request for IntersectionF.
+[00:00:47] SERVER: IntersectionF is locked. Train5 added to wait queue.
+
+[00:00:48] Train6: Sent ACQUIRE request for IntersectionB.
+[00:00:48] SERVER: GRANTED IntersectionB to Train6. Semaphore count: 7.
+[00:00:48] Train6: Acquired IntersectionB. Proceeding...
+
+[00:00:49] Train7: Sent ACQUIRE request for IntersectionR.
+[00:00:49] SERVER: IntersectionR is locked. Train7 added to wait queue.
+
+[00:00:50] Train8: Sent ACQUIRE request for IntersectionL.
+[00:00:50] SERVER: GRANTED IntersectionL to Train8. Semaphore count: 15.
+[00:00:50] Train8: Acquired IntersectionL. Proceeding...
+
+[00:00:51] Train3: Released IntersectionT.
+
+[00:00:52] Train9: Sent ACQUIRE request for IntersectionK.
+[00:00:52] SERVER: GRANTED IntersectionK to Train9. Semaphore count: 10.
+[00:00:52] Train9: Acquired IntersectionK. Proceeding...
+
+[00:00:53] Train4: Released IntersectionN.
+
+[00:00:54] Train10: Sent ACQUIRE request for IntersectionF.
+[00:00:54] SERVER: IntersectionF is locked. Train10 added to wait queue.
+
+[00:00:55] Train11: Sent ACQUIRE request for IntersectionQ.
+[00:00:55] SERVER: GRANTED IntersectionQ to Train11. Semaphore count: 11.
+[00:00:55] Train11: Acquired IntersectionQ. Proceeding...
+
+[00:00:56] Train12: Sent ACQUIRE request for IntersectionK.
+[00:00:56] SERVER: GRANTED IntersectionK to Train12. Semaphore count: 9.
+[00:00:56] Train12: Acquired IntersectionK. Proceeding...
+
+[00:00:57] Train6: Released IntersectionA.
+
+[00:00:58] Train13: Sent ACQUIRE request for IntersectionJ.
+[00:00:58] SERVER: IntersectionJ is locked. Train13 added to wait queue.
+
+[00:00:59] Train14: Sent ACQUIRE request for IntersectionP.
+[00:00:59] SERVER: GRANTED IntersectionP to Train14. Semaphore count: 8.
+[00:00:59] Train14: Acquired IntersectionP. Proceeding...
+
+[00:01:00] Train15: Sent ACQUIRE request for IntersectionS.
+[00:01:00] SERVER: GRANTED IntersectionS to Train15. Semaphore count: 18.
+[00:01:00] Train15: Acquired IntersectionS. Proceeding...
+
+[00:01:01] Train8: Released IntersectionE.
+
+[00:01:02] Train16: Sent ACQUIRE request for IntersectionB.
+[00:01:02] SERVER: GRANTED IntersectionB to Train16. Semaphore count: 6.
+[00:01:02] Train16: Acquired IntersectionB. Proceeding...
+
+[00:01:03] Train17: Sent ACQUIRE request for IntersectionR.
+[00:01:03] SERVER: IntersectionR is locked. Train17 added to wait queue.
+
+[00:01:04] Train18: Sent ACQUIRE request for IntersectionT.
+[00:01:04] SERVER: GRANTED IntersectionT to Train18. Semaphore count: 3.
+[00:01:04] Train18: Acquired IntersectionT. Proceeding...
+
+[00:01:05] Train19: Sent ACQUIRE request for IntersectionO.
+[00:01:05] SERVER: GRANTED IntersectionO to Train19. Semaphore count: 14.
+[00:01:05] Train19: Acquired IntersectionO. Proceeding...
+
+[00:01:06] Train9: Released IntersectionM.
+
+[00:01:07] Train20: Sent ACQUIRE request for IntersectionV.
+[00:01:07] SERVER: GRANTED IntersectionV to Train20. Semaphore count: 6.
+[00:01:07] Train20: Acquired IntersectionV. Proceeding...
+
+[00:01:08] Train21: Sent ACQUIRE request for IntersectionD.
+[00:01:08] SERVER: GRANTED IntersectionD to Train21. Semaphore count: 6.
+[00:01:08] Train21: Acquired IntersectionD. Proceeding...
+
+[00:01:09] Train22: Sent ACQUIRE request for IntersectionE.
+[00:01:09] SERVER: GRANTED IntersectionE to Train22. Semaphore count: 12.
+[00:01:09] Train22: Acquired IntersectionE. Proceeding...
+
+[00:01:10] Train24: Sent ACQUIRE request for IntersectionG.
+[00:01:10] SERVER: GRANTED IntersectionG to Train24. Semaphore count: 5.
+[00:01:10] Train24: Acquired IntersectionG. Proceeding...
+
+[00:01:11] Train25: Sent ACQUIRE request for IntersectionH.
+[00:01:11] SERVER: GRANTED IntersectionH to Train25. Semaphore count: 7.
+[00:01:11] Train25: Acquired IntersectionH. Proceeding...
+
+[00:01:12] Train11: Released IntersectionB.
+
+[00:01:13] Train27: Sent ACQUIRE request for IntersectionJ.
+[00:01:13] SERVER: IntersectionJ is locked. Train27 added to wait queue.
+
+[00:01:14] Train28: Sent ACQUIRE request for IntersectionK.
+[00:01:14] SERVER: GRANTED IntersectionK to Train28. Semaphore count: 8.
+[00:01:14] Train28: Acquired IntersectionK. Proceeding...
+
+[00:01:15] Train29: Sent ACQUIRE request for IntersectionL.
+[00:01:15] SERVER: GRANTED IntersectionL to Train29. Semaphore count: 14.
+[00:01:15] Train29: Acquired IntersectionL. Proceeding...
+
+[00:01:16] Train31: Sent ACQUIRE request for IntersectionN.
+[00:01:16] SERVER: GRANTED IntersectionN to Train31.
+[00:01:16] Train31: Acquired IntersectionN. Proceeding...
+
+[00:01:17] Train32: Sent ACQUIRE request for IntersectionO.
+[00:01:17] SERVER: GRANTED IntersectionO to Train32. Semaphore count: 13.
+[00:01:17] Train32: Acquired IntersectionO. Proceeding...
+
+[00:01:18] Train12: Released IntersectionC.
+
+[00:01:19] Train33: Sent ACQUIRE request for IntersectionP.
+[00:01:19] SERVER: GRANTED IntersectionP to Train33. Semaphore count: 7.
+[00:01:19] Train33: Acquired IntersectionP. Proceeding...
+
+[00:01:20] Train35: Sent ACQUIRE request for IntersectionR.
+[00:01:20] SERVER: IntersectionR is locked. Train35 added to wait queue.
+
+[00:01:21] Train14: Released IntersectionF.
+
+[00:01:22] Train36: Sent ACQUIRE request for IntersectionS.
+[00:01:22] SERVER: GRANTED IntersectionS to Train36. Semaphore count: 17.
+[00:01:22] Train36: Acquired IntersectionS. Proceeding...
+
+[00:01:23] Train15: Released IntersectionG.
+
+[00:01:24] Train37: Sent ACQUIRE request for IntersectionT.
+[00:01:24] SERVER: GRANTED IntersectionT to Train37. Semaphore count: 2.
+[00:01:24] Train37: Acquired IntersectionT. Proceeding...
+
+[00:01:25] Train38: Sent ACQUIRE request for IntersectionU.
+[00:01:25] SERVER: GRANTED IntersectionU to Train38. Semaphore count: 1.
+[00:01:25] Train38: Acquired IntersectionU. Proceeding...
+
+[00:01:26] Train16: Released IntersectionH.
+
+[00:01:27] Train39: Sent ACQUIRE request for IntersectionV.
+[00:01:27] SERVER: GRANTED IntersectionV to Train39. Semaphore count: 5.
+[00:01:27] Train39: Acquired IntersectionV. Proceeding...
+
+[00:01:28] Train40: Sent ACQUIRE request for IntersectionW.
+[00:01:28] SERVER: GRANTED IntersectionW to Train40. Semaphore count: 18.
+[00:01:28] Train40: Acquired IntersectionW. Proceeding...
+
+[00:01:29] Train18: Released IntersectionJ.
+
+[00:01:30] Train19: Released IntersectionK.
+
+[00:01:31] Train20: Released IntersectionL.
+
+[00:01:32] Train21: Released IntersectionA.
+
+[00:01:33] Train22: Released IntersectionB.
+
+[00:01:34] Train24: Released IntersectionD.
+
+[00:01:35] Train25: Released IntersectionE.
+
+[00:01:36] Train28: Released IntersectionH.
+
+[00:01:37] Train29: Released IntersectionI.
+
+[00:01:38] Train31: Released IntersectionK.
+
+[00:01:39] Train32: Released IntersectionL.
+
+[00:01:40] Train33: Released IntersectionM.
+
+[00:01:41] Train36: Released IntersectionP.
+
+[00:01:42] Train37: Released IntersectionQ.
+
+[00:01:43] Train38: Released IntersectionR.
+
+[00:01:44] Train39: Released IntersectionS.
+
+[00:01:45] Train40: Released IntersectionT.
+
+[00:01:46] Train1: Sent ACQUIRE request for IntersectionC.
+[00:01:46] SERVER: GRANTED IntersectionC to Train1.
+[00:01:46] Train1: Acquired IntersectionC. Proceeding...
+
+[00:01:47] Train1: Released IntersectionB.
+
+[00:01:48] Train2: Sent ACQUIRE request for IntersectionC.
+[00:01:48] SERVER: IntersectionC is locked. Train2 added to wait queue.
+
+[00:01:49] Train3: Sent ACQUIRE request for IntersectionP.
+[00:01:49] SERVER: GRANTED IntersectionP to Train3. Semaphore count: 7.
+[00:01:49] Train3: Acquired IntersectionP. Proceeding...
+
+[00:01:50] Train3: Released IntersectionG.
+
+[00:01:51] Train4: Sent ACQUIRE request for IntersectionO.
+[00:01:51] SERVER: GRANTED IntersectionO to Train4. Semaphore count: 12.
+[00:01:51] Train4: Acquired IntersectionO. Proceeding...
+
+[00:01:52] Train4: Released IntersectionQ.
+
+[00:01:53] Train6: Sent ACQUIRE request for IntersectionI.
+[00:01:53] SERVER: GRANTED IntersectionI to Train6. Semaphore count: 1.
+[00:01:53] Train6: Acquired IntersectionI. Proceeding...
+
+[00:01:54] Train6: Released IntersectionB.
+
+[00:01:55] Train8: Sent ACQUIRE request for IntersectionI.
+[00:01:55] SERVER: GRANTED IntersectionI to Train8. Semaphore count: 0.
+[00:01:55] Train8: Acquired IntersectionI. Proceeding...
+
+[00:01:56] Train8: Released IntersectionL.
+
+[00:01:57] Train9: Sent ACQUIRE request for IntersectionD.
+[00:01:57] SERVER: GRANTED IntersectionD to Train9. Semaphore count: 6.
+[00:01:57] Train9: Acquired IntersectionD. Proceeding...
+
+[00:01:58] Train9: Released IntersectionK.
+
+[00:01:59] Train11: Sent ACQUIRE request for IntersectionT.
+[00:01:59] SERVER: GRANTED IntersectionT to Train11. Semaphore count: 2.
+[00:01:59] Train11: Acquired IntersectionT. Proceeding...
+
+[00:02:00] Train11: Released IntersectionQ.
+
+[00:02:01] Train12: Sent ACQUIRE request for IntersectionN.
+[00:02:01] SERVER: IntersectionN is locked. Train12 added to wait queue.
+
+[00:02:02] Train14: Sent ACQUIRE request for IntersectionU.
+[00:02:02] SERVER: GRANTED IntersectionU to Train14. Semaphore count: 0.
+[00:02:02] Train14: Acquired IntersectionU. Proceeding...
+
+[00:02:03] Train14: Released IntersectionP.
+
+[00:02:04] Train15: Sent ACQUIRE request for IntersectionY.
+[00:02:04] SERVER: GRANTED IntersectionY to Train15. Semaphore count: 3.
+[00:02:04] Train15: Acquired IntersectionY. Proceeding...
+
+[00:02:05] Train15: Released IntersectionS.
+
+[00:02:06] Train16: Sent ACQUIRE request for IntersectionO.
+[00:02:06] SERVER: GRANTED IntersectionO to Train16. Semaphore count: 11.
+[00:02:06] Train16: Acquired IntersectionO. Proceeding...
+
+[00:02:07] Train16: Released IntersectionB.
+
+[00:02:08] Train18: Sent ACQUIRE request for IntersectionQ.
+[00:02:08] SERVER: GRANTED IntersectionQ to Train18. Semaphore count: 13.
+[00:02:08] Train18: Acquired IntersectionQ. Proceeding...
+
+[00:02:09] Train19: Sent ACQUIRE request for IntersectionP.
+[00:02:09] SERVER: GRANTED IntersectionP to Train19. Semaphore count: 7.
+[00:02:09] Train19: Acquired IntersectionP. Proceeding...
+
+[00:02:10] Train20: Sent ACQUIRE request for IntersectionW.
+[00:02:10] SERVER: GRANTED IntersectionW to Train20. Semaphore count: 17.
+[00:02:10] Train20: Acquired IntersectionW. Proceeding...
+
+[00:02:11] Train21: Sent ACQUIRE request for IntersectionF.
+[00:02:11] SERVER: GRANTED IntersectionF to Train21.
+[00:02:11] Train21: Acquired IntersectionF. Proceeding...
+
+[00:02:12] Train18: Released IntersectionT.
+
+[00:02:13] Train22: Sent ACQUIRE request for IntersectionG.
+[00:02:13] SERVER: GRANTED IntersectionG to Train22. Semaphore count: 6.
+[00:02:13] Train22: Acquired IntersectionG. Proceeding...
+
+[00:02:14] Train19: Released IntersectionO.
+
+[00:02:15] Train24: Sent ACQUIRE request for IntersectionK.
+[00:02:15] SERVER: GRANTED IntersectionK to Train24. Semaphore count: 10.
+[00:02:15] Train24: Acquired IntersectionK. Proceeding...
+
+[00:02:16] Train20: Released IntersectionV.
+
+[00:02:17] Train21: Released IntersectionD.
+
+[00:02:18] Train25: Sent ACQUIRE request for IntersectionL.
+[00:02:18] SERVER: GRANTED IntersectionL to Train25. Semaphore count: 16.
+[00:02:18] Train25: Acquired IntersectionL. Proceeding...
+
+[00:02:19] Train22: Released IntersectionE.
+
+[00:02:20] Train28: Sent ACQUIRE request for IntersectionO.
+[00:02:20] SERVER: GRANTED IntersectionO to Train28. Semaphore count: 11.
+[00:02:20] Train28: Acquired IntersectionO. Proceeding...
+
+[00:02:21] Train24: Released IntersectionG.
+
+[00:02:22] Train25: Released IntersectionH.
+
+[00:02:23] Train28: Released IntersectionK.
+
+[00:02:24] Train29: Sent ACQUIRE request for IntersectionP.
+[00:02:24] SERVER: GRANTED IntersectionP to Train29. Semaphore count: 6.
+[00:02:24] Train29: Acquired IntersectionP. Proceeding...
+
+[00:02:25] Train31: Sent ACQUIRE request for IntersectionR.
+[00:02:25] SERVER: GRANTED IntersectionR to Train31.
+[00:02:25] Train31: Acquired IntersectionR. Proceeding...
+
+[00:02:26] Train32: Sent ACQUIRE request for IntersectionS.
+[00:02:26] SERVER: GRANTED IntersectionS to Train32. Semaphore count: 18.
+[00:02:26] Train32: Acquired IntersectionS. Proceeding...
+
+[00:02:27] Train29: Released IntersectionL.
+
+[00:02:28] Train31: Released IntersectionN.
+
+[00:02:29] Train32: Released IntersectionO.
+
+[00:02:30] Train33: Sent ACQUIRE request for IntersectionT.
+[00:02:30] SERVER: GRANTED IntersectionT to Train33. Semaphore count: 2.
+[00:02:30] Train33: Acquired IntersectionT. Proceeding...
+
+[00:02:31] Train33: Released IntersectionP.
+
+[00:02:32] Train36: Sent ACQUIRE request for IntersectionW.
+[00:02:32] SERVER: GRANTED IntersectionW to Train36. Semaphore count: 16.
+[00:02:32] Train36: Acquired IntersectionW. Proceeding...
+
+[00:02:33] Train36: Released IntersectionS.
+
+[00:02:34] Train37: Sent ACQUIRE request for IntersectionX.
+[00:02:34] SERVER: GRANTED IntersectionX to Train37.
+[00:02:34] Train37: Acquired IntersectionX. Proceeding...
+
+[00:02:35] Train38: Sent ACQUIRE request for IntersectionY.
+[00:02:35] SERVER: GRANTED IntersectionY to Train38. Semaphore count: 2.
+[00:02:35] Train38: Acquired IntersectionY. Proceeding...
+
+[00:02:36] Train37: Released IntersectionT.
+
+[00:02:37] Train38: Released IntersectionU.
+
+[00:02:38] Train39: Sent ACQUIRE request for IntersectionZ.
+[00:02:38] SERVER: GRANTED IntersectionZ to Train39.
+[00:02:38] Train39: Acquired IntersectionZ. Proceeding...
+
+[00:02:39] Train40: Sent ACQUIRE request for IntersectionA.
+[00:02:39] SERVER: GRANTED IntersectionA to Train40. Semaphore count: 15.
+[00:02:39] Train40: Acquired IntersectionA. Proceeding...
+
+[00:02:40] Train39: Released IntersectionV.
+
+[00:02:41] Train40: Released IntersectionW.
+
+[00:02:42] Train23: Sent ACQUIRE request for IntersectionF.
+[00:02:42] SERVER: IntersectionF is locked. Train23 added to wait queue.
+
+[00:02:43] Train26: Sent ACQUIRE request for IntersectionI.
+[00:02:43] SERVER: IntersectionI is locked. Train26 added to wait queue.
+
+[00:02:44] Train30: Sent ACQUIRE request for IntersectionM.
+[00:02:44] SERVER: GRANTED IntersectionM to Train30. Semaphore count: 4.
+[00:02:44] Train30: Acquired IntersectionM. Proceeding...
+
+[00:02:45] Train34: Sent ACQUIRE request for IntersectionQ.
+[00:02:45] SERVER: GRANTED IntersectionQ to Train34. Semaphore count: 12.
+[00:02:45] Train34: Acquired IntersectionQ. Proceeding...
+
+[00:02:46] Train5: Sent ACQUIRE request for IntersectionF.
+[00:02:46] SERVER: IntersectionF is locked. Train5 added to wait queue.
+
+[00:02:47] Train7: Sent ACQUIRE request for IntersectionR.
+[00:02:47] SERVER: IntersectionR is locked. Train7 added to wait queue.
+
+[00:02:48] Train10: Sent ACQUIRE request for IntersectionF.
+[00:02:48] SERVER: IntersectionF is locked. Train10 added to wait queue.
+
+[00:02:49] Train13: Sent ACQUIRE request for IntersectionJ.
+[00:02:49] SERVER: GRANTED IntersectionJ to Train13.
+[00:02:49] Train13: Acquired IntersectionJ. Proceeding...
+
+[00:02:50] Train13: Released IntersectionE.
+
+[00:02:51] Train17: Sent ACQUIRE request for IntersectionR.
+[00:02:51] SERVER: IntersectionR is locked. Train17 added to wait queue.
+
+[00:02:52] Train27: Sent ACQUIRE request for IntersectionJ.
+[00:02:52] SERVER: IntersectionJ is locked. Train27 added to wait queue.
+
+[00:02:53] Train35: Sent ACQUIRE request for IntersectionR.
+[00:02:53] SERVER: IntersectionR is locked. Train35 added to wait queue.
+
+[00:02:54] Train1: Sent ACQUIRE request for IntersectionZ.
+[00:02:54] SERVER: IntersectionZ is locked. Train1 added to wait queue.
+
+[00:02:55] Train3: Sent ACQUIRE request for IntersectionU.
+[00:02:55] SERVER: GRANTED IntersectionU to Train3. Semaphore count: 0.
+[00:02:55] Train3: Acquired IntersectionU. Proceeding...
+
+[00:02:56] Train3: Released IntersectionP.
+
+[00:02:57] Train4: Sent ACQUIRE request for IntersectionV.
+[00:02:57] SERVER: GRANTED IntersectionV to Train4. Semaphore count: 6.
+[00:02:57] Train4: Acquired IntersectionV. Proceeding...
+
+[00:02:58] Train4: Released IntersectionO.
+
+[00:02:59] Train6: Sent ACQUIRE request for IntersectionT.
+[00:02:59] SERVER: GRANTED IntersectionT to Train6. Semaphore count: 2.
+[00:02:59] Train6: Acquired IntersectionT. Proceeding...
+
+[00:03:00] Train6: Released IntersectionI.
+
+[00:03:01] Train8: Sent ACQUIRE request for IntersectionH.
+[00:03:01] SERVER: GRANTED IntersectionH to Train8. Semaphore count: 9.
+[00:03:01] Train8: Acquired IntersectionH. Proceeding...
+
+[00:03:02] Train8: Released IntersectionI.
+
+[00:03:03] Train9: Sent ACQUIRE request for IntersectionG.
+[00:03:03] SERVER: GRANTED IntersectionG to Train9. Semaphore count: 6.
+[00:03:03] Train9: Acquired IntersectionG. Proceeding...
+
+[00:03:04] Train9: Released IntersectionD.
+
+[00:03:05] Train11: Sent ACQUIRE request for IntersectionM.
+[00:03:05] SERVER: GRANTED IntersectionM to Train11. Semaphore count: 3.
+[00:03:05] Train11: Acquired IntersectionM. Proceeding...
+
+[00:03:06] Train11: Released IntersectionT.
+
+[00:03:07] Train14: Sent ACQUIRE request for IntersectionW.
+[00:03:07] SERVER: GRANTED IntersectionW to Train14. Semaphore count: 16.
+[00:03:07] Train14: Acquired IntersectionW. Proceeding...
+
+[00:03:08] Train14: Released IntersectionU.
+
+[00:03:09] Train15: Sent ACQUIRE request for IntersectionZ.
+[00:03:09] SERVER: IntersectionZ is locked. Train15 added to wait queue.
+
+[00:03:10] Train16: Sent ACQUIRE request for IntersectionV.
+[00:03:10] SERVER: GRANTED IntersectionV to Train16. Semaphore count: 5.
+[00:03:10] Train16: Acquired IntersectionV. Proceeding...
+
+[00:03:11] Train16: Released IntersectionO.
+
+[00:03:12] Train18: Sent ACQUIRE request for IntersectionD.
+[00:03:12] SERVER: GRANTED IntersectionD to Train18. Semaphore count: 7.
+[00:03:12] Train18: Acquired IntersectionD. Proceeding...
+
+[00:03:13] Train18: Released IntersectionQ.
+
+[00:03:14] Train19: Sent ACQUIRE request for IntersectionX.
+[00:03:14] SERVER: IntersectionX is locked. Train19 added to wait queue.
+
+[00:03:15] Train20: Sent ACQUIRE request for IntersectionY.
+[00:03:15] SERVER: GRANTED IntersectionY to Train20. Semaphore count: 1.
+[00:03:15] Train20: Acquired IntersectionY. Proceeding...
+
+[00:03:16] Train20: Released IntersectionW.
+
+[00:03:17] Train21: Sent ACQUIRE request for IntersectionH.
+[00:03:17] SERVER: GRANTED IntersectionH to Train21. Semaphore count: 8.
+[00:03:17] Train21: Acquired IntersectionH. Proceeding...
+
+[00:03:18] Train21: Released IntersectionF.
+
+[00:03:19] Train22: Sent ACQUIRE request for IntersectionI.
+[00:03:19] SERVER: GRANTED IntersectionI to Train22. Semaphore count: 1.
+[00:03:19] Train22: Acquired IntersectionI. Proceeding...
+
+[00:03:20] Train22: Released IntersectionG.
+
+[00:03:21] Train24: Sent ACQUIRE request for IntersectionM.
+[00:03:21] SERVER: GRANTED IntersectionM to Train24. Semaphore count: 2.
+[00:03:21] Train24: Acquired IntersectionM. Proceeding...
+
+[00:03:22] Train24: Released IntersectionK.
+
+[00:03:23] Train25: Sent ACQUIRE request for IntersectionN.
+[00:03:23] SERVER: GRANTED IntersectionN to Train25.
+[00:03:23] Train25: Acquired IntersectionN. Proceeding...
+
+[00:03:24] Train25: Released IntersectionL.
+
+[00:03:25] Train28: Sent ACQUIRE request for IntersectionQ.
+[00:03:25] SERVER: GRANTED IntersectionQ to Train28. Semaphore count: 12.
+[00:03:25] Train28: Acquired IntersectionQ. Proceeding...
+
+[00:03:26] Train28: Released IntersectionO.
+
+[00:03:27] Train29: Sent ACQUIRE request for IntersectionR.
+[00:03:27] SERVER: IntersectionR is locked. Train29 added to wait queue.
+
+[00:03:28] Train31: Sent ACQUIRE request for IntersectionT.
+[00:03:28] SERVER: GRANTED IntersectionT to Train31. Semaphore count: 2.
+[00:03:28] Train31: Acquired IntersectionT. Proceeding...
+
+[00:03:29] Train31: Released IntersectionR.
+
+[00:03:30] Train32: Sent ACQUIRE request for IntersectionU.
+[00:03:30] SERVER: GRANTED IntersectionU to Train32. Semaphore count: 0.
+[00:03:30] Train32: Acquired IntersectionU. Proceeding...
+
+[00:03:31] Train32: Released IntersectionS.
+
+[00:03:32] Train33: Sent ACQUIRE request for IntersectionV.
+[00:03:32] SERVER: GRANTED IntersectionV to Train33. Semaphore count: 4.
+[00:03:32] Train33: Acquired IntersectionV. Proceeding...
+
+[00:03:33] Train33: Released IntersectionT.
+
+[00:03:34] Train36: Sent ACQUIRE request for IntersectionY.
+[00:03:34] SERVER: GRANTED IntersectionY to Train36. Semaphore count: 0.
+[00:03:34] Train36: Acquired IntersectionY. Proceeding...
+
+[00:03:35] Train36: Released IntersectionW.
+
+[00:03:36] Train37: Sent ACQUIRE request for IntersectionZ.
+[00:03:36] SERVER: IntersectionZ is locked. Train37 added to wait queue.
+
+[00:03:37] Train38: Sent ACQUIRE request for IntersectionA.
+[00:03:37] SERVER: GRANTED IntersectionA to Train38. Semaphore count: 14.
+[00:03:37] Train38: Acquired IntersectionA. Proceeding...
+
+[00:03:38] Train38: Released IntersectionY.
+
+[00:03:39] Train39: Sent ACQUIRE request for IntersectionB.
+[00:03:39] SERVER: GRANTED IntersectionB to Train39. Semaphore count: 10.
+[00:03:39] Train39: Acquired IntersectionB. Proceeding...
+
+[00:03:40] Train39: Released IntersectionZ.
+
+[00:03:41] Train40: Sent ACQUIRE request for IntersectionC.
+[00:03:41] SERVER: IntersectionC is locked. Train40 added to wait queue.
+
+[00:03:42] Train30: Sent ACQUIRE request for IntersectionQ.
+[00:03:42] SERVER: GRANTED IntersectionQ to Train30. Semaphore count: 11.
+[00:03:42] Train30: Acquired IntersectionQ. Proceeding...
+
+[00:03:43] Train30: Released IntersectionM.
+
+[00:03:44] Train34: Sent ACQUIRE request for IntersectionU.
+[00:03:44] SERVER: IntersectionU is locked. Train34 added to wait queue.
+
+[00:03:45] Train13: Sent ACQUIRE request for IntersectionV.
+[00:03:45] SERVER: GRANTED IntersectionV to Train13. Semaphore count: 3.
+[00:03:45] Train13: Acquired IntersectionV. Proceeding...
+
+[00:03:46] Train13: Released IntersectionJ.
+
+[00:03:47] Train2: Sent ACQUIRE request for IntersectionC.
+[00:03:47] SERVER: IntersectionC is locked. Train2 added to wait queue.
+
+[00:03:48] Train12: Sent ACQUIRE request for IntersectionN.
+[00:03:48] SERVER: IntersectionN is locked. Train12 added to wait queue.
+
+[00:03:49] Train23: Sent ACQUIRE request for IntersectionF.
+[00:03:49] SERVER: GRANTED IntersectionF to Train23.
+[00:03:49] Train23: Acquired IntersectionF. Proceeding...
+
+[00:03:50] Train26: Sent ACQUIRE request for IntersectionI.
+[00:03:50] SERVER: GRANTED IntersectionI to Train26. Semaphore count: 0.
+[00:03:50] Train26: Acquired IntersectionI. Proceeding...
+
+[00:03:51] Train3: Released IntersectionU.
+
+
+[00:03:53] Train5: Sent ACQUIRE request for IntersectionF.
+[00:03:53] SERVER: IntersectionF is locked. Train5 added to wait queue.
+
+[00:03:54] Train4: Released IntersectionV.
+
+
+[00:03:56] Train7: Sent ACQUIRE request for IntersectionR.
+[00:03:56] SERVER: GRANTED IntersectionR to Train7.
+[00:03:56] Train7: Acquired IntersectionR. Proceeding...
+
+[00:03:57] Train6: Released IntersectionT.
+
+
+[00:03:59] Train8: Released IntersectionH.
+
+
+[00:04:01] Train7: Released IntersectionM.
+
+[00:04:02] Train9: Released IntersectionG.
+
+
+[00:04:04] Train10: Sent ACQUIRE request for IntersectionF.
+[00:04:04] SERVER: IntersectionF is locked. Train10 added to wait queue.
+
+[00:04:05] Train11: Released IntersectionM.
+
+
+[00:04:07] Train30: Sent ACQUIRE request for IntersectionS.
+[00:04:07] SERVER: GRANTED IntersectionS to Train30. Semaphore count: 19.
+[00:04:07] Train30: Acquired IntersectionS. Proceeding...
+
+[00:04:08] Train30: Released IntersectionQ.
+
+[00:04:09] Train14: Released IntersectionW.
+
+
+[00:04:11] Train16: Released IntersectionV.
+
+
+[00:04:13] Train17: Sent ACQUIRE request for IntersectionR.
+[00:04:13] SERVER: IntersectionR is locked. Train17 added to wait queue.
+
+[00:04:14] Train18: Released IntersectionD.
+
+
+[00:04:16] Train20: Released IntersectionY.
+
+
+[00:04:18] Train21: Released IntersectionH.
+
+
+[00:04:20] Train22: Released IntersectionI.
+
+
+[00:04:22] Train27: Sent ACQUIRE request for IntersectionJ.
+[00:04:22] SERVER: GRANTED IntersectionJ to Train27.
+[00:04:22] Train27: Acquired IntersectionJ. Proceeding...
+
+[00:04:23] Train24: Released IntersectionM.
+
+
+[00:04:25] Train25: Released IntersectionN.
+
+
+[00:04:27] Train28: Released IntersectionQ.
+
+
+[00:04:29] Train27: Released IntersectionG.
+
+[00:04:30] Train31: Released IntersectionT.
+
+
+[00:04:32] Train32: Released IntersectionU.
+
+
+[00:04:34] Train35: Sent ACQUIRE request for IntersectionR.
+[00:04:34] SERVER: IntersectionR is locked. Train35 added to wait queue.
+
+[00:04:35] Train33: Released IntersectionV.
+
+
+[00:04:37] Train36: Released IntersectionY.
+
+
+[00:04:39] Train38: Released IntersectionA.
+
+
+[00:04:41] Train39: Released IntersectionB.
+
+
+[00:04:43] Train1: Sent ACQUIRE request for IntersectionZ.
+[00:04:43] SERVER: GRANTED IntersectionZ to Train1.
+[00:04:43] Train1: Acquired IntersectionZ. Proceeding...
+
+[00:04:44] Train1: Released IntersectionC.
+
+[00:04:45] Train15: Sent ACQUIRE request for IntersectionZ.
+[00:04:45] SERVER: IntersectionZ is locked. Train15 added to wait queue.
+
+[00:04:46] Train19: Sent ACQUIRE request for IntersectionX.
+[00:04:46] SERVER: IntersectionX is locked. Train19 added to wait queue.
+
+[00:04:47] Train29: Sent ACQUIRE request for IntersectionR.
+[00:04:47] SERVER: IntersectionR is locked. Train29 added to wait queue.
+
+[00:04:48] Train37: Sent ACQUIRE request for IntersectionZ.
+[00:04:48] SERVER: IntersectionZ is locked. Train37 added to wait queue.
+
+[00:04:49] Train40: Sent ACQUIRE request for IntersectionC.
+[00:04:49] SERVER: GRANTED IntersectionC to Train40.
+[00:04:49] Train40: Acquired IntersectionC. Proceeding...
+
+[00:04:50] Train40: Released IntersectionA.
+
+[00:04:51] Train23: Sent ACQUIRE request for IntersectionJ.
+[00:04:51] SERVER: IntersectionJ is locked. Train23 added to wait queue.
+
+[00:04:52] Train26: Sent ACQUIRE request for IntersectionM.
+[00:04:52] SERVER: GRANTED IntersectionM to Train26. Semaphore count: 5.
+[00:04:52] Train26: Acquired IntersectionM. Proceeding...
+
+[00:04:53] Train26: Released IntersectionI.
+
+[00:04:54] Train13: Sent ACQUIRE request for IntersectionT.
+[00:04:54] SERVER: GRANTED IntersectionT to Train13. Semaphore count: 4.
+[00:04:54] Train13: Acquired IntersectionT. Proceeding...
+
+[00:04:55] Train13: Released IntersectionV.
+
+[00:04:56] Train1: Released IntersectionZ.
+
+
+[00:04:58] Train34: Sent ACQUIRE request for IntersectionU.
+[00:04:58] SERVER: GRANTED IntersectionU to Train34. Semaphore count: 1.
+[00:04:58] Train34: Acquired IntersectionU. Proceeding...
+
+[00:04:59] Train34: Released IntersectionQ.
+
+[00:05:00] Train40: Released IntersectionC.
+
+
+[00:05:02] Train2: Sent ACQUIRE request for IntersectionC.
+[00:05:02] SERVER: GRANTED IntersectionC to Train2.
+[00:05:02] Train2: Acquired IntersectionC. Proceeding...
+
+[00:05:03] Train2: Released IntersectionB.
+
+[00:05:04] Train12: Sent ACQUIRE request for IntersectionN.
+[00:05:04] SERVER: GRANTED IntersectionN to Train12.
+[00:05:04] Train12: Acquired IntersectionN. Proceeding...
+
+[00:05:05] Train12: Released IntersectionK.
+
+[00:05:06] Train13: Released IntersectionT.
+
+
+[00:05:08] Train7: Sent ACQUIRE request for IntersectionC.
+[00:05:08] SERVER: IntersectionC is locked. Train7 added to wait queue.
+
+[00:05:09] Train30: Released IntersectionS.
+
+
+[00:05:11] Train27: Sent ACQUIRE request for IntersectionN.
+[00:05:11] SERVER: IntersectionN is locked. Train27 added to wait queue.
+
+[00:05:12] Train2: Sent ACQUIRE request for IntersectionX.
+[00:05:12] SERVER: IntersectionX is locked. Train2 added to wait queue.
+
+[00:05:13] Train5: Sent ACQUIRE request for IntersectionF.
+[00:05:13] SERVER: IntersectionF is locked. Train5 added to wait queue.
+
+[00:05:14] Train10: Sent ACQUIRE request for IntersectionF.
+[00:05:14] SERVER: IntersectionF is locked. Train10 added to wait queue.
+
+[00:05:15] Train12: Sent ACQUIRE request for IntersectionD.
+[00:05:15] SERVER: GRANTED IntersectionD to Train12. Semaphore count: 7.
+[00:05:15] Train12: Acquired IntersectionD. Proceeding...
+
+[00:05:16] Train12: Released IntersectionN.
+
+[00:05:17] Train17: Sent ACQUIRE request for IntersectionR.
+[00:05:17] SERVER: IntersectionR is locked. Train17 added to wait queue.
+
+[00:05:18] Train35: Sent ACQUIRE request for IntersectionR.
+[00:05:18] SERVER: IntersectionR is locked. Train35 added to wait queue.
+
+[00:05:19] Train26: Sent ACQUIRE request for IntersectionO.
+[00:05:19] SERVER: GRANTED IntersectionO to Train26. Semaphore count: 14.
+[00:05:19] Train26: Acquired IntersectionO. Proceeding...
+
+[00:05:20] Train26: Released IntersectionM.
+
+[00:05:21] Train15: Sent ACQUIRE request for IntersectionZ.
+[00:05:21] SERVER: GRANTED IntersectionZ to Train15.
+[00:05:21] Train15: Acquired IntersectionZ. Proceeding...
+
+[00:05:22] Train15: Released IntersectionY.
+
+[00:05:23] Train19: Sent ACQUIRE request for IntersectionX.
+[00:05:23] SERVER: IntersectionX is locked. Train19 added to wait queue.
+
+[00:05:24] Train29: Sent ACQUIRE request for IntersectionR.
+[00:05:24] SERVER: IntersectionR is locked. Train29 added to wait queue.
+
+[00:05:25] Train37: Sent ACQUIRE request for IntersectionZ.
+[00:05:25] SERVER: IntersectionZ is locked. Train37 added to wait queue.
+
+[00:05:26] Train23: Sent ACQUIRE request for IntersectionJ.
+[00:05:26] SERVER: IntersectionJ is locked. Train23 added to wait queue.
+
+[00:05:27] Train34: Sent ACQUIRE request for IntersectionW.
+[00:05:27] SERVER: GRANTED IntersectionW to Train34. Semaphore count: 18.
+[00:05:27] Train34: Acquired IntersectionW. Proceeding...
+
+[00:05:28] Train34: Released IntersectionU.
+
+[00:05:29] Train26: Released IntersectionO.
+
+
+[00:05:31] Train34: Released IntersectionW.
+
+
+[00:05:33] Train7: Sent ACQUIRE request for IntersectionC.
+[00:05:33] SERVER: IntersectionC is locked. Train7 added to wait queue.
+
+[00:05:34] Train12: Released IntersectionD.
+
+
+[00:05:36] Train27: Sent ACQUIRE request for IntersectionN.
+[00:05:36] SERVER: GRANTED IntersectionN to Train27.
+[00:05:36] Train27: Acquired IntersectionN. Proceeding...
+
+[00:05:37] Train27: Released IntersectionJ.
+
+[00:05:38] Train2: Sent ACQUIRE request for IntersectionX.
+[00:05:38] SERVER: IntersectionX is locked. Train2 added to wait queue.
+
+[00:05:39] Train5: Sent ACQUIRE request for IntersectionF.
+[00:05:39] SERVER: IntersectionF is locked. Train5 added to wait queue.
+
+[00:05:40] Train10: Sent ACQUIRE request for IntersectionF.
+[00:05:40] SERVER: IntersectionF is locked. Train10 added to wait queue.
+
+[00:05:41] Train15: Released IntersectionZ.
+
+
+[00:05:43] Train17: Sent ACQUIRE request for IntersectionR.
+[00:05:43] SERVER: IntersectionR is locked. Train17 added to wait queue.
+
+[00:05:44] Train35: Sent ACQUIRE request for IntersectionR.
+[00:05:44] SERVER: IntersectionR is locked. Train35 added to wait queue.
+
+[00:05:45] Train19: Sent ACQUIRE request for IntersectionX.
+[00:05:45] SERVER: IntersectionX is locked. Train19 added to wait queue.
+
+[00:05:46] Train29: Sent ACQUIRE request for IntersectionR.
+[00:05:46] SERVER: IntersectionR is locked. Train29 added to wait queue.
+
+[00:05:47] Train37: Sent ACQUIRE request for IntersectionZ.
+[00:05:47] SERVER: GRANTED IntersectionZ to Train37.
+[00:05:47] Train37: Acquired IntersectionZ. Proceeding...
+
+[00:05:48] Train37: Released IntersectionX.
+
+[00:05:49] Train23: Sent ACQUIRE request for IntersectionJ.
+[00:05:49] SERVER: GRANTED IntersectionJ to Train23.
+[00:05:49] Train23: Acquired IntersectionJ. Proceeding...
+
+[00:05:50] Train23: Released IntersectionF.
+
+[00:05:51] Train27: Sent ACQUIRE request for IntersectionP.
+[00:05:51] SERVER: GRANTED IntersectionP to Train27. Semaphore count: 7.
+[00:05:51] Train27: Acquired IntersectionP. Proceeding...
+
+[00:05:52] Train27: Released IntersectionN.
+
+[00:05:53] Train7: Sent ACQUIRE request for IntersectionC.
+[00:05:53] SERVER: IntersectionC is locked. Train7 added to wait queue.
+
+[00:05:54] Train37: Released IntersectionZ.
+
+
+[00:05:56] Train2: Sent ACQUIRE request for IntersectionX.
+[00:05:56] SERVER: GRANTED IntersectionX to Train2.
+[00:05:56] Train2: Acquired IntersectionX. Proceeding...
+
+[00:05:57] Train5: Sent ACQUIRE request for IntersectionF.
+[00:05:57] SERVER: GRANTED IntersectionF to Train5.
+[00:05:57] Train5: Acquired IntersectionF. Proceeding...
+
+[00:05:58] Train2: Released IntersectionC.
+
+[00:05:59] Train5: Released IntersectionH.
+
+[00:06:00] Train10: Sent ACQUIRE request for IntersectionF.
+[00:06:00] SERVER: IntersectionF is locked. Train10 added to wait queue.
+
+[00:06:01] Train17: Sent ACQUIRE request for IntersectionR.
+[00:06:01] SERVER: IntersectionR is locked. Train17 added to wait queue.
+
+[00:06:02] Train35: Sent ACQUIRE request for IntersectionR.
+[00:06:02] SERVER: IntersectionR is locked. Train35 added to wait queue.
+
+[00:06:03] Train23: Sent ACQUIRE request for IntersectionL.
+[00:06:03] SERVER: GRANTED IntersectionL to Train23. Semaphore count: 17.
+[00:06:03] Train23: Acquired IntersectionL. Proceeding...
+
+[00:06:04] Train23: Released IntersectionJ.
+
+[00:06:05] Train19: Sent ACQUIRE request for IntersectionX.
+[00:06:05] SERVER: IntersectionX is locked. Train19 added to wait queue.
+
+[00:06:06] Train29: Sent ACQUIRE request for IntersectionR.
+[00:06:06] SERVER: IntersectionR is locked. Train29 added to wait queue.
+
+[00:06:07] Train2: Released IntersectionX.
+
+
+[00:06:09] Train27: Released IntersectionP.
+
+
+[00:06:11] Train5: Sent ACQUIRE request for IntersectionS.
+[00:06:11] SERVER: GRANTED IntersectionS to Train5. Semaphore count: 19.
+[00:06:11] Train5: Acquired IntersectionS. Proceeding...
+
+[00:06:12] Train5: Released IntersectionF.
+
+[00:06:13] Train7: Sent ACQUIRE request for IntersectionC.
+[00:06:13] SERVER: GRANTED IntersectionC to Train7.
+[00:06:13] Train7: Acquired IntersectionC. Proceeding...
+
+[00:06:14] Train7: Released IntersectionR.
+
+[00:06:15] Train23: Released IntersectionL.
+
+
+[00:06:17] Train5: Sent ACQUIRE request for IntersectionY.
+[00:06:17] SERVER: GRANTED IntersectionY to Train5. Semaphore count: 3.
+[00:06:17] Train5: Acquired IntersectionY. Proceeding...
+
+[00:06:18] Train5: Released IntersectionS.
+
+[00:06:19] Train10: Sent ACQUIRE request for IntersectionF.
+[00:06:19] SERVER: GRANTED IntersectionF to Train10.
+[00:06:19] Train10: Acquired IntersectionF. Proceeding...
+
+[00:06:20] Train10: Released IntersectionA.
+
+[00:06:21] Train17: Sent ACQUIRE request for IntersectionR.
+[00:06:21] SERVER: GRANTED IntersectionR to Train17.
+[00:06:21] Train17: Acquired IntersectionR. Proceeding...
+
+[00:06:22] Train17: Released IntersectionI.
+
+[00:06:23] Train35: Sent ACQUIRE request for IntersectionR.
+[00:06:23] SERVER: IntersectionR is locked. Train35 added to wait queue.
+
+[00:06:24] Train7: Sent ACQUIRE request for IntersectionA.
+[00:06:24] SERVER: GRANTED IntersectionA to Train7. Semaphore count: 16.
+[00:06:24] Train7: Acquired IntersectionA. Proceeding...
+
+[00:06:25] Train7: Released IntersectionC.
+
+[00:06:26] Train19: Sent ACQUIRE request for IntersectionX.
+[00:06:26] SERVER: GRANTED IntersectionX to Train19.
+[00:06:26] Train19: Acquired IntersectionX. Proceeding...
+
+[00:06:27] Train19: Released IntersectionP.
+
+[00:06:28] Train29: Sent ACQUIRE request for IntersectionR.
+[00:06:28] SERVER: IntersectionR is locked. Train29 added to wait queue.
+
+[00:06:29] Train10: Sent ACQUIRE request for IntersectionL.
+[00:06:29] SERVER: GRANTED IntersectionL to Train10. Semaphore count: 17.
+[00:06:29] Train10: Acquired IntersectionL. Proceeding...
+
+[00:06:30] Train10: Released IntersectionF.
+
+[00:06:31] Train17: Sent ACQUIRE request for IntersectionM.
+[00:06:31] SERVER: GRANTED IntersectionM to Train17. Semaphore count: 5.
+[00:06:31] Train17: Acquired IntersectionM. Proceeding...
+
+[00:06:32] Train17: Released IntersectionR.
+
+[00:06:33] Train5: Released IntersectionY.
+
+
+[00:06:35] Train7: Released IntersectionA.
+
+
+[00:06:37] Train19: Released IntersectionX.
+
+
+[00:06:39] Train10: Sent ACQUIRE request for IntersectionS.
+[00:06:39] SERVER: GRANTED IntersectionS to Train10. Semaphore count: 19.
+[00:06:39] Train10: Acquired IntersectionS. Proceeding...
+
+[00:06:40] Train10: Released IntersectionL.
+
+[00:06:41] Train17: Sent ACQUIRE request for IntersectionK.
+[00:06:41] SERVER: GRANTED IntersectionK to Train17. Semaphore count: 12.
+[00:06:41] Train17: Acquired IntersectionK. Proceeding...
+
+[00:06:42] Train17: Released IntersectionM.
+
+[00:06:43] Train35: Sent ACQUIRE request for IntersectionR.
+[00:06:43] SERVER: GRANTED IntersectionR to Train35.
+[00:06:43] Train35: Acquired IntersectionR. Proceeding...
+
+[00:06:44] Train35: Released IntersectionO.
+
+[00:06:45] Train29: Sent ACQUIRE request for IntersectionR.
+[00:06:45] SERVER: IntersectionR is locked. Train29 added to wait queue.
+
+[00:06:46] Train10: Released IntersectionS.
+
+
+[00:06:48] Train17: Released IntersectionK.
+
+
+[00:06:50] Train35: Sent ACQUIRE request for IntersectionV.
+[00:06:50] SERVER: GRANTED IntersectionV to Train35. Semaphore count: 6.
+[00:06:50] Train35: Acquired IntersectionV. Proceeding...
+
+[00:06:51] Train35: Released IntersectionR.
+
+[00:06:52] Train35: Sent ACQUIRE request for IntersectionX.
+[00:06:52] SERVER: GRANTED IntersectionX to Train35.
+[00:06:52] Train35: Acquired IntersectionX. Proceeding...
+
+[00:06:53] Train35: Released IntersectionV.
+
+[00:06:54] Train29: Sent ACQUIRE request for IntersectionR.
+[00:06:54] SERVER: GRANTED IntersectionR to Train29.
+[00:06:54] Train29: Acquired IntersectionR. Proceeding...
+
+[00:06:55] Train29: Released IntersectionP.
+
+[00:06:56] Train35: Released IntersectionX.
+
+
+[00:06:58] Train29: Released IntersectionR.
+
+
+[00:07:00] SIMULATION COMPLETE. All trains reached destinations.

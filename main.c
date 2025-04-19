@@ -258,8 +258,8 @@ int main() {
 
     initR_Table(&intersections, intersectionCount);
     printR_Table(&intersections, intersectionCount);
-    initializeSemaphores(intersections, intersectionCount);//added
-    initializeMutex(intersections, intersectionCount);//added
+    initializeSemaphores(&intersections, intersectionCount);//added
+    initializeMutex(&intersections, intersectionCount);//added
 
     // This is just testing mutexes are properly working
     printf("\n TEST FOR MUTEX \n") ;
@@ -291,7 +291,7 @@ int main() {
     // so only the parent will execute the code below
 
     // execute responsibilities of server
-    server_process(msgid, trainCount, intersectionCount, trains, intersections, RAG);
+    server_process(msgid, trainCount, intersectionCount, &trains, &intersections, RAG);
 
     // running createRAG in server for now for testing, it should
     // eventually be executed after any train request is made

@@ -39,9 +39,6 @@ void initR_Table(Intersection **intersections, int intersectionCount){
 		//initializes lock_state to 0
 		(*intersections)[i].lock_state = 0;
 		//Test case
-		strcpy((*intersections)[0].trains[0].name, "Train 1");
-		strcpy((*intersections)[1].trains[0].name, "Train 2");
-		strcpy((*intersections)[1].trains[1].name, "Train 3");
 
 		//initializes lock type to semaphore if its resource > 1 and mutex if else
 		if((*intersections)[i].capacity > 1){
@@ -102,7 +99,7 @@ void resetTrain(Train *train) {
     }
 
     // Reset other fields
-    for (int j = 0; j < train->heldIntersectionCount; ++j) {
+    for (int j = 0; j < train->heldIntersectionCount; j++) {
         train->heldIntersections[j] = NULL;
     }
     train->waitingIntersection = NULL;

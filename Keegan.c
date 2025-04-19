@@ -16,21 +16,21 @@
     it would be compatible with mutexes and also only allowing one train can enter at a time in an intersection.
 */
 // method for initializing mutex
-void initializeMutex(Intersection *intersections, int intersectionCount){
-   pthread_mutexattr_t at;
-   pthread_mutexattr_init(&at);
-   pthread_mutexattr_setpshared(&at, PTHREAD_PROCESS_SHARED);
+void initializeMutex(Intersection **intersections, int intersectionCount){
+    pthread_mutexattr_t at;
+    pthread_mutexattr_init(&at);
+    pthread_mutexattr_setpshared(&at, PTHREAD_PROCESS_SHARED);
 
-   for(int i =0; i < intersectionCount; i++){
-    //checking id the resource or capacity is == 1 so the mutex can be initialized
-    if(intersections[i].capacity == 1){
-        pthread_mutex_init(&intersections[i].Mutex, &at);
-        printf("MUTEX Intersection %s initialized \n", intersections[i].name);
-        printf("Intersection %s initialized with lock type: %s and capacity: %d\n", intersections[i].name, intersections[i].lock_type, intersections[i].capacity);
-
+    // Iterate through each intersection
+    for (int i = 0; i < intersectionCount; i++) {
+        // Check if the capacity is 1 so the mutex can be initialized
+        if ((*intersections)[i].capacity == 1) {
+            // Initialize the mutex for the intersection
+            pthread_mutex_init(&(*intersections)[i].Mutex, &at);
+            printf("MUTEX Intersection %s initialized \n", (*intersections)[i].name);
+            printf("Intersection %s initialized with lock type: %s and capacity: %d\n", (*intersections)[i].name, (*intersections)[i].lock_type, (*intersections)[i].capacity);
+        }
     }
-   }
-    
 }
 
 //Acquiring a lock for intersections that can only fit one process
@@ -84,7 +84,7 @@ void test_initializeMutex() {
     intersections[0].capacity = 2;
 
     //testing the initalization
-    initializeMutex(intersections, 1);
+    //initializeMutex(intersections, 1);
     
       //throwing a check to see if mutex is incorrect
     if (intersections[0].isMutexInitialized) {

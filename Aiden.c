@@ -11,18 +11,21 @@
 #include "shared_header.h"
 
 //Function to initialize the semaphores for every intersection with more than 1 resource
-void initializeSemaphores(Intersection *intersections, int intersectionCount){
-    for(int i = 0; i < intersectionCount; i++){
-        if(intersections[i].capacity > 1){
-           // (*intersections)[i].Semaphore = malloc(sizeof(sem_t));
-            sem_init(&intersections[i].Semaphore, 0, intersections[i].capacity);
-            printf("Semaphore Intersection %s initialized \n", intersections[i].name);
-            printf("Intersection %s initialized with lock type: %s and capacity: %d\n", intersections[i].name, intersections[i].lock_type, intersections[i].capacity);
+void initializeSemaphores(Intersection **intersections, int intersectionCount){
+    // Iterate through the intersections
+    for (int i = 0; i < intersectionCount; i++) {
+        // Check if the intersection capacity is greater than 1
+        if ((*intersections)[i].capacity > 1) {
+            // Initialize the semaphore for the intersection
+            sem_init(&(*intersections)[i].Semaphore, 0, (*intersections)[i].capacity);
+            printf("Semaphore Intersection %s initialized \n", (*intersections)[i].name);
+            printf("Intersection %s initialized with lock type: %s and capacity: %d\n", (*intersections)[i].name, (*intersections)[i].lock_type, (*intersections)[i].capacity);
         }
-        //else if((*intersections)[i].resources < 0){
-          //  printf("Error: Intersection %c has an invalid resource value: %i (must be greater than 0)", (*intersections)[i].name, (*intersections)[i].resources);
-            //exit(0);
-       // }
+        // Error check for invalid resources (optional, uncomment if needed)
+        // else if ((*intersections)[i].resources < 0) {
+        //    printf("Error: Intersection %c has an invalid resource value: %i (must be greater than 0)\n", (*intersections)[i].name, (*intersections)[i].resources);
+        //    exit(0);
+        // }
     }
 }
 //Function for a train to try and go through an intersection

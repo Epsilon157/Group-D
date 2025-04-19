@@ -41,17 +41,22 @@ void formatTime(char *buffer) {
 
 // Function to log events in the simulation
 void logEvent(const char *format, ...) {
+    if (!format) {
+        fprintf(stderr, "logEvent: NULL format string\n");
+        return;
+    }
+
     char timeBuffer[10];
     formatTime(timeBuffer);  // Format current time
 
     va_list args;
     va_start(args, format);
 
-    if (log_file) {  // Ensure the log file is open
-        fprintf(log_file, "%s ", timeBuffer);
-        vfprintf(log_file, format, args);
-        fprintf(log_file, "\n");
-    }
+    FILE *out = log_file ? log_file : stderr;
+
+    fprintf(out, "%s ", timeBuffer);
+    vfprintf(out, format, args);
+    fprintf(out, "\n");
 
     va_end(args);
 }
@@ -87,12 +92,10 @@ void printRequestRelease(int trainIndex, const char *intersection) {
 
 // Function to print denied request for intersection
 void printDenied(const char *train, const char *intersection) {
-    //pthread_mutex_lock(&sim_time_mutex); // Lock mutex to safely increment sim_time
-    //(*sim_time)++;  // Increment simulation time
-   // pthread_mutex_unlock(&sim_time_mutex) // Unlock mutex after incrementing sim_time
+    const char *safeTrain = train ? train : "(null)";
+    const char *safeIntersection = intersection ? intersection : "(null)";
 
-    logEvent("SERVER: %s is locked. %s added to wait queue.", intersection, train);
-    //fprintf(log_file, "\n");
+    logEvent("SERVER: %s is locked. %s added to wait queue.", safeIntersection, safeTrain);
 }
 
 void ForceRelease(const char *train, const char *intersection){

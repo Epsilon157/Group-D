@@ -355,7 +355,11 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train **tr
                 // If the target intersection is mutex type
 
                 // acquire the train's mutex and lock it
-                if(pthread_mutex_trylock(&targetIntersection->Mutex) == 0){
+                //if(pthread_mutex_trylock(&targetIntersection->Mutex) == 0){
+
+                //%%%% for consolidation function from Keegan.c %%%%
+                int mutexAcqu(Intersection *targetIntersection, Train *train, int msgid, int trainIndex, const *intersectionName);
+               /*if(tryAcquireMutex(targetIntersection, train->name)==0){
                     //printf("Server attempting tryAcquireMutex for Train %s on %s\n", train->name, msg.intersectionName);
                     printf("Mutex Intersection %s acquired by %s\n", targetIntersection->name, train->name);
                     // grant the request to the train
@@ -385,6 +389,7 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train **tr
                     serverResponse(WAIT, msgid, msg.trainIndex, msg.intersectionName);
             
                 }
+                */
             } else if (targetIntersection && targetIntersection->lock_type && strcmp(targetIntersection->lock_type, "Semaphore") == 0) {
                 // If the target intersection is semaphore type
                 // acquire the train's semaphore 

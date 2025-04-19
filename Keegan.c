@@ -45,10 +45,13 @@ void acquireTrainMutex(Intersection *intersection, const char *trainName){
 }
 // using a tryAcquireMutex function to allow acquiring trains without blocking anything.
 int tryAcquireMutex(Intersection *intersection, const char *trainName) {
+
     if (strcmp(intersection->lock_type, "Mutex") == 0) {
-        int result = intersection->lock_state;
+        int result = pthread_mutex_trylock(&intersection->Mutex);
         if (result == 0) {
+
             intersection->lock_state = 1;
+
             printf("Train %s has acquired Mutex at %s\n", trainName, intersection->name);
             return 0;
         } else if (result == EBUSY) {
@@ -64,13 +67,50 @@ int tryAcquireMutex(Intersection *intersection, const char *trainName) {
 
 //Releasin for intersections that can only fit one process by unlocking
 void releaseTrainMutex(Intersection *intersection, const char *trainName){
+
     if(strcmp(intersection-> lock_type, "Mutex") == 0){
 
         pthread_mutex_unlock(&intersection-> Mutex);
         //lock state being 0 for mutex
         intersection -> lock_state = 0;
+
         //printing the Mutex intersection and train associated with the mutex
+
         printf("Mutex Intersection %s releasing %s\n", intersection->name, trainName);
+    }
+}
+
+int mutexAcqu(Intersection *targetIntersection, Train *train, int msgid, int trainIndex, const *intersectionName){
+    if(tryAcquireMutex(targetIntersection, train->name)==0){
+        //printf("Server attempting tryAcquireMutex for Train %s on %s\n", train->name, msg.intersectionName);
+        printf("Mutex Intersection %s acquired by %s\n", targetIntersection->name, train->name);
+        // grant the request to the train
+        serverResponse(GRANT, msgid, trainIndex, intersectionName);
+
+        // logging
+        log_file = fopen("simulation.log", "a");
+        printIntersectionGranted(trainIndex, intersectionName);
+        fclose(log_file);
+        // logging
+        log_file = fopen("simulation.log", "a");
+        printIntersectionGranted(trainIndex, intersectionName);
+        fclose(log_file);
+
+        // update train to be holding the intersection
+        train->heldIntersections[train->heldIntersectionCount] = strdup(intersectionName); // safe string copy
+        train->heldIntersectionCount++; 
+
+        // train is no longer waiting on this intersection, so remove it from the waiting list
+        free(train->waitingIntersection);
+        train->waitingIntersection = NULL; // Clear it after successful grant
+        return 0;
+    }
+    else {
+        // It's locked, deny for now
+        printf("Train%d cannot acquire %s, already locked. Sending WAIT.\n", trainIndex + 1, intersectionName);
+        train->waitingIntersection = strdup(intersectionName);
+        serverResponse(WAIT, msgid, trainIndex, intersectionName);
+        return -1;
     }
 }
 //writing a test to ensure the code mutexes are called correctly 
@@ -95,5 +135,6 @@ void test_initializeMutex() {
         printf("Correct behavior: Mutex not initialized for %s (capacity > 1)\n", intersections[0].name);
     }
 }
+
 
 // write more tests and comments

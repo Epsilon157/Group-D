@@ -60,7 +60,6 @@ typedef struct {
     int isMutexInitialized;
     pthread_mutex_t Mutex;
     sem_t Semaphore;
-    int forcedRelease;     // tells if an intersection's release has been forced
 } Intersection;
 
 void printRequestSent(int trainIndex, const char *intersection);
@@ -68,9 +67,8 @@ void printIntersectionGranted(int trainIndex, const char *intersectionName);
 void AttemptingDeadlockResolve(const char *intersectionName, const char *victim);
 void printRequestRelease(int trainIndex, const char *intersection);
 void printSimulationComplete();
-void printDenied(const char *train, const char *intersection);
+void printDenied(int trainIndex, const char *intersection);
 void ForceRelease(const char *train, const char *intersection);
-void AttemptingDeadlockResolve(const char *intersectionName, const char *victim);
 void freeRAG(Node *head);
 void acquireTrainMutex(Intersection *intersection, const char *trainName);
 int tryAcquireMutex(Intersection *intersection, const char *trainName);
@@ -78,9 +76,10 @@ void releaseTrainMutex(Intersection *intersection, const char *trainName);
 void releaseTrain(Intersection *intersection, const char *trainName);
 void acquireTrain(Intersection *intersection, const char *trainName);
 void printDeadlockDetected(char *deadlockedTrains[], int deadlockedCount);
-int mutexAcqu(Intersection *targetIntersection, Train *train, int msgid, int trainIndex, const *intersectionName);
-
-
+void resolveDeadlock(Train **trains, int trainCount, Intersection **intersections, int intersectionCount, int msgid);
+void listTrainsInDeadlock(Node *RAG);
+void mutexAcqu(Intersection *targetIntersection, Train *train, int msgid, int trainIndex, const char *intersectionName);
+void semaphoreAcqu(Intersection *targetIntersection, Train *train, int msgid, int trainIndex, const char *intersectionName);
 int tryAcquireSemaphore(Intersection *intersection, const char *trainName);
 extern int *sim_time;  // Simulation time pointer
 extern pthread_mutex_t sim_time_mutex;  // Mutex for controlling sim_time

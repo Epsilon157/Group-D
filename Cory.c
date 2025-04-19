@@ -269,8 +269,9 @@ void resolveDeadlock(Train **trains, int trainCount, Intersection **intersection
 
             free(intersectionName);
             victim->heldIntersections[i] = NULL;
-            printf("Releases%d\n", releases);
+
             releases++;
+            printf("Releases%d\n", releases);
         } else {
             printf("Target intersection is null\n");
         }
@@ -439,6 +440,8 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train **tr
             
             // Safely remove the intersection from the train list
             if (found != -1) {
+                releases++;
+                printf("Releases%d\n", releases);
                 // call for releasing mutexes and semaphores
                 if(targetIntersection && strcmp(targetIntersection->lock_type, "Mutex") == 0){
                     printf("Mutex  %s releasing %s\n", targetIntersection->name, train->name);
@@ -465,10 +468,8 @@ void server_process(int msgid, int trainCount, int intersectionCount, Train **tr
 
                 // keeping track of how many times an intersection has been release
                 // so that the server will know once it's done (while loop conditional)
-                printf("Releases%d\n", releases);
-                releases++;
             } else {
-                // printf("WARNING: Train%d tried to release an intersection it does not hold: %s\n", msg.trainIndex + 1, msg.intersectionName);
+                 printf("WARNING: Train%d tried to release an intersection it does not hold: %s\n", msg.trainIndex + 1, msg.intersectionName);
             }
         }
 

@@ -1,7 +1,18 @@
-//Main, combined file
-/* Add text options when ran so anyone can find how to pull the data out.
-As we get more code for the data to be used in I will adjust parsing so it returns the info needed*/
+/*
+Group D
+4/19/2025
+Description: This is the main file of the whole project.
+It executes all of the functions defined in each group
+members' file, while are all included in lines 22
+through 27.
 
+To test this project, simple navigate to the Group-D 
+folder, compile this file, and execute it using the 
+following commands:
+
+gcc -o main main.c
+./main
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,188 +20,12 @@ As we get more code for the data to be used in I will adjust parsing so it retur
 #include <semaphore.h>
 #include <string.h>
 #include "shared_header.h"
-
-// include other files here
-
 #include "Cory.c"
 #include "Keegan.c" 
 #include "Aiden.c"
 #include "Jacob.c"
-// #include "Fawaz.c"
 #include "Zack.c"
-
-/*// Structure to hold data about trains
-typedef struct {
-    char name[50];  // Train name (e.g., Train1)
-    char **route;   // Array of intersection names the train passes through
-    int routeCount; // Number of intersections the train visits
-} Train;
-
-// Structure to hold data about intersections
-typedef struct {
-    char name[50];  // Intersection name
-    char type[50]; // Type of Intersection
-    char lock_type[50]; //Type of lock
-    int resources;  // Resources available at this intersection
-    int lock_state; //0 is for free, 1 is for locked
-    Train trains[50];
-    
-    pthread_mutex_t Mutex;
-    sem_t Semaphore;
-    
-} Intersection;*
-
-// File paths for intersections and trains
-const char *intersectionFilePath = "intersections.txt";
-const char *trainFilePath = "trains.txt";
-*/
-
-/*
-//Function that makes the resource allocation table
-void initR_Table(Intersection **intersections, int intersectionCount){
-    
-    for(int i = 0; i < intersectionCount; i++){
-        
-        //initializes lock_state to 0
-        (*intersections)[i].lock_state = 0;
-        
-        //Test case
-        strcpy((*intersections)[0].trains[0].name, "Train 1");
-        strcpy((*intersections)[1].trains[0].name, "Train 2");
-        strcpy((*intersections)[1].trains[1].name, "Train 3");
-        
-        //initializes semaphore is resource > 1 and mutex if else
-        if((*intersections)[i].resources > 1){
-            strcpy((*intersections)[i].lock_type, "Semaphore");
-        } else{
-            strcpy((*intersections)[i].lock_type, "Mutex");
-        }
-        
-        if(strcmp((*intersections)[i].lock_type, "Semaphore")){
-            sem_init(&(*intersections)[i].Semaphore, 0, (*intersections)[i].resources);
-        } else{
-            pthread_mutex_init(&(*intersections)[i].Mutex, NULL);
-        }
-        
-        
-    } 
-
-    //initializeMutex(*intersections, intersectionCount);
-    
-}
-
-//Function that prints resource allocation table
-void printR_Table(Intersection **intersections, int intersectionCount) {
-    printf("Resource Allocation Table:\n");
-    printf("---------------------------------------------------------------\n");
-    printf("IntersectionID | Type | Capacity | Lock State | Holding Trains\n");
-    printf("---------------------------------------------------------------\n");
-
-    for (int i = 0; i < intersectionCount; i++) {
-        printf("%-15s | %-9s | %-8d | %-10s |", (*intersections)[i].name,
-               strcmp((*intersections)[i].lock_type, "Semaphore") ? "Mutex" : "Semaphore",
-               (*intersections)[i].resources, ((*intersections)[i].lock_state == 0) ? "Free" : "Locked");
-        int j = 0;
-        if(strcmp((*intersections)[i].trains[0].name, "") == 0){
-            printf(" None");
-        }else {
-        while(!(strcmp((*intersections)[i].trains[j].name, "") == 0)){
-            printf("%-1s ", (*intersections)[i].trains[j].name);
-            j++;
-            }
-        }
-
-        printf("\n");
-    }
-    printf("---------------------------------------------------------------\n");
-}
-*/
-
-
-/*
-// Function to parse the intersection data
-int IntersectionParsing(const char *filename, Intersection **intersections) {
-    FILE *file = fopen(filename, "r");
-    if (file == NULL) {
-        printf("Error opening file: %s\n", filename);
-        return 0;
-    }
-
-    int count = 0;
-    char line[100];
-    while (fgets(line, sizeof(line), file)) {
-        count++;
-    }
-    rewind(file);
-
-    *intersections = malloc(count * sizeof(Intersection));
-
-    int i = 0;
-    while (fgets(line, sizeof(line), file)) {
-        char name[50];
-        int resources;
-        sscanf(line, "%[^:]:%d", name, &resources);
-        strcpy((*intersections)[i].name, name);
-        (*intersections)[i].resources = resources;
-        i++;
-    }
-
-    fclose(file);
-    return count;
-}
-
-// Function to parse the train data
-int TrainParsing(const char *filename, Train **trains) {
-    FILE *file = fopen(filename, "r");
-    if (file == NULL) {
-        printf("Error opening file: %s\n", filename);
-        return 0;
-    }
-
-    int count = 0;
-    char line[200];
-    while (fgets(line, sizeof(line), file)) {
-        count++;
-    }
-    rewind(file);
-
-    *trains = malloc(count * sizeof(Train));
-
-    int i = 0;
-    while (fgets(line, sizeof(line), file)) {
-        char name[50];
-        char route[200];
-        sscanf(line, "%[^:]:%s", name, route);
-
-        strcpy((*trains)[i].name, name);
-
-        (*trains)[i].route = NULL;
-        (*trains)[i].routeCount = 0;
-
-        char *token = strtok(route, ",");
-        while (token != NULL) {
-            (*trains)[i].route = realloc((*trains)[i].route, ((*trains)[i].routeCount + 1) * sizeof(char *));
-            (*trains)[i].route[(*trains)[i].routeCount] = malloc(strlen(token) + 1);
-            strcpy((*trains)[i].route[(*trains)[i].routeCount], token);
-            (*trains)[i].routeCount++;
-            token = strtok(NULL, ",");
-        }
-        i++;
-    }
-
-    fclose(file);
-    return count;
-}
-
-// Function to get the resource amount for a specific intersection
-void GetIntersectionResources(Intersection *intersections, int intersectionCount, int intersectionIndex) {
-    if (intersectionIndex >= 1 && intersectionIndex <= intersectionCount) {
-        printf("Resources at intersection %s: %d\n", intersections[intersectionIndex - 1].name, intersections[intersectionIndex - 1].resources);
-    } else {
-        printf("Invalid intersection number.\n");
-    }
-}*/
-
+// #include "Fawaz.c"
 
 int main() {
     initialize_sim_time();
@@ -208,8 +43,6 @@ int main() {
     printf("Parsed %d intersections:\n", intersectionCount);
     for (int i = 0; i < intersectionCount; i++) {
         printf("%s has %d resources\n", intersections[i].name, intersections[i].capacity);
-        // Initialize each intersection to have forcedRelease value of false
-        intersections[i].forcedRelease = 0;
     }
       // removed &
     int trainCount = TrainParsing(trainFilePath, &trains);
@@ -246,15 +79,12 @@ int main() {
        
     print_initialized_intersections(intersections, intersectionCount);
     fprintf(log_file, "\n");
+    (*sim_time)++;
     int grantTest = 1;
-  
- 
     //printMessages(trains[0].name, intersections[0].name, grantTest, intersections[0].capacity);
-
     if (log_file) {
         fclose(log_file);
     }
-
 
     initR_Table(&intersections, intersectionCount);
     printR_Table(&intersections, intersectionCount);
@@ -266,11 +96,8 @@ int main() {
     //test_initializeMutex();
     printf("\n END OF TEST FOR MUTEX \n") ;
 
-    
-
     // Create message queue for message passing between parent
     // and child processes. This function MUST return msgid so 
-
     // that the created message queue ID can be used in the 
     // rest of the main function.
     msgid = createMessageQueue(key, msgid);
@@ -287,38 +114,17 @@ int main() {
     // Fork multiple child processes
     fork_trains(msgid, trainCount, trains, intersections);
 
-    // By this point, all child processes have exited,
-    // so only the parent will execute the code below
-    //cleanupAll(trains, trainCount, intersections, intersectionCount);
     // execute responsibilities of server
     server_process(msgid, trainCount, intersectionCount, &trains, &intersections, RAG);
 
-    // running createRAG in server for now for testing, it should
-    // eventually be executed after any train request is made
-    // in the train_process function
-
-    // for this to work properly, trains.heldIntersections and
-    // trains.instersectionCount need to be updated based on
-    // parsed info from text files
-    
-    // hard coded tests for RAG
-    // trains[0].heldIntersectionCount = 2;
-    // trains[0].heldIntersections[0] = "IntersectionA";
-    // trains[0].heldIntersections[1] = "IntersectionB";
-    // trains[0].waitingIntersection = "IntersectionC";
-
-    // trains[1].heldIntersectionCount = 1;
-    // trains[1].heldIntersections[0] = "IntersectionD";
-
-    // trains[2].heldIntersectionCount = 0;
-    // trains[2].waitingIntersection = "IntersectionD";
-    
-    // trains[3].heldIntersectionCount = 1;
-    // trains[3].heldIntersections[0] = "IntersectionC";
-    // trains[3].waitingIntersection = "IntersectionA";
-
     // hard coded print statements to verify trains
     printf("\nTrain1's first intersection held: %s\n", trains[0].heldIntersections[0]);
+
+    log_file = fopen("simulation.log", "a");
+                   
+    printSimulationComplete();
+    
+    fclose(log_file);
 
     createRAG_dot(trains, trainCount);
     RAG = createRAG_list(trains, trainCount);
@@ -329,26 +135,16 @@ int main() {
     }
 
     printRAG_list(RAG);
-
+    
     // clear up memory from message queue since, it is no longer needed
     destroyMessageQueue(msgid);
 
     FreeMemory(intersections, intersectionCount, trains, trainCount);
 
- 
     // Clean up the dynamically allocated memory
     //free(intersections);
-
-  
-
-    log_file = fopen("simulation.log", "a");
-                   
-    printSimulationComplete();
-    
-    fclose(log_file);
     freeRAG(RAG);
     cleanupAll(trains, trainCount, intersections, intersectionCount);
 
     return 0;
-
 }

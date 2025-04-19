@@ -1,12 +1,15 @@
-// Group D
-// Jacob Abad
-// jacob.abad10@okstate.edu@okstate.edu
-// 4/5/2025
+/*
+Group D
+Jacob Abad
+jacob.abad10@okstate.edu@okstate.edu
+4/19/2025
+Description: This file contains functions for both parsing and logging.
+The parsing uses number of lines to navigate and pattern searching to get the names and the resources of the intersectiosn.
+Similarly the parsing for trains uses patterns to find each route to ensure each "stop" is stored separately.
+The logging functions are split up for accuracy of when actions are completed.
+They all call on simtime which is updated in the parent process to maintain consitently with it being implemented with a mutex
 
-// Jacob's Week 2 role: Parsing files
-// Parsing for both intersections and trains to put into objects
-
-// Jacob's Week 3 role: Simulation Clock and Reallocated work of logging messages.
+*/
 
 #include <stdio.h>
 #include <sys/mman.h>
@@ -14,6 +17,7 @@
 #include <string.h>
 #include <stdarg.h>  // For va_list, va_start, va_end
 #include <pthread.h> // For mutexes
+#include <ctype.h>
 #include "shared_header.h"
 
 // Global variables
@@ -91,11 +95,11 @@ void printRequestRelease(int trainIndex, const char *intersection) {
 }
 
 // Function to print denied request for intersection
-void printDenied(const char *train, const char *intersection) {
-    const char *safeTrain = train ? train : "(null)";
+void printDenied(int trainIndex, const char *intersection) {
+    
     const char *safeIntersection = intersection ? intersection : "(null)";
 
-    logEvent("SERVER: %s is locked. %s added to wait queue.", safeIntersection, safeTrain);
+    logEvent("SERVER: %s is locked. %s added to wait queue.", safeIntersection, trains[trainIndex].name);
 }
 
 void ForceRelease(const char *train, const char *intersection){
@@ -215,6 +219,7 @@ int IntersectionParsing(const char *filename, Intersection **intersections) {
         return 0;
     }
 
+    int currentCount = 0;
     int count = 0;
     char line[100];
     while (fgets(line, sizeof(line), file)) {
@@ -228,15 +233,37 @@ int IntersectionParsing(const char *filename, Intersection **intersections) {
     while (fgets(line, sizeof(line), file)) {
         char name[50];
         int capacity;
-        sscanf(line, "%[^:]:%d", name, &capacity);
-        strcpy((*intersections)[i].name, name);
-        (*intersections)[i].capacity = capacity;
-        i++;
+        //sscanf(line, "%[^:]:%d", name, &capacity);
+        if(sscanf(line, "%[^:]:%d", name, &capacity) == 2){
+            if(capacity < 1){
+                printf("Error: Intersections must have value greater than 0\n");
+                exit(1);
+            }
+            else if(name[0] == 'i'){
+                printf("Error: Intersection input must be \"Intersection\", not \"intersection\"\n");
+                exit(1);
+            }
+            for(int j = 0; j < i; j++){
+                if(strcmp(name, (*intersections)[j].name) == 0){
+                    printf("Error: Duplicate intersection\n");
+                    exit(1);
+                }
+            }
+            strcpy((*intersections)[i].name, name);
+            (*intersections)[i].capacity = capacity;
+            i++;
+        }
+        
+        else{
+            printf("Error: Incorrect intersection input: Must follow \"IntersectionA:1\"\n");
+            exit(1);
+        }
     }
 
     fclose(file);
     return count;
 }
+
 
 // Function to parse the train data
 int TrainParsing(const char *filename, Train **trains) {
@@ -259,25 +286,62 @@ int TrainParsing(const char *filename, Train **trains) {
     while (fgets(line, sizeof(line), file)) {
         char name[50];
         char route[200];
-        sscanf(line, "%[^:]:%s", name, route);
-
-        // Ensure the name is properly null-terminated and fits in the buffer
-        strncpy((*trains)[i].name, name, sizeof((*trains)[i].name) - 1);
-        (*trains)[i].name[sizeof((*trains)[i].name) - 1] = '\0';  // Ensure null termination
-
-        (*trains)[i].route = NULL;
-        (*trains)[i].routeCount = 0;
-
-        // Parse the route string and allocate memory for each intersection
-        char *token = strtok(route, ",");
-        while (token != NULL) {
-            (*trains)[i].route = realloc((*trains)[i].route, ((*trains)[i].routeCount + 1) * sizeof(char *));
-            (*trains)[i].route[(*trains)[i].routeCount] = malloc(strlen(token) + 1);
-            strcpy((*trains)[i].route[(*trains)[i].routeCount], token);
-            (*trains)[i].routeCount++;
-            token = strtok(NULL, ",");
+        if(sscanf(line, "%[^:]:%[^\n]", name, route) == 2){
+            for(int j = 0; j < i; j++){
+                if(strcmp(name, (*trains)[j].name) == 0){
+                    printf("Error: Duplicate train\n");
+                    exit(1);
+                }
+            }
+            for(int j = 0; j < strlen(route); j++){
+                //printf("%c", route[j]);
+                if(isdigit(route[j]) != 0){
+                    printf("Error: A train has a path with bad syntax: Cannot contain a number\n");
+                    exit(1);
+                }
+                /*else if(route[j] == ' '){
+                    printf("Error: A train has a path with bad syntax: Cannot contain a space; %i; %li\n", j, strlen(route));
+                    exit(1);
+                }*/
+            }
+            if(strlen(name) < 6){
+                printf("Error: Incorrect train input: Must follow \"Train1:IntersectionA,IntersectionB,IntersectionC...\"\n");
+                exit(1);
+            }
+            else if(strlen(route) < 12){
+                printf("Error: Incorrect train route syntax\n");
+                exit(1);
+            }
+            else if(name[0] != 'T'){
+                printf("Error: Incorrect train input: Must follow \"Train1:IntersectionA,IntersectionB,IntersectionC...\"\n");
+                exit(1);
+            }
+                // Ensure the name is properly null-terminated and fits in the buffer
+                strncpy((*trains)[i].name, name, sizeof((*trains)[i].name) - 1);
+                (*trains)[i].name[sizeof((*trains)[i].name) - 1] = '\0';  // Ensure null termination
+    
+                (*trains)[i].route = NULL;
+                (*trains)[i].routeCount = 0;
+    
+                // Parse the route string and allocate memory for each intersection
+                char *token = strtok(route, ",");
+                while (token != NULL) {
+                    (*trains)[i].route = realloc((*trains)[i].route, ((*trains)[i].routeCount + 1) * sizeof(char *));
+                    (*trains)[i].route[(*trains)[i].routeCount] = malloc(strlen(token) + 1);
+                    strcpy((*trains)[i].route[(*trains)[i].routeCount], token);
+                    (*trains)[i].routeCount++;
+                    token = strtok(NULL, ",");
+                }
+                i++;
         }
-        i++;
+        else{
+            if(i != numberOfTrains - 1){
+                printf("Error: Incorrect train input: Must follow \"Train1:IntersectionA,IntersectionB,IntersectionC...dsfgfhgj\"\n");
+                exit(1);
+            }
+            
+        }
+        
     }
 
     fclose(file);

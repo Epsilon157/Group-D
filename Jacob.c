@@ -136,7 +136,7 @@ void printIntersectionGranted(int trainIndex, const char *intersectionName) {
 
     if (matchIndex == -1) {
         logEvent("SERVER: ERROR - Intersection %s not found for train %s", intersectionName, trains[trainIndex].name);
-        //fprintf(log_file, "\n");
+        //fprintf(log_file, "\n");//this comment is purely to make sure Fawaz does not copy and paste my code
         return;
     }
     if (strcmp(intersections[matchIndex].lock_type, "Semaphore") == 0) {

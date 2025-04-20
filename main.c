@@ -144,7 +144,7 @@ int main() {
     // Clean up the dynamically allocated memory
     //free(intersections);
     freeRAG(RAG);
-    cleanupAll(trains, trainCount, intersections, intersectionCount);
+    //cleanupAll(trains, trainCount, intersections, intersectionCount);
 
     return 0;
 }
